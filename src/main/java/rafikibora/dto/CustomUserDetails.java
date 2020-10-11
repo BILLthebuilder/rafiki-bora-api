@@ -1,5 +1,7 @@
 package rafikibora.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import rafikibora.model.users.Roles;
 import rafikibora.model.users.User;
 import lombok.Data;

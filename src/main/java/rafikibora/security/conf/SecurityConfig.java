@@ -80,11 +80,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated().and()
                 .formLogin().disable().httpBasic().disable()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                .maximumSessions(1)
-                .maxSessionsPreventsLogin(true)
-                .sessionRegistry(sessionRegistry()).and()
-                .sessionFixation().migrateSession();
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//                .maximumSessions(1)
+//                .maxSessionsPreventsLogin(true)
+//                .sessionRegistry(sessionRegistry()).and()
+//                .sessionFixation().migrateSession();
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 

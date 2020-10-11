@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import rafikibora.dto.AuthenticationResponse;
 import rafikibora.dto.LoginRequest;
 import rafikibora.dto.LoginResponse;
 import rafikibora.dto.UserSummary;
@@ -36,19 +37,9 @@ import javax.validation.Valid;
          return ResponseEntity.ok(userServiceI.getUserProfile());
      }
 
-     @PostMapping(value = "api/auth/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-     public ResponseEntity<LoginResponse> login(
-             @CookieValue(name = "accessToken", required = false) String accessToken,
-             @CookieValue(name = "refreshToken", required = false) String refreshToken,
-             @Valid @RequestBody LoginRequest loginRequest
-     ) {
-         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-         String decryptedAccessToken = SecurityCipher.decrypt(accessToken);
-         String decryptedRefreshToken = SecurityCipher.decrypt(refreshToken);
-         log.info(decryptedAccessToken);
-         return userServiceI.login(loginRequest, decryptedAccessToken, decryptedRefreshToken);
+     @PostMapping(value = "api/auth/login")
+     public AuthenticationResponse login(@RequestBody LoginRequest loginRequest) throws Exception {
+         return userServiceI.login(loginRequest);
      }
 
      @PostMapping(value = "/refresh", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -58,4 +49,20 @@ import javax.validation.Valid;
          String decryptedRefreshToken = SecurityCipher.decrypt(refreshToken);
          return userServiceI.refresh(decryptedAccessToken, decryptedRefreshToken);
      }
+
+     @PostMapping(value = "api/auth/login2", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+     public ResponseEntity<LoginResponse> login2(
+             @CookieValue(name = "accessToken", required = false) String accessToken,
+             @CookieValue(name = "refreshToken", required = false) String refreshToken,
+             @Valid @RequestBody LoginRequest loginRequest
+     ) {
+         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+         String decryptedAccessToken = SecurityCipher.decrypt(accessToken);
+         String decryptedRefreshToken = SecurityCipher.decrypt(refreshToken);
+//         log.info(decryptedAccessToken);
+         return userServiceI.login2(loginRequest, decryptedAccessToken, decryptedRefreshToken);
+     }
+
  }

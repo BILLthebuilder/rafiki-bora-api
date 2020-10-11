@@ -1,16 +1,11 @@
 package rafikibora.model.users;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.ToString;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Set;
 
 @Entity
 @Data
@@ -18,19 +13,10 @@ import java.util.Set;
 public class Roles implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "role_id")
     private Long roleId;
 
-    @Column(length = 100, unique = true)
+    @Column(length = 100, unique = true, nullable = false)
     @NotNull
     private String roleName;
-
-    // @JsonIgnore
-    // @ToString.Exclude
-    // @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    // private Set<User> users;
-
-    // public GrantedAuthority grantedAuthority() {
-    //     return new SimpleGrantedAuthority(this.roleName);
-    // }
-
 }

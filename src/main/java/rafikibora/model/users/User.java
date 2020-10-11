@@ -1,7 +1,5 @@
 package rafikibora.model.users;
 
-//import rafikibora.config.security.dto.UserSummary;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,22 +25,22 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_id")
+    @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "first_name",nullable = false, columnDefinition = "VARCHAR(15)")
+    @Column(name = "first_name", nullable = false, columnDefinition = "VARCHAR(15)")
     private String firstName;
 
-    @Column(name = "last_name",nullable = false, columnDefinition = "VARCHAR(15)")
+    @Column(name = "last_name", nullable = false, columnDefinition = "VARCHAR(15)")
     private String lastName;
 
-    @Column(name = "email",unique = true,nullable = false, columnDefinition = "VARCHAR(50)")
+    @Column(name = "email", unique = true, nullable = false, columnDefinition = "VARCHAR(50)")
     private String email;
 
-    @Column(name = "password",nullable = false, columnDefinition = "VARCHAR(255)")
+    @Column(name = "password", nullable = false, columnDefinition = "VARCHAR(255)")
     private String password;
 
-    @Column(name = "status",nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
+    @Column(name = "status", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean status;
 
     @Column(name = "mid", unique = true, columnDefinition = "VARCHAR(34)")
@@ -57,7 +55,7 @@ public class User implements Serializable {
     @Column(name = "is_deleted", columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted;
 
-    @Column(name = "date_created", updatable=false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "date_created", updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date dateCreated;
 
@@ -67,12 +65,12 @@ public class User implements Serializable {
 
     @JsonBackReference(value = "createdBy_u")
     @ManyToOne
-    @JoinColumn(name="created_by", referencedColumnName = "user_id")
+    @JoinColumn(name = "created_by", referencedColumnName = "user_id")
     private User userMaker;
 
     @JsonBackReference(value = "approved_by_u")
     @ManyToOne
-    @JoinColumn(name="approved_by", referencedColumnName = "user_id")
+    @JoinColumn(name = "approved_by", referencedColumnName = "user_id")
     private User userChecker;
 
 //     @NotNull
@@ -82,27 +80,27 @@ public class User implements Serializable {
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "user_roles",
-            joinColumns = {@JoinColumn(name = "userId", referencedColumnName = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "roleId", referencedColumnName = "role_id")})
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Roles> roles = new HashSet<>();
 
-     public UserSummary toUserSummary() {
-         UserSummary userSummary = new UserSummary();
-         userSummary.setEmail(this.email);
-         userSummary.setUserId(this.userId);
-         return userSummary;
-     }
+    public UserSummary toUserSummary() {
+        UserSummary userSummary = new UserSummary();
+        userSummary.setEmail(this.email);
+        userSummary.setUserId(this.userId);
+        return userSummary;
+    }
 
     @JsonBackReference(value = "account_number_u")
     @OneToOne
-    @JoinColumn(name="account_number", referencedColumnName = "account_id")
+    @JoinColumn(name = "account_number", referencedColumnName = "account_id")
     private Account userAccount;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "Agents_Terminals",
-            joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "terminal_id") }
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "terminal_id")}
     )
     List<Terminal> assignedTerminals = new ArrayList<Terminal>();
 
