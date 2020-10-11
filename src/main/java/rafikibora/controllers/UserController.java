@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rafikibora.services.UserService;
+import rafikibora.services.UserServiceI;
 import rafikibora.dto.UserDto;
 
 
@@ -14,7 +14,7 @@ import rafikibora.dto.UserDto;
 @Slf4j
 public class UserController {
     @Autowired
-    private UserService userService;
+    private UserServiceI userServiceI;
 
    
 //   @GetMapping("/me")
@@ -27,13 +27,13 @@ public class UserController {
         // log.info("----------------------");
         // log.info("The Data is:", user);
         // log.info("------------------------");
-        userService.save(user);
+        userServiceI.save(user);
         return new ResponseEntity<>("Registration successful", HttpStatus.CREATED);
     }
 //    @PostMapping("register")
 //    public User save(@RequestBody User user){
 //        try {
-//            userService.register(user);
+//            userServiceI.register(user);
 //            System.out.println("success");
 //        }catch (Exception ex){
 //            System.out.println(ex.getMessage());
@@ -46,7 +46,7 @@ public class UserController {
 //    public boolean login(@RequestBody String email, String password){
 //        boolean isLoggedIn = true;
 //        try {
-//            userService.login(email, password);
+//            userServiceI.login(email, password);
 //            System.out.println("success");
 //            isLoggedIn = true;
 //        }catch (Exception ex){

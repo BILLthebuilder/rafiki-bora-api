@@ -2,9 +2,9 @@ package rafikibora.controllers;
 
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,7 +14,7 @@ import rafikibora.dto.LoginRequest;
 import rafikibora.dto.LoginResponse;
 import rafikibora.dto.UserSummary;
 import rafikibora.security.util.SecurityCipher;
-import rafikibora.services.UserService;
+import rafikibora.services.UserServiceI;
 
 import javax.validation.Valid;
 
@@ -26,13 +26,13 @@ import javax.validation.Valid;
      private final AuthenticationManager authenticationManager;
 
 
-     private final UserService userService;
+     private final UserServiceI userServiceI;
 
 
 
      @GetMapping("/profile")
      public ResponseEntity<UserSummary> me() {
-         return ResponseEntity.ok(userService.getUserProfile());
+         return ResponseEntity.ok(userServiceI.getUserProfile());
      }
 
      @PostMapping(value = "api/auth/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -46,8 +46,8 @@ import javax.validation.Valid;
 
          String decryptedAccessToken = SecurityCipher.decrypt(accessToken);
          String decryptedRefreshToken = SecurityCipher.decrypt(refreshToken);
-         System.out.println(decryptedAccessToken);
-         return userService.login(loginRequest, decryptedAccessToken, decryptedRefreshToken);
+         log.info(decryptedAccessToken);
+         return userServiceI.login(loginRequest, decryptedAccessToken, decryptedRefreshToken);
      }
 
      @PostMapping(value = "/refresh", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -55,6 +55,6 @@ import javax.validation.Valid;
                                                        @CookieValue(name = "refreshToken", required = false) String refreshToken) {
          String decryptedAccessToken = SecurityCipher.decrypt(accessToken);
          String decryptedRefreshToken = SecurityCipher.decrypt(refreshToken);
-         return userService.refresh(decryptedAccessToken, decryptedRefreshToken);
+         return userServiceI.refresh(decryptedAccessToken, decryptedRefreshToken);
      }
  }
