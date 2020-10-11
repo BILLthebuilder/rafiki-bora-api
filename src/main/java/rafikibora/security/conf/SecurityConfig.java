@@ -76,6 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable().exceptionHandling()
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and().authorizeRequests()
+                .antMatchers("/profile").hasAuthority("ADMIN")
                 .antMatchers("/api/auth/**").permitAll()
                 .anyRequest().authenticated().and()
                 .formLogin().disable().httpBasic().disable()
@@ -85,20 +86,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .maxSessionsPreventsLogin(true)
                 .sessionRegistry(sessionRegistry()).and()
                 .sessionFixation().migrateSession();
-
-//        http
-//            .cors().and()
-//            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-//                .and()
-//            .csrf().disable()
-//            .formLogin().disable()
-//            .httpBasic().disable()
-//            .exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint()).and()
-//            .authorizeRequests()
-//            .antMatchers("/api/auth/**")
-//            .permitAll()
-//            .anyRequest().authenticated();
-
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
