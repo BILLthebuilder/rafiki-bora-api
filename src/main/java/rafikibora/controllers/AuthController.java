@@ -21,6 +21,7 @@ import javax.validation.Valid;
  @RestController
  //@RequestMapping("api/auth")
  @AllArgsConstructor
+ @Slf4j
  public class AuthController {
 
      private final AuthenticationManager authenticationManager;
