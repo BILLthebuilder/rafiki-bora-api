@@ -14,6 +14,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -82,8 +83,8 @@ public class User implements Serializable {
     @JoinTable(
             name = "user_roles",
             joinColumns = {@JoinColumn(name = "userId", referencedColumnName = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "roleId", referencedColumnName = "roleId")})
-    private Set<Roles> roles;
+            inverseJoinColumns = {@JoinColumn(name = "roleId", referencedColumnName = "role_id")})
+    private Set<Roles> roles = new HashSet<>();
 
      public UserSummary toUserSummary() {
          UserSummary userSummary = new UserSummary();

@@ -19,7 +19,7 @@ import rafikibora.services.UserService;
 import javax.validation.Valid;
 
  @RestController
- @RequestMapping("api/auth")
+ //@RequestMapping("api/auth")
  @AllArgsConstructor
  public class AuthController {
 
@@ -35,7 +35,7 @@ import javax.validation.Valid;
          return ResponseEntity.ok(userService.getUserProfile());
      }
 
-     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+     @PostMapping(value = "api/auth/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
      public ResponseEntity<LoginResponse> login(
              @CookieValue(name = "accessToken", required = false) String accessToken,
              @CookieValue(name = "refreshToken", required = false) String refreshToken,
@@ -46,6 +46,7 @@ import javax.validation.Valid;
 
          String decryptedAccessToken = SecurityCipher.decrypt(accessToken);
          String decryptedRefreshToken = SecurityCipher.decrypt(refreshToken);
+         System.out.println(decryptedAccessToken);
          return userService.login(loginRequest, decryptedAccessToken, decryptedRefreshToken);
      }
 

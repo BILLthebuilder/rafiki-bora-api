@@ -17,8 +17,7 @@ import java.util.Set;
 @Table(name = "roles")
 public class Roles implements Serializable {
     @Id
-    // @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq")
-    // @SequenceGenerator(name = "role_seq", sequenceName = "role_sequence", allocationSize = 1)
+    @Column(name = "role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roleId;
 
@@ -26,13 +25,13 @@ public class Roles implements Serializable {
     @NotNull
     private String roleName;
 
-    @JsonIgnore
-    @ToString.Exclude
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<User> users;
+    // @JsonIgnore
+    // @ToString.Exclude
+    // @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // private Set<User> users;
 
-    public GrantedAuthority grantedAuthority() {
-        return new SimpleGrantedAuthority(this.roleName);
-    }
+    // public GrantedAuthority grantedAuthority() {
+    //     return new SimpleGrantedAuthority(this.roleName);
+    // }
 
 }
