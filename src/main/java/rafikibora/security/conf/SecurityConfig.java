@@ -3,7 +3,6 @@ package rafikibora.security.conf;
 //import rafikibora.services.CustomUserDetailsServiceImpl;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,7 +22,7 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import rafikibora.services.CustomUserDetailsServiceImpl;
+import rafikibora.services.CustomUserDetailsService;
 
 import java.util.Arrays;
 
@@ -38,7 +37,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final CustomUserDetailsServiceImpl customUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
