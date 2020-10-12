@@ -48,11 +48,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public TokenAuthenticationFilter tokenAuthenticationFilter() {
         return new TokenAuthenticationFilter();
     }
-    @Bean
-    public SessionRegistry sessionRegistry() {
-        SessionRegistry sessionRegistry = new SessionRegistryImpl();
-        return sessionRegistry;
-    }
 
     @Bean
     public HttpSessionEventPublisher httpSessionEventPublisher() {

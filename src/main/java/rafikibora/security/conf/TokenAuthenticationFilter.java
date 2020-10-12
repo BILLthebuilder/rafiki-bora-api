@@ -23,12 +23,6 @@ import java.io.IOException;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
-    @Value("${authentication-test.auth.accessTokenCookieName}")
-    private String accessTokenCookieName;
-
-    @Value("${authentication-test.auth.refreshTokenCookieName}")
-    private String refreshTokenCookieName;
-
     @Autowired
     private JwtProviderI jwtProvider;
 
@@ -67,8 +61,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
 
     private String getJwtToken(HttpServletRequest request) {
-        //if (fromCookie) return getJwtFromCookie(request);
-
         return getJwtFromRequest(request);
     }
 }
