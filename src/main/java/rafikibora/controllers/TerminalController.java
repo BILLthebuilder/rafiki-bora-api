@@ -64,10 +64,10 @@ public class TerminalController {
     }
 
 
-//Delete Terminal by Id
-    @DeleteMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
-    public ResponseEntity<String> delete(@RequestBody TerminalDto terminalDto) {
-        terminalService.delete(terminalDto);
+    //Delete Terminal by Id
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
+        terminalService.deleteById(id);
         return new ResponseEntity<>("Terminal deletion successful", HttpStatus.ACCEPTED);
     }
 

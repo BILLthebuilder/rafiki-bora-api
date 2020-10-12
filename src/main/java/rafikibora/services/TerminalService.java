@@ -1,6 +1,7 @@
 package rafikibora.services;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -76,10 +77,13 @@ public class TerminalService implements TerminalInterface {
 
     //Delete Terminal by Id
     @Transactional
-    public void delete(TerminalDto terminalDto) {
-        Long id = Long.parseLong(terminalDto.getId());
-        terminalRepository.deleteById(id);
-        terminalRepository.deleteAll();
+    public void deleteById(Long id) {
+        try {
+            terminalRepository.deleteById(id);
+        }catch (EmptyResultDataAccessException e){
+
+        }
+
     }
 
 
