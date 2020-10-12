@@ -10,40 +10,37 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@RequestMapping(value = "/api/transactions")
 public class TransactionController {
     @Autowired
     private TransactionService service;
 
-    @PostMapping("/addTransaction")
+    @PostMapping
     public Transaction addTransaction(@RequestBody Transaction transaction) {
         return service.saveTransaction(transaction);
     }
 
-
-    @PostMapping("/addTransactions")
-    public List<Transaction> addTransactions(@RequestBody List<Transaction> trac) { return service.saveTransactions(trac);}
-
-    @GetMapping("/listTransactions")
+    @GetMapping
     public List<Transaction> findAllTransactions() {
         return service.getTransactions();
     }
 
-    @GetMapping("/transaction/{id}")
+    @GetMapping("/{id}")
     public Transaction findTransactionById(@PathVariable int id) {
         return service.getTransactionById(id);
     }
 
-    @GetMapping("/transactions/{resultCode}")
+    @GetMapping("/{resultCode}")
     public Transaction findTransactionByResultCode(@PathVariable @Valid String resultCode) {
         return service.getTransactionByName(resultCode);
     }
 
-    @PutMapping("/updateTransaction")
+    @PatchMapping
     public Transaction updateAccount(@RequestBody Transaction transaction) {
         return service.updateTransaction(transaction);
     }
 
-    @DeleteMapping("/deleteTransaction/{id}")
+    @DeleteMapping("/{id}")
     public String deleteTransaction(@PathVariable int id) {
         return service.deleteTransaction(id);
     }

@@ -12,41 +12,39 @@ import java.util.List;
 
 @Validated
 @RestController
+@RequestMapping(value = "/api/accounts")
 public class AccountController {
 
     @Autowired
     private AccountService service;
 
-    @PostMapping("/addAccount")
-   public Account addAccount(@RequestBody Account accounts) {
-        return service.saveAccount(accounts);
+    @PostMapping
+   public Account addAccount(@RequestBody Account account) {
+        return service.saveAccount(account);
     }
 
 
-    @PostMapping("/addAccounts")
-    public List<Account> addAccounts(@RequestBody List<Account> acc) { return service.saveAccounts(acc);}
-
-    @GetMapping("/listAccounts")
+    @GetMapping
     public List<Account> findAllAccounts() {
         return service.getAccounts();
     }
 
-    @GetMapping("/account/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Account> findAccountById(@PathVariable int id) {
-        return service.getAccountById(id);
+        return (ResponseEntity<Account>) service.getAccountById(id);
     }
 
-    @GetMapping("/accounts/{name}")
+    @GetMapping("/{name}")
     public ResponseEntity<Account> findAccountByName(@PathVariable @Valid String name) {
-        return service.getAccountByName(name);
+        return (ResponseEntity<Account>) service.getAccountByName(name);
     }
 
-    @PutMapping("/updateAccount")
-    public Account updateAccount(@RequestBody Account accounts) {
-        return service.updateAccount(accounts);
+    @PatchMapping("/")
+    public Account updateAccount(@RequestBody Account account) {
+        return service.updateAccount(account);
     }
 
-    @DeleteMapping("/deleteAccount/{id}")
+    @DeleteMapping("/{id}")
     public String deleteAccount(@PathVariable int id) {
         return service.deleteAccount(id);
     }

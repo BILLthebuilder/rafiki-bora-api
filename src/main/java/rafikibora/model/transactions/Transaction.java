@@ -26,12 +26,12 @@ public class Transaction implements Serializable {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="source_account", referencedColumnName = "account_number")
+    @JoinColumn(name="source_account", referencedColumnName = "account_id")
     private Account sourceAccount;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="destination_account", referencedColumnName = "account_number")
+    @JoinColumn(name="destination_account", referencedColumnName = "account_id")
     private Account destinationAccount;
 
     @JsonIgnore

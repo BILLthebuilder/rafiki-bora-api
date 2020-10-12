@@ -1,7 +1,7 @@
 package rafikibora.services;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import rafikibora.dto.Response;
 import rafikibora.model.account.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,40 +28,57 @@ public class AccountService {
         return repository.findAll();
     }
 
-    public ResponseEntity<Account> getAccountById(int id) {
-
+    public ResponseEntity<?> getAccountById(int id) {
+        Response response;
         Optional<Account> optional = repository.findById(id);
         Account account = null;
         if (optional.isPresent()) {
             account = optional.get();
         } else {
-            throw new RuntimeException(" Account not found for id :: " + id);
+            response = new Response(Response.responseStatus.FAILED," Account not found for id :: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
-        return ResponseEntity.ok().body(account);
+        return ResponseEntity.status(HttpStatus.OK).body(account);
     }
 
-    public ResponseEntity<Account> getAccountByName(String name) {
+    public ResponseEntity<?> getAccountByName(String name) {
+        Response response;
         Optional <Account> optional = repository.findByName(name);
         Account account = null;
         if (optional.isPresent()) {
             account = optional.get();
+            //response = new Response(Response.responseStatus.SUCCESS,"Successful account");
         } else {
-            throw new RuntimeException(" Account not found for name :: " + name);
+//            throw new RuntimeException(" Account not found for name :: " + name);
+            response = new Response(Response.responseStatus.FAILED,"No account found for :: " + name);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
-        return ResponseEntity.status((HttpStatus.NOT_FOUND)).body(account);
+        return ResponseEntity.status(HttpStatus.OK).body(account);
     }
 
     public String deleteAccount(int id) {
         repository.deleteById(id);
-        return "product removed !! " + id;
+        return "Account removed  !! " + id;
     }
 
     public Account updateAccount(Account accounts) {
         Account existingAccount = repository.findById(accounts.getId()).orElse(null);
-        existingAccount.setName(accounts.getName());
-        existingAccount.setPan(accounts.getPan());
-        existingAccount.setBalance(accounts.getBalance());
-        existingAccount.setAccountMakers(accounts.getAccountMakers());
+        if (accounts.getName() != null) {
+            existingAccount.setName(accounts.getName());
+        }
+
+        if ((Integer) accounts.getPan() != null) {
+            existingAccount.setPan(accounts.getPan());
+        }
+
+        if ((Double) accounts.getBalance() != null) {
+            existingAccount.setBalance(accounts.getBalance());
+        }
+
+        if (accounts.getAccountMakers() != null) {
+            existingAccount.setAccountMakers(accounts.getAccountMakers());
+        }
+
         return repository.save(existingAccount);
     }
 
