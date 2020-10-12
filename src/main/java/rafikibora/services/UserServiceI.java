@@ -10,7 +10,7 @@ public interface UserServiceI {
 
     ResponseEntity<AuthenticationResponse> login(LoginRequest loginRequest) throws Exception;
 
-    void save(UserDto user);
+    ResponseEntity<SignupResponse> save(UserDto user);
 
 
     UserSummary getUserProfile();

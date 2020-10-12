@@ -1,6 +1,7 @@
 package rafikibora.model.users;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -63,12 +64,12 @@ public class User implements Serializable {
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date dateUpdated;
 
-    @JsonBackReference(value = "createdBy_u")
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "created_by", referencedColumnName = "user_id")
     private User userMaker;
 
-    @JsonBackReference(value = "approved_by_u")
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "approved_by", referencedColumnName = "user_id")
     private User userChecker;
@@ -91,7 +92,7 @@ public class User implements Serializable {
         return userSummary;
     }
 
-    @JsonBackReference(value = "account_number_u")
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "account_number", referencedColumnName = "account_id")
     private Account userAccount;

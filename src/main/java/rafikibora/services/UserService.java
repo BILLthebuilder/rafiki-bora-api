@@ -36,28 +36,38 @@ public class UserService implements UserServiceI {
 
 
     @Transactional
-    public void save(UserDto user) {
+    public ResponseEntity<SignupResponse> save(UserDto user) {
+        SignupResponse signupResponse;
         User newUser = new User();
-        Roles roles = new Roles();
-        roles.setRoleName("ADMIN");
-        roleRepository.save(roles);
+//        Roles roles = new Roles();
+//        roles.setRoleName("ADMIN");
+//        roleRepository.save(roles);
         newUser.setFirstName(user.getFirstName());
         newUser.setLastName(user.getLastName());
         newUser.setEmail(user.getEmail());
         newUser.setPhoneNo(user.getPhoneNo());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        newUser.getRoles().add(roles);
-        userRepository.save(newUser);
+        //newUser.getRoles().add(roles);
+        try{
+            userRepository.save(newUser);
+            signupResponse = new SignupResponse(SignupResponse.responseStatus.SUCCESS, "Registration Successful");
+            return ResponseEntity.status(HttpStatus.CREATED).body(signupResponse);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            signupResponse = new SignupResponse(SignupResponse.responseStatus.FAILED, "Registration Failed");
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(signupResponse);
+            //throw new RafikiBoraException("Something went wrong");
+        }
     }
 
     @Override
     public ResponseEntity<AuthenticationResponse> login(LoginRequest loginRequest) {
-        AuthenticationResponse response;
+        AuthenticationResponse authResponse;
         try {
             authenticate(loginRequest.getEmail(), loginRequest.getPassword());
         }catch (Exception ex){
-            response = new AuthenticationResponse(AuthenticationResponse.responseStatus.FAILED, ex.getMessage(),null,null);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            authResponse = new AuthenticationResponse(AuthenticationResponse.responseStatus.FAILED, ex.getMessage(),null,null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(authResponse);
         }
 
         final UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginRequest.getEmail());
@@ -66,8 +76,8 @@ public class UserService implements UserServiceI {
         if(!validateToken){
             jwtProvider.generateToken(userDetails);
         }
-        response = new AuthenticationResponse(AuthenticationResponse.responseStatus.SUCCESS, "Successful Login",token,loginRequest.getEmail());
-        return ResponseEntity.ok().body(response);
+        authResponse = new AuthenticationResponse(AuthenticationResponse.responseStatus.SUCCESS, "Successful Login",token,loginRequest.getEmail());
+        return ResponseEntity.ok().body(authResponse);
     }
 
     private void authenticate(String email, String password) {
