@@ -2,6 +2,7 @@ package rafikibora.model.terminal;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -26,8 +28,8 @@ public class Terminal implements Serializable {
     @Column(name="terminal_id")
     private int id;
 
-    @Column(name = "tid",nullable = false, unique = true, columnDefinition = "VARCHAR(16)")
-    private String tid;
+    @Column(name = "tid")
+    private String tid = UUID.randomUUID().toString().replaceAll("[^0-3]", "");
 
     @Column(name = "serial_no",nullable = false, unique = true, columnDefinition = "VARCHAR(28)")
     private String serialNo;
@@ -38,17 +40,17 @@ public class Terminal implements Serializable {
     @Column(name = "status", columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean status;
 
-    @JsonBackReference(value = "mid_t")
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="mid", referencedColumnName = "mid")
     private User merchant;
 
-    @JsonBackReference(value = "created_by_t")
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="created_by", nullable = false, referencedColumnName = "user_id")
     private User terminalMaker;
 
-    @JsonBackReference(value = "approved_by_t")
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="approved_by", referencedColumnName = "user_id")
     private User terminalChecker;
@@ -64,14 +66,13 @@ public class Terminal implements Serializable {
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date dateUpdated;
 
-    @JsonBackReference(value = "user_id_t")
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="user_id", nullable = false, referencedColumnName = "user_id")
     private User user;
 
 
     @OneToMany(mappedBy="terminal",cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "tid_t")
+    @JsonIgnore
     private List<Transaction> transactions = new ArrayList<Transaction>();
-
 }

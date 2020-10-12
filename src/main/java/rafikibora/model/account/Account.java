@@ -2,6 +2,7 @@ package rafikibora.model.account;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -29,8 +31,8 @@ public class Account implements Serializable {
     @Column(name = "name",nullable = false, columnDefinition = "VARCHAR(50)")
     private String name;
 
-    @Column(name = "account_number",nullable = false, unique = true, columnDefinition = "VARCHAR(10)")
-    private String accountNumber;
+    @Column(name = "account_number")
+    private String accountNumber = UUID.randomUUID().toString().replaceAll("[^0-3]", "");
 
     @Column(name = "pan",nullable = false, columnDefinition = "INT(19)")
     private int pan;
@@ -49,17 +51,20 @@ public class Account implements Serializable {
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date dateUpdated;
 
-    @JsonBackReference(value = "created_by_a")
     @ManyToOne
-    @JoinColumn(name="created_by", nullable = false, referencedColumnName = "user_id")
+    @JoinColumn(name="created_by", nullable = false, referencedColumnName = "user_id", insertable = false, updatable = false)
+    @JsonIgnore
     private User accountMaker;
 
-    @JsonBackReference(value = "approved_by_a")
+    @Column(name = "created_by")
+    private Integer accountMakers;
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="approved_by", referencedColumnName = "user_id")
     private User accountChecker;
 
-    @JsonManagedReference(value = "account_number_u")
+    @JsonIgnore
     @OneToOne(mappedBy="userAccount",cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private User user;
 
@@ -70,10 +75,10 @@ public class Account implements Serializable {
     private double balance;
 
     @OneToMany(mappedBy="sourceAccount",cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "source_account_t")
+    @JsonIgnore
     private List<Transaction> withdrawals = new ArrayList<Transaction>();
 
     @OneToMany(mappedBy="destinationAccount",cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "destination_account_t")
+    @JsonIgnore
     private List<Transaction> deposits = new ArrayList<Transaction>();
 }

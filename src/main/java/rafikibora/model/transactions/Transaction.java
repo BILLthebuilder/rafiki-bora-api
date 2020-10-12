@@ -1,6 +1,7 @@
 package rafikibora.model.transactions;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,17 +24,17 @@ public class Transaction implements Serializable {
     @Column(name = "transaction_id")
     private int id;
 
-    @JsonBackReference(value = "source_account_t")
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="source_account", referencedColumnName = "account_number")
     private Account sourceAccount;
 
-    @JsonBackReference(value = "destination_account_t")
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="destination_account", referencedColumnName = "account_number")
     private Account destinationAccount;
 
-    @JsonBackReference(value = "tid_t")
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="tid", nullable = false, referencedColumnName = "tid")
     private Terminal terminal;
