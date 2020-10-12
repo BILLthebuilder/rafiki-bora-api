@@ -1,8 +1,6 @@
 package rafikibora.services;
 
 import org.springframework.security.core.userdetails.UserDetails;
-import rafikibora.dto.Token;
-import rafikibora.model.users.User;
 
 import java.time.LocalDateTime;
 

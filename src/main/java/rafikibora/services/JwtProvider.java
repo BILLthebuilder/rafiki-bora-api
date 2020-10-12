@@ -14,13 +14,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class JwtProvider implements JwtProviderI {
-    @Value("${authentication-test.auth.tokenSecret}")
+    @Value("${rafiki-bora.auth.tokenSecret}")
     private String tokenSecret;
 
-    @Value("${authentication-test.auth.tokenExpirationMsec}")
+    @Value("${rafiki-bora.auth.tokenExpirationMsec}")
     private Long tokenExpirationMsec;
 
-    @Value("${authentication-test.auth.refreshTokenExpirationMsec}")
+    @Value("${rafiki-bora.auth.refreshTokenExpirationMsec}")
     private Long refreshTokenExpirationMsec;
 
     @Override
@@ -50,7 +50,7 @@ public class JwtProvider implements JwtProviderI {
                 filter(Objects::nonNull).
                 collect(Collectors.toList()));
         Date now = new Date();
-        Long duration = now.getTime() + tokenExpirationMsec;
+        Long duration = now.getTime() + refreshTokenExpirationMsec;
         Date expiryDate = new Date(duration);
         return Jwts.builder()
                 .setClaims(claims)

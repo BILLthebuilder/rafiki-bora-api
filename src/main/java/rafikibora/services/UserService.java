@@ -2,7 +2,7 @@ package rafikibora.services;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,7 +19,6 @@ import rafikibora.model.users.Roles;
 import rafikibora.model.users.User;
 import rafikibora.repository.RoleRepository;
 import rafikibora.repository.UserRepository;
-import rafikibora.security.util.CookieUtil;
 import rafikibora.security.util.exceptions.RafikiBoraException;
 
 @Service
@@ -30,9 +29,7 @@ public class UserService implements UserServiceI {
     private final UserRepository userRepository;
 
     private final RoleRepository roleRepository;
-    private final TokenProviderI tokenProviderI;
     private final JwtProviderI jwtProvider;
-    private final CookieUtil cookieUtil;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final CustomUserDetailsService customUserDetailsService;
@@ -42,7 +39,7 @@ public class UserService implements UserServiceI {
     public void save(UserDto user) {
         User newUser = new User();
         Roles roles = new Roles();
-        roles.setRoleName("ADMIN45433");
+        roles.setRoleName("ADMIN");
         roleRepository.save(roles);
         newUser.setFirstName(user.getFirstName());
         newUser.setLastName(user.getLastName());
@@ -53,20 +50,24 @@ public class UserService implements UserServiceI {
         userRepository.save(newUser);
     }
 
-    private void addAccessTokenCookie(HttpHeaders httpHeaders, Token token) {
-        httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtil.createAccessTokenCookie(token.getTokenValue(), token.getDuration()).toString());
-    }
-
-    private void addRefreshTokenCookie(HttpHeaders httpHeaders, Token token) {
-        httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtil.createRefreshTokenCookie(token.getTokenValue(), token.getDuration()).toString());
-    }
-
     @Override
-    public AuthenticationResponse login(LoginRequest loginRequest) {
-        authenticate(loginRequest.getEmail(), loginRequest.getPassword());
+    public ResponseEntity<AuthenticationResponse> login(LoginRequest loginRequest) {
+        AuthenticationResponse response;
+        try {
+            authenticate(loginRequest.getEmail(), loginRequest.getPassword());
+        }catch (Exception ex){
+            response = new AuthenticationResponse(AuthenticationResponse.responseStatus.FAILED, ex.getMessage(),null,null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
         final UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginRequest.getEmail());
         String token = jwtProvider.generateToken(userDetails);
-        return new AuthenticationResponse(token, loginRequest.getEmail());
+        boolean validateToken = jwtProvider.validateToken(token);
+        if(!validateToken){
+            jwtProvider.generateToken(userDetails);
+        }
+        response = new AuthenticationResponse(AuthenticationResponse.responseStatus.SUCCESS, "Successful Login",token,loginRequest.getEmail());
+        return ResponseEntity.ok().body(response);
     }
 
     private void authenticate(String email, String password) {
@@ -88,58 +89,66 @@ public class UserService implements UserServiceI {
         return user.toUserSummary();
     }
 
-    @Override
-     public ResponseEntity<LoginResponse> login2(LoginRequest loginRequest, String accessToken, String refreshToken) {
-         String email = loginRequest.getEmail();
-         User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found with email " + email));
+//    @Override
+//     public ResponseEntity<LoginResponse> login2(LoginRequest loginRequest, String accessToken, String refreshToken) {
+//         String email = loginRequest.getEmail();
+//         User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found with email " + email));
+//
+//         Boolean accessTokenValid = tokenProviderI.validateToken(accessToken);
+//         Boolean refreshTokenValid = tokenProviderI.validateToken(refreshToken);
+//
+//         HttpHeaders responseHeaders = new HttpHeaders();
+//         Token newAccessToken;
+//         Token newRefreshToken;
+//         if (!accessTokenValid && !refreshTokenValid) {
+//             newAccessToken = tokenProviderI.generateAccessToken(user);
+//             newRefreshToken = tokenProviderI.generateRefreshToken(user);
+//             addAccessTokenCookie(responseHeaders, newAccessToken);
+//             addRefreshTokenCookie(responseHeaders, newRefreshToken);
+//         }
+//
+//         if (!accessTokenValid && refreshTokenValid) {
+//             newAccessToken = tokenProviderI.generateAccessToken(user);
+//             addAccessTokenCookie(responseHeaders, newAccessToken);
+//         }
+//
+//         if (accessTokenValid && refreshTokenValid) {
+//             newAccessToken = tokenProviderI.generateAccessToken(user);
+//             newRefreshToken = tokenProviderI.generateRefreshToken(user);
+//             addAccessTokenCookie(responseHeaders, newAccessToken);
+//             addRefreshTokenCookie(responseHeaders, newRefreshToken);
+//         }
+//
+//         LoginResponse loginResponse = new LoginResponse(LoginResponse.SuccessFailure.SUCCESS, "Successful Login");
+//         return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
+//
+//     }
 
-         Boolean accessTokenValid = tokenProviderI.validateToken(accessToken);
-         Boolean refreshTokenValid = tokenProviderI.validateToken(refreshToken);
+//     @Override
+//     public ResponseEntity<LoginResponse> refresh(String accessToken, String refreshToken) {
+//         Boolean refreshTokenValid = tokenProviderI.validateToken(refreshToken);
+//         if (!refreshTokenValid) {
+//             LoginResponse loginResponse = new LoginResponse(LoginResponse.SuccessFailure.FAILURE, "Invalid refresh token !");
+//             return ResponseEntity.unprocessableEntity().body(loginResponse);
+//         }
+//
+//         String currentUserEmail = tokenProviderI.getUsernameFromToken(accessToken);
+//         User user = userRepository.findByEmail(currentUserEmail).orElseThrow(() -> new IllegalArgumentException("User not found with username " + currentUserEmail));
+//
+//         Token newAccessToken = tokenProviderI.generateAccessToken(user);
+//         HttpHeaders responseHeaders = new HttpHeaders();
+//         responseHeaders.add(HttpHeaders.SET_COOKIE, cookieUtil.createAccessTokenCookie(newAccessToken.getTokenValue(), newAccessToken.getDuration()).toString());
+//
+//         LoginResponse loginResponse = new LoginResponse(LoginResponse.SuccessFailure.SUCCESS, "Successful Login");
+//         return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
+//     }
 
-         HttpHeaders responseHeaders = new HttpHeaders();
-         Token newAccessToken;
-         Token newRefreshToken;
-         if (!accessTokenValid && !refreshTokenValid) {
-             newAccessToken = tokenProviderI.generateAccessToken(user);
-             newRefreshToken = tokenProviderI.generateRefreshToken(user);
-             addAccessTokenCookie(responseHeaders, newAccessToken);
-             addRefreshTokenCookie(responseHeaders, newRefreshToken);
-         }
-
-         if (!accessTokenValid && refreshTokenValid) {
-             newAccessToken = tokenProviderI.generateAccessToken(user);
-             addAccessTokenCookie(responseHeaders, newAccessToken);
-         }
-
-         if (accessTokenValid && refreshTokenValid) {
-             newAccessToken = tokenProviderI.generateAccessToken(user);
-             newRefreshToken = tokenProviderI.generateRefreshToken(user);
-             addAccessTokenCookie(responseHeaders, newAccessToken);
-             addRefreshTokenCookie(responseHeaders, newRefreshToken);
-         }
-
-         LoginResponse loginResponse = new LoginResponse(LoginResponse.SuccessFailure.SUCCESS, "Successful Login");
-         return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
-
-     }
-
-     @Override
-     public ResponseEntity<LoginResponse> refresh(String accessToken, String refreshToken) {
-         Boolean refreshTokenValid = tokenProviderI.validateToken(refreshToken);
-         if (!refreshTokenValid) {
-             LoginResponse loginResponse = new LoginResponse(LoginResponse.SuccessFailure.FAILURE, "Invalid refresh token !");
-             return ResponseEntity.unprocessableEntity().body(loginResponse);
-         }
-
-         String currentUserEmail = tokenProviderI.getUsernameFromToken(accessToken);
-         User user = userRepository.findByEmail(currentUserEmail).orElseThrow(() -> new IllegalArgumentException("User not found with username " + currentUserEmail));
-
-         Token newAccessToken = tokenProviderI.generateAccessToken(user);
-         HttpHeaders responseHeaders = new HttpHeaders();
-         responseHeaders.add(HttpHeaders.SET_COOKIE, cookieUtil.createAccessTokenCookie(newAccessToken.getTokenValue(), newAccessToken.getDuration()).toString());
-
-         LoginResponse loginResponse = new LoginResponse(LoginResponse.SuccessFailure.SUCCESS, "Successful Login");
-         return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
-     }
+    //    private void addAccessTokenCookie(HttpHeaders httpHeaders, Token token) {
+//        httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtil.createAccessTokenCookie(token.getTokenValue(), token.getDuration()).toString());
+//    }
+//
+//    private void addRefreshTokenCookie(HttpHeaders httpHeaders, Token token) {
+//        httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtil.createRefreshTokenCookie(token.getTokenValue(), token.getDuration()).toString());
+//    }
 
 }
