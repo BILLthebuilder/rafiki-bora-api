@@ -19,7 +19,7 @@ public class DepositOrSaleService {
     public void performDepositOrSale(Transaction depositSaleData) {
         Double amount = depositSaleData.getAmountTransaction();
         String sourceAccountNum = depositSaleData.getSourceAccountNumber();
-        String destAccountNum = depositSaleData.getDestAccountNumber(); // merchant's account a/c if sale tx;
+        String destAccountNum = depositSaleData.getDestinationAccountNumber(); // merchant's account a/c if sale tx;
 
         try {
             Account sourceAccount = accountRepository.findByAccountNumber(sourceAccountNum);
