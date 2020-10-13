@@ -1,7 +1,9 @@
 package rafikibora.services;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import rafikibora.dto.Response;
+import rafikibora.exceptions.ResourceNotFoundException;
 import rafikibora.model.account.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,12 +18,9 @@ public class AccountService {
     @Autowired
     private AccountRepository repository;
 
+    @Transactional
     public Account saveAccount(Account accounts) {
         return repository.save(accounts);
-    }
-
-    public List<Account> saveAccounts(List<Account> accounts) {
-        return repository.saveAll(accounts);
     }
 
     public List<Account> getAccounts() {
@@ -56,27 +55,36 @@ public class AccountService {
         return ResponseEntity.status(HttpStatus.OK).body(account);
     }
 
-    public String deleteAccount(int id) {
-        repository.deleteById(id);
-        return "Account removed  !! " + id;
+    @Transactional
+    public void deleteAccount(int id) {
+        if ( repository.findById(id).isPresent()) {
+            repository.deleteById(id);
+        } else {
+            throw new ResourceNotFoundException("Account " + id + " Not Found");
+        }
     }
 
-    public Account updateAccount(Account accounts) {
-        Account existingAccount = repository.findById(accounts.getId()).orElse(null);
-        if (accounts.getName() != null) {
-            existingAccount.setName(accounts.getName());
+    @Transactional
+    public Account updateAccount(Account account, int accountid) {
+        Account existingAccount = repository.findById(accountid).
+                orElseThrow(
+                        () -> new ResourceNotFoundException
+                                ("Account " + accountid + " Not Found"));
+
+        if (account.getName() != null) {
+            existingAccount.setName(account.getName());
         }
 
-        if ((Integer) accounts.getPan() != null) {
-            existingAccount.setPan(accounts.getPan());
+        if ((Integer) account.getPan() != null) {
+            existingAccount.setPan(account.getPan());
         }
 
-        if ((Double) accounts.getBalance() != null) {
-            existingAccount.setBalance(accounts.getBalance());
+        if ((Double) account.getBalance() != null) {
+            existingAccount.setBalance(account.getBalance());
         }
 
-        if (accounts.getAccountMakers() != null) {
-            existingAccount.setAccountMakers(accounts.getAccountMakers());
+        if (account.getAccountMakers() != null) {
+            existingAccount.setAccountMakers(account.getAccountMakers());
         }
 
         return repository.save(existingAccount);

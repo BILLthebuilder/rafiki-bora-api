@@ -1,16 +1,20 @@
 package rafikibora.controllers;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 import rafikibora.model.account.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import rafikibora.services.AccountService;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
-@Validated
 @RestController
 @RequestMapping(value = "/api/accounts")
 public class AccountController {
@@ -19,8 +23,21 @@ public class AccountController {
     private AccountService service;
 
     @PostMapping
-   public Account addAccount(@RequestBody Account account) {
-        return service.saveAccount(account);
+    public ResponseEntity<?> addAccount(@Valid @RequestBody Account account) {
+
+        Account newAccount = service.saveAccount(account);
+
+        // set the location header for the newly created resource
+        HttpHeaders responseHeaders = new HttpHeaders();
+        URI newEmployeeURI = ServletUriComponentsBuilder.fromCurrentRequest() // get the URI for this request
+                .path("/{id}") // add to it a path variable
+                .buildAndExpand(newAccount.getId()) // populate that path variable with the newly created restaurant id
+                .toUri(); // convert that work into a human readable URI
+        responseHeaders.setLocation(newEmployeeURI); // in the header, set the location location to that URI
+
+        return new ResponseEntity<>(null,
+                responseHeaders,
+                HttpStatus.CREATED);
     }
 
 
@@ -39,13 +56,16 @@ public class AccountController {
         return (ResponseEntity<Account>) service.getAccountByName(name);
     }
 
-    @PatchMapping("/")
-    public Account updateAccount(@RequestBody Account account) {
-        return service.updateAccount(account);
+    @PatchMapping(value = "/{id}", consumes = {"application/json"})
+    public ResponseEntity<?> updateAccount(@RequestBody Account account, @PathVariable int id) {
+        service.updateAccount(account, id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteAccount(@PathVariable int id) {
-        return service.deleteAccount(id);
+    public ResponseEntity<?> deleteAccount(@PathVariable int id) {
+        service.deleteAccount(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
