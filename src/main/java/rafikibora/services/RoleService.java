@@ -29,29 +29,28 @@ public class RoleService {
         return repository.findAll();
     }
 
-    public ResponseEntity<?> getRoleById(int id) {
+    public ResponseEntity<?> getRoleById(long roleId) {
         Response response;
-        Optional<Roles> optional = repository.findById((long) id);
+        Optional<Roles> optional = repository.findById((int) roleId);
         Roles roles = null;
         if (optional.isPresent()) {
             roles = optional.get();
         } else {
-            response = new Response(Response.responseStatus.FAILED," Role not found for id :: " + id);
+            response = new Response(Response.responseStatus.FAILED," Account not found for id :: " + roleId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
         return ResponseEntity.status(HttpStatus.OK).body(roles);
     }
-
-    public ResponseEntity<?> getRoleByName(String name) {
+    public ResponseEntity<?> getRoleByName(String roleName) {
         Response response;
-        Optional <Roles> optional = repository.findByName(name);
+        Optional <Roles> optional = repository.findByRoleName(roleName);
         Roles roles = null;
         if (optional.isPresent()) {
             roles = optional.get();
             //response = new Response(Response.responseStatus.SUCCESS,"Successful account");
         } else {
 //            throw new RuntimeException(" Account not found for name :: " + name);
-            response = new Response(Response.responseStatus.FAILED,"No role found for :: " + name);
+            response = new Response(Response.responseStatus.FAILED,"No role found for :: " + roleName);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
         return ResponseEntity.status(HttpStatus.OK).body(roles);
@@ -59,8 +58,8 @@ public class RoleService {
 
     @Transactional
     public void deleteRole(int id) {
-        if ( repository.findById((long) id).isPresent()) {
-            repository.deleteById((long) id);
+        if ( repository.findById(id).isPresent()) {
+            repository.deleteById(id);
         } else {
             throw new ResourceNotFoundException("Roles " + id + " Not Found");
         }
@@ -68,7 +67,7 @@ public class RoleService {
 
     @Transactional
     public Roles updateRole(Roles roles, int roleid) {
-        Roles existingRoles = repository.findById((long) roleid).
+        Roles existingRoles = repository.findById(roleid).
                 orElseThrow(
                         () -> new ResourceNotFoundException
                                 ("Roles " + roleid + " Not Found"));

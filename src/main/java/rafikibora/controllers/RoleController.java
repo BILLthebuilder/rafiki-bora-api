@@ -20,7 +20,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/roles")
+@RequestMapping(value = "/api")
 public class RoleController {
 
     @Autowired
@@ -50,19 +50,19 @@ public class RoleController {
         return service.getRoles();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Roles> findRoleById(@PathVariable int id) {
-        return (ResponseEntity<Roles>) service.getRoleById(id);
+    @GetMapping("/roles/{roleId}")
+    public ResponseEntity<Roles> findRoleById(@PathVariable ("roleId") long roleId) {
+        return (ResponseEntity<Roles>) service.getRoleById(roleId);
     }
 
-    @GetMapping("/{name}")
-    public ResponseEntity<Roles> findRoleByName(@PathVariable @Valid String name) {
-        return (ResponseEntity<Roles>) service.getRoleByName(name);
+    @GetMapping("role/{roleName}")
+    public ResponseEntity<Roles> findRoleByName(@PathVariable @Valid String roleName) {
+        return (ResponseEntity<Roles>) service.getRoleByName(roleName);
     }
 
     @PatchMapping(value = "/{id}", consumes = {"application/json"})
-    public ResponseEntity<?> updateRole(@RequestBody Roles roles, @PathVariable int id) {
-        service.updateRole(roles, id);
+    public ResponseEntity<?> updateRole(@RequestBody Roles roles, @PathVariable int roleId) {
+        service.updateRole(roles, roleId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
