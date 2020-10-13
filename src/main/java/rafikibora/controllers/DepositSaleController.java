@@ -12,7 +12,7 @@ import rafikibora.services.DepositOrSaleService;
 
 @RestController
 @RequestMapping("/depositSale")
-public class DepositSale {
+public class DepositSaleController {
     @Autowired
     DepositOrSaleService depositOrSaleService;
 
