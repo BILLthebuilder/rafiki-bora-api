@@ -51,7 +51,7 @@ public class AccountController {
         return (ResponseEntity<Account>) service.getAccountById(id);
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("accounts/{name}")
     public ResponseEntity<Account> findAccountByName(@PathVariable @Valid String name) {
         return (ResponseEntity<Account>) service.getAccountByName(name);
     }
