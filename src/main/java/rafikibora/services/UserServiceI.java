@@ -11,6 +11,7 @@ public interface UserServiceI {
     ResponseEntity<AuthenticationResponse> login(LoginRequest loginRequest) throws Exception;
 
     ResponseEntity<SignupResponse> save(UserDto user);
+    String deleteUser(int user);
 
 
     UserSummary getUserProfile();

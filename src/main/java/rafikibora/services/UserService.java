@@ -15,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rafikibora.dto.*;
-import rafikibora.model.users.Roles;
 import rafikibora.model.users.User;
 import rafikibora.repository.RoleRepository;
 import rafikibora.repository.UserRepository;
@@ -60,6 +59,8 @@ public class UserService implements UserServiceI {
         }
     }
 
+
+
     @Override
     public ResponseEntity<AuthenticationResponse> login(LoginRequest loginRequest) {
         AuthenticationResponse authResponse;
@@ -97,6 +98,13 @@ public class UserService implements UserServiceI {
 
         User user = userRepository.findByEmail(customUserDetails.getUsername()).orElseThrow(() -> new IllegalArgumentException("User not found with email " + customUserDetails.getUsername()));
         return user.toUserSummary();
+    }
+
+
+    @Override
+    public String deleteUser(int id) {
+        userRepository.deleteById((long) id);
+        return "user removed !! " + id;
     }
 
 //    @Override
