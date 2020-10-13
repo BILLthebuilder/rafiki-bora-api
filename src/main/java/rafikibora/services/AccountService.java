@@ -1,7 +1,9 @@
 package rafikibora.services;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import rafikibora.dto.Response;
+import rafikibora.exceptions.ResourceNotFoundException;
 import rafikibora.model.account.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,52 +18,75 @@ public class AccountService {
     @Autowired
     private AccountRepository repository;
 
+    @Transactional
     public Account saveAccount(Account accounts) {
         return repository.save(accounts);
-    }
-
-    public List<Account> saveAccounts(List<Account> accounts) {
-        return repository.saveAll(accounts);
     }
 
     public List<Account> getAccounts() {
         return repository.findAll();
     }
 
-    public ResponseEntity<Account> getAccountById(int id) {
-
+    public ResponseEntity<?> getAccountById(int id) {
+        Response response;
         Optional<Account> optional = repository.findById(id);
         Account account = null;
         if (optional.isPresent()) {
             account = optional.get();
         } else {
-            throw new RuntimeException(" Account not found for id :: " + id);
+            response = new Response(Response.responseStatus.FAILED," Account not found for id :: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
-        return ResponseEntity.ok().body(account);
+        return ResponseEntity.status(HttpStatus.OK).body(account);
     }
 
-    public ResponseEntity<Account> getAccountByName(String name) {
+    public ResponseEntity<?> getAccountByName(String name) {
+        Response response;
         Optional <Account> optional = repository.findByName(name);
         Account account = null;
         if (optional.isPresent()) {
             account = optional.get();
+            //response = new Response(Response.responseStatus.SUCCESS,"Successful account");
         } else {
-            throw new RuntimeException(" Account not found for name :: " + name);
+//            throw new RuntimeException(" Account not found for name :: " + name);
+            response = new Response(Response.responseStatus.FAILED,"No account found for :: " + name);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
-        return ResponseEntity.status((HttpStatus.NOT_FOUND)).body(account);
+        return ResponseEntity.status(HttpStatus.OK).body(account);
     }
 
-    public String deleteAccount(int id) {
-        repository.deleteById(id);
-        return "product removed !! " + id;
+    @Transactional
+    public void deleteAccount(int id) {
+        if ( repository.findById(id).isPresent()) {
+            repository.deleteById(id);
+        } else {
+            throw new ResourceNotFoundException("Account " + id + " Not Found");
+        }
     }
 
-    public Account updateAccount(Account accounts) {
-        Account existingAccount = repository.findById(accounts.getId()).orElse(null);
-        existingAccount.setName(accounts.getName());
-        existingAccount.setPan(accounts.getPan());
-        existingAccount.setBalance(accounts.getBalance());
-        existingAccount.setAccountMakers(accounts.getAccountMakers());
+    @Transactional
+    public Account updateAccount(Account account, int accountid) {
+        Account existingAccount = repository.findById(accountid).
+                orElseThrow(
+                        () -> new ResourceNotFoundException
+                                ("Account " + accountid + " Not Found"));
+
+        if (account.getName() != null) {
+            existingAccount.setName(account.getName());
+        }
+
+        if ((Integer) account.getPan() != null) {
+            existingAccount.setPan(account.getPan());
+        }
+
+        if ((Double) account.getBalance() != null) {
+            existingAccount.setBalance(account.getBalance());
+        }
+
+        if (account.getAccountMakers() != null) {
+            existingAccount.setAccountMakers(account.getAccountMakers());
+        }
+
         return repository.save(existingAccount);
     }
 

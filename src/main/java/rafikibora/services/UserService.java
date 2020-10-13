@@ -15,11 +15,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rafikibora.dto.*;
-import rafikibora.model.users.Roles;
 import rafikibora.model.users.User;
 import rafikibora.repository.RoleRepository;
 import rafikibora.repository.UserRepository;
 import rafikibora.security.util.exceptions.RafikiBoraException;
+
+import java.util.List;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -60,6 +62,8 @@ public class UserService implements UserServiceI {
         }
     }
 
+
+
     @Override
     public ResponseEntity<AuthenticationResponse> login(LoginRequest loginRequest) {
         AuthenticationResponse authResponse;
@@ -98,6 +102,21 @@ public class UserService implements UserServiceI {
         User user = userRepository.findByEmail(customUserDetails.getUsername()).orElseThrow(() -> new IllegalArgumentException("User not found with email " + customUserDetails.getUsername()));
         return user.toUserSummary();
     }
+
+    @Override
+    public String deleteUser(int id) {
+        userRepository.deleteById((long) id);
+        return "user removed !! " + id;
+    }
+
+    @Override
+    public Set<User> getUserByRole(String roleName) {
+
+        Set<User> users = userRepository.findByRoles_RoleNameContainingIgnoreCase(roleName);
+
+        return users;
+    }
+
 
 //    @Override
 //     public ResponseEntity<LoginResponse> login2(LoginRequest loginRequest, String accessToken, String refreshToken) {

@@ -75,6 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/terminals/**").permitAll()
                 .antMatchers("/api/accounts/**").permitAll()
                 .antMatchers("/api/transactions/**").permitAll()
+                .antMatchers("/depositSale/**").permitAll()
                 .anyRequest().authenticated().and()
                 .formLogin().disable().httpBasic().disable()
                 .sessionManagement()

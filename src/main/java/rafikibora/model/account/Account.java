@@ -32,7 +32,7 @@ public class Account implements Serializable {
     private String name;
 
     @Column(name = "account_number")
-    private String accountNumber = UUID.randomUUID().toString().replaceAll("[^0-3]", "");
+    private String accountNumber = UUID.randomUUID().toString().replaceAll("[^0.05]","2");
 
     @Column(name = "pan",nullable = false, columnDefinition = "INT(19)")
     private int pan;
