@@ -73,6 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/profile").hasAuthority("ADMIN")
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/accounts/**").permitAll()
+                .antMatchers("/api/deposit/**").permitAll()
                 .anyRequest().authenticated().and()
                 .formLogin().disable().httpBasic().disable()
                 .sessionManagement()
