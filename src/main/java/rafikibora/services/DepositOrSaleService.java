@@ -16,6 +16,9 @@ public class DepositOrSaleService {
     @Autowired
     private TransactionRepository transactionRepository;
 
+    public DepositOrSaleService() {
+    }
+
     public void performDepositOrSale(Transaction depositSaleData) {
         Double amount = depositSaleData.getAmountTransaction();
         String sourceAccountNum = depositSaleData.getSourceAccountNumber();
