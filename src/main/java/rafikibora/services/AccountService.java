@@ -3,12 +3,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import rafikibora.dto.Response;
+import rafikibora.exceptions.ResourceNotFoundException;
 import rafikibora.model.account.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rafikibora.repository.AccountRepository;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,7 +60,7 @@ public class AccountService {
         if ( repository.findById(id).isPresent()) {
             repository.deleteById(id);
         } else {
-            throw new EntityNotFoundException("Account " + id + " Not Found");
+            throw new ResourceNotFoundException("Account " + id + " Not Found");
         }
     }
 
@@ -68,7 +68,7 @@ public class AccountService {
     public Account updateAccount(Account account, int accountid) {
         Account existingAccount = repository.findById(accountid).
                 orElseThrow(
-                        () -> new EntityNotFoundException
+                        () -> new ResourceNotFoundException
                                 ("Account " + accountid + " Not Found"));
 
         if (account.getName() != null) {
