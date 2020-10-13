@@ -58,4 +58,9 @@ public class Transaction implements Serializable {
     @Column(name = "result_code",columnDefinition = "VARCHAR(6)")
     private String resultCode;
 
+    @Transient
+    private String sourceAccountNumber;
+
+    @Transient
+    private String destAccountNumber;
 }
