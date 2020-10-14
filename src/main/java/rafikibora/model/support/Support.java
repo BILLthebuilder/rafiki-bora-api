@@ -3,6 +3,7 @@ package rafikibora.model.support;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,10 +12,11 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE support SET is_deleted=true WHERE support_id=?")
 public class Support {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="terminal_id", columnDefinition = "INT(10)")
+    @Column(name="support_id", columnDefinition = "INT(10)")
     private Long id;
 
     @Column(name = "tid", unique = true, columnDefinition = "VARCHAR(16)")
