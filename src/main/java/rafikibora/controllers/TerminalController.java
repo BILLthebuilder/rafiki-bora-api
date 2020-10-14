@@ -54,14 +54,27 @@ public class TerminalController {
 
 
 
-
-
 //Update Terminal by Id
     @PatchMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
     public ResponseEntity<String> update(@PathVariable("id") Long id, @RequestBody TerminalDto terminalDto) {
         System.out.println(id.toString());
         terminalService.update(id, terminalDto);
         return new ResponseEntity<>("Terminal updated successfully", HttpStatus.OK);
+    }
+
+
+    @PatchMapping(value = "/approve/{id}", consumes = {"application/json"}, produces = {"application/json"})
+    public ResponseEntity<String> approve(@PathVariable("id") Long id) {
+        System.out.println(id.toString());
+        String msg = "";
+        try{
+            terminalService.approve(id);
+            msg = "Terminal approved successfully";
+        }catch (Exception ex){
+            msg = ex.getMessage();
+        }finally {
+            return new ResponseEntity<>(msg, HttpStatus.OK);
+        }
     }
 
 

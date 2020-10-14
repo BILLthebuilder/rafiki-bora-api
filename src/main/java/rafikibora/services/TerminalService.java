@@ -56,7 +56,6 @@ public class TerminalService implements TerminalInterface {
         terminal.setTid(createTID());
         terminal.setMid(createMID());
         terminal.setTerminalMaker(user.getUser());
-        terminal.setTerminalChecker(user.getUser());
         return terminalRepository.save(terminal);
     }
 
@@ -91,7 +90,24 @@ public class TerminalService implements TerminalInterface {
             terminal.setSerialNo(terminalDto.getSerialNumber());
         }
         terminalRepository.save(terminal);
+    }
 
+    // approve Terminal by Id
+    @Transactional
+    public void approve(Long id) throws Exception{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+        Terminal terminal = terminalRepository.findById(id).get();
+        Long checkerId = user.getUser().getUserId(); // Logged in user
+
+        Long makerId = terminal.getTerminalMaker().getUserId(); // Person created this resource
+
+        if(checkerId.equals(makerId))
+            throw new Exception("Creator of resource is not allowed to approve.");
+        else{
+            terminal.setTerminalChecker(user.getUser());
+            terminalRepository.save(terminal);
+        }
     }
 
 

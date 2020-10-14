@@ -3,13 +3,15 @@ package rafikibora.services;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import rafikibora.dto.ReceiveMoneyRequestDto;
 import rafikibora.dto.ReceiveMoneyResponseDto;
 import rafikibora.exceptions.ResourceNotFoundException;
-import rafikibora.helpers.Transaction;
-import rafikibora.model.account.Account;
+import rafikibora.model.terminal.Terminal;
+import rafikibora.model.transactions.Transaction;
 import rafikibora.model.users.User;
-import rafikibora.repository.AccountRepository;
+import rafikibora.repository.TerminalRepository;
+import rafikibora.repository.TransactionRepository;
 import rafikibora.repository.UserRepository;
 
 import java.text.ParseException;
@@ -27,28 +29,61 @@ public class ReceiveMoneyServiceImpl implements ReceiveMoneyService{
     private UserRepository userRepository;
 
     @Autowired
-    private AccountRepository accountRepository;
+    private TransactionRepository transactionRepository;
+
+    @Autowired
+    private TerminalRepository terminalRepository;
 
     @Override
+    @Transactional
     public ReceiveMoneyResponseDto receiveMoney(ReceiveMoneyRequestDto req) throws ParseException {
         Optional<User> optionalMerchant;
-        Optional<Account> optionalMerchantAccount;
+        Optional<Terminal> optionalTerminal;
         User merchant;
-        Account merchantAccount;
+        Terminal terminal;
         double amount = Double.parseDouble(req.getTxnAmount());
+        double newAccountBalance;
+        double accountBalance;
         String currencyCode = this.formatCurrencyCode(req.getTxnCurrencyCode());
-
-//        System.out.println("**************Merchant Details**************");
-//        System.out.println("mid: "+req.getMid());
-//        System.out.println("**************Merchant Details**************");
-//        System.out.println();
+        Transaction transaction = new Transaction();
 
         // Get merchant
-        optionalMerchant = userRepository.findByMid("123456789123456");
+        optionalMerchant = userRepository.findByMid(req.getMid());
         if(optionalMerchant.isPresent())
             merchant = optionalMerchant.get();
         else
             throw new ResourceNotFoundException("Merchant Not Found");
+
+        accountBalance = merchant.getUserAccount().getBalance();
+        if(accountBalance >= amount){
+            newAccountBalance = accountBalance - amount;
+            merchant.getUserAccount().setBalance(newAccountBalance);
+            userRepository.save(merchant);
+        }
+
+        // Get terminal
+        optionalTerminal = terminalRepository.findByTid(req.getTid());
+        if(optionalTerminal.isPresent())
+            terminal = optionalTerminal.get();
+        else
+            throw new ResourceNotFoundException("Merchant Not Found");
+
+        transaction.setAmountTransaction(amount);
+        transaction.setAmountTransactionCurrencyCode(currencyCode);
+        transaction.setDateTimeLocalTransaction(this.formatDateTime(req.getTxnLocalDate()+req.getTxnLocalTime()));
+        transaction.setDateTimeTransmission(this.formatDateTime(req.getTransmissionDateTime()));
+        /**
+         * If withdrawing with token, merchant account is the debit account.
+         * If withdrawing with card, customer account is the debit account.
+         */
+        transaction.setSourceAccount(merchant.getUserAccount());
+        transaction.setTerminal(terminal);
+        transaction.setMerchant(merchant);
+        transaction.setPosConditionCode(req.getPosConditionCode());
+        transaction.setPan(req.getPan());
+        transaction.setProcessingCode(req.getPcode());
+        transaction.setStan(req.getStan());
+        transactionRepository.save(transaction);
 
         if(merchant != null) {
             System.out.println("**************Merchant Details**************");
@@ -56,54 +91,32 @@ public class ReceiveMoneyServiceImpl implements ReceiveMoneyService{
             System.out.println("buss name: "+merchant.getBusinessName());
             System.out.println("email: "+merchant.getEmail());
             System.out.println("name: "+merchant.getFirstName() + merchant.getLastName());
+            System.out.println("phone no: "+merchant.getPhoneNo());
             System.out.println("mid: "+merchant.getMid());
+            System.out.println("tid: "+terminal.getTid());
             System.out.println("account number: "+merchant.getUserAccount().getAccountNumber());
+            System.out.println("account balance: "+merchant.getUserAccount().getBalance());
+            System.out.println("business name: "+merchant.getUserAccount().getName());
+            System.out.println("pan: "+merchant.getUserAccount().getPan());
             System.out.println("**************Merchant Details**************");
         }else{
             System.out.println("**************Merchant Details**************");
-            System.out.println("No merchant...");
+            System.out.println("No merchant Found...");
             System.out.println("**************Merchant Details**************");
-            System.out.println();
         }
-
-
-//        // Get merchant bank account
-//        optionalMerchantAccount = accountRepository.findByAccountNumber(merchant.getUserAccount().getAccountNumber());
-//        if(optionalMerchantAccount.isPresent())
-//            merchantAccount =  optionalMerchantAccount.get();
-//        else
-//            throw new ResourceNotFoundException("Merchant Account Not Found");
-
-
-//        System.out.println("**************Merchant Details**************");
-//        System.out.println("user id: "+ merchant.getUserId());
-//        System.out.println("buss name: "+merchant.getBusinessName());
-//        System.out.println("email: "+merchant.getEmail());
-//        System.out.println("name: "+merchant.getFirstName() + merchant.getLastName());
-//        System.out.println("mid: "+merchant.getMid());
-//        System.out.println("account number: "+merchant.getUserAccount().getAccountNumber());
-//        System.out.println("**************Merchant Details**************");
-//        System.out.println();
-//        System.out.println("**************Merchant Account Details**************");
-//        System.out.println("account id: "+merchantAccount.getId());
-//        System.out.println("account number: "+merchantAccount.getAccountNumber());
-//        System.out.println("balance: "+merchantAccount.getBalance());
-//        System.out.println("pan: "+merchantAccount.getPan());
-//        System.out.println("phone number: "+merchantAccount.getPhoneNumber());
-//        System.out.println("**************Merchant Account Details**************");
-//        System.out.println();
 
         ReceiveMoneyResponseDto resp = new ReceiveMoneyResponseDto();
         resp.setMessage("successful");
-        resp.setAmount(amount);
-        resp.setCurrencyCode(currencyCode);
-        resp.setTransmissionDateTime(this.formatDateTime(req.getTransmissionDateTime()));
-        resp.setTransactionDateTime(this.formatDateTime(req.getTxnLocalDate()+req.getTxnLocalTime()));
-
         return resp;
     }
 
 
+    /**
+     *
+     * @param transmissionDateTime
+     * @return Formatted date
+     * @throws ParseException
+     */
     private Date formatDateTime(String transmissionDateTime) throws ParseException {
         String pattern = "yyyy-MM-dd HH:mm:ss";
         String month = transmissionDateTime.substring(0,2);
@@ -119,6 +132,11 @@ public class ReceiveMoneyServiceImpl implements ReceiveMoneyService{
     }
 
 
+    /**
+     *
+     * @param currencyCode
+     * @return currency
+     */
     private String formatCurrencyCode(String currencyCode){
         String code = "";
         switch(currencyCode){
