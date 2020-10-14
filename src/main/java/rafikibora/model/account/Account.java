@@ -35,7 +35,7 @@ public class Account implements Serializable {
 //    private String accountNumber = UUID.randomUUID().toString().replaceAll("[^0.05]","2");
 
     @Column(name = "account_number", unique = true, nullable = false, columnDefinition = "VARCHAR(10)")
-    private String accountNumber;
+    public String accountNumber;
 
     @Column(name = "pan",nullable = false, columnDefinition = "VARCHAR(16)")
     private String pan;

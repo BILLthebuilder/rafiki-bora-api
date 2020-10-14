@@ -14,6 +14,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByMid(String mid);
 
 
+
     //Optional<User> findByRoles( @Param("roleName") String roleName);
 
 //    Set<User> findByroles(Long roleId);
