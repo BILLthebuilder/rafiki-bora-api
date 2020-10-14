@@ -20,6 +20,9 @@ import rafikibora.repository.RoleRepository;
 import rafikibora.repository.UserRepository;
 import rafikibora.security.util.exceptions.RafikiBoraException;
 
+import java.util.List;
+import java.util.Set;
+
 @Service
 @Slf4j
 @AllArgsConstructor
@@ -100,12 +103,20 @@ public class UserService implements UserServiceI {
         return user.toUserSummary();
     }
 
-
     @Override
     public String deleteUser(int id) {
         userRepository.deleteById((long) id);
         return "user removed !! " + id;
     }
+
+    @Override
+    public Set<User> getUserByRole(String roleName) {
+
+        Set<User> users = userRepository.findByRoles_RoleNameContainingIgnoreCase(roleName);
+
+        return users;
+    }
+
 
 //    @Override
 //     public ResponseEntity<LoginResponse> login2(LoginRequest loginRequest, String accessToken, String refreshToken) {

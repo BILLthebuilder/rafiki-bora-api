@@ -2,6 +2,10 @@ package rafikibora.services;
 
 import org.springframework.http.ResponseEntity;
 import rafikibora.dto.*;
+import rafikibora.model.users.User;
+
+import java.util.List;
+import java.util.Set;
 
 public interface UserServiceI {
     //ResponseEntity<LoginResponse> login2(LoginRequest loginRequest, String accessToken, String refreshToken);
@@ -15,4 +19,9 @@ public interface UserServiceI {
 
 
     UserSummary getUserProfile();
+
+//    List<User> getUserByRole(String roleName);
+
+    Set<User> getUserByRole(String roleName);
+
 }
