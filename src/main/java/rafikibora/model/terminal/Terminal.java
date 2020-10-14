@@ -1,6 +1,7 @@
 package rafikibora.model.terminal;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import rafikibora.model.transactions.Transaction;
 
@@ -38,12 +39,12 @@ public class Terminal implements Serializable {
 //
 //    @JsonBackReference(value = "created_by_t")
 //    @ManyToOne
-//    @JoinColumn(name="created_by", nullable = false, referencedColumnName = "user_id")
+//    @JoinColumn(name="created_by", nullable = false, referencedColumnName = "userid")
 //    private User terminalMaker;
 //
 //    @JsonBackReference(value = "approved_by_t")
 //    @ManyToOne
-//    @JoinColumn(name="approved_by", referencedColumnName = "user_id")
+//    @JoinColumn(name="approved_by", referencedColumnName = "userid")
 //    private User terminalChecker;
 
 
@@ -58,8 +59,9 @@ public class Terminal implements Serializable {
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date dateUpdated;
 
+    @JsonIgnore
     @OneToMany(mappedBy="terminal",cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "tid_t")
+    //@JsonManagedReference(value = "tid_t")
     private List<Transaction> transactions = new ArrayList<Transaction>();
 
     public Long getId() {

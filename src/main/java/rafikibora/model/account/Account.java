@@ -52,7 +52,7 @@ public class Account implements Serializable {
     private Date dateUpdated;
 
     @ManyToOne
-    @JoinColumn(name="created_by", nullable = false, referencedColumnName = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name="created_by", nullable = false, referencedColumnName = "userid", insertable = false, updatable = false)
     @JsonIgnore
     private User accountMaker;
 
@@ -61,7 +61,7 @@ public class Account implements Serializable {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="approved_by", referencedColumnName = "user_id")
+    @JoinColumn(name="approved_by", referencedColumnName = "userid")
     private User accountChecker;
 
     @JsonIgnore
