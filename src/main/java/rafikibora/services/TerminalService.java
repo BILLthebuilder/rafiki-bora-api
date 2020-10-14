@@ -18,6 +18,7 @@ import rafikibora.repository.TerminalRepository;
 
 import javax.transaction.Transactional;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -32,6 +33,12 @@ public class TerminalService implements TerminalInterface {
         return UUID.randomUUID().toString().substring(0,16);
     }
 
+    //create MID
+    public String createMID(){
+        return UUID.randomUUID().toString().substring(0,16);
+    }
+
+
     //Create Terminal
     @Transactional
     public Terminal save(Terminal terminal) {
@@ -41,11 +48,15 @@ public class TerminalService implements TerminalInterface {
         terminal.setModelType(terminal.getModelType());
         terminal.setSerialNo(terminal.getSerialNo());
         terminal.setDeleted(false);
-        terminal.setDateCreated(new Date());
-        terminal.setDateUpdated(new Date());
+        terminal.setCreatedOn(( LocalDateTime.now()));
+        terminal.setUpdatedOn(( LocalDateTime.now()));
         terminal.setStatus(true);
+//        terminal.setDateCreated(new Date());
+//        terminal.setDateUpdated(new Date());
         terminal.setTid(createTID());
+        terminal.setMid(createMID());
         terminal.setTerminalMaker(user.getUser());
+        terminal.setTerminalChecker(user.getUser());
         return terminalRepository.save(terminal);
     }
 
