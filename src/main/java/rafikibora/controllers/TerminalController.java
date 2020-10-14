@@ -54,6 +54,7 @@ public class TerminalController {
 
 
 
+
     //Update Terminal by Id
 
     @PatchMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
@@ -62,6 +63,7 @@ public class TerminalController {
         terminalService.update(id, terminalDto);
         return new ResponseEntity<>("Terminal updated successfully", HttpStatus.OK);
     }
+
 
 
 

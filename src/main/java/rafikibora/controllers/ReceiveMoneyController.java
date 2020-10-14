@@ -12,6 +12,7 @@ import rafikibora.dto.ReceiveMoneyResponseDto;
 import rafikibora.services.ReceiveMoneyService;
 
 import java.text.ParseException;
+import java.util.concurrent.ExecutionException;
 
 
 @RestController
@@ -22,7 +23,7 @@ public class ReceiveMoneyController {
     private ReceiveMoneyService receiveMoneyService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ReceiveMoneyResponseDto receiveMoneyTransaction(@RequestBody ReceiveMoneyRequestDto req) throws ParseException {
+    public ReceiveMoneyResponseDto receiveMoneyTransaction(@RequestBody ReceiveMoneyRequestDto req) {
         System.out.println("=================================== INCOMING ISO MSG ===================================");
         System.out.println("pcode: "+ req.getPcode());
         System.out.println("pan: " + req.getPan());
@@ -36,15 +37,15 @@ public class ReceiveMoneyController {
         System.out.println("destAccount: " + req.getDestAccount());
         System.out.println("authToken: "+ req.getAgentAuthToken());
         System.out.println("=================================== INCOMING ISO MSG ===================================");
-
-        System.out.println("=================================== PROCESSED ISO MSG ===================================");
-        System.out.println("txnAmount: "+receiveMoneyService.receiveMoney(req).getAmount());
-        System.out.println("txnCurrencyCode: " +receiveMoneyService.receiveMoney(req).getCurrencyCode());
-        System.out.println("txnTransmissionDateTime: "+receiveMoneyService.receiveMoney(req).getTransmissionDateTime());
-        System.out.println("txnTransactionDateTime: "+receiveMoneyService.receiveMoney(req).getTransactionDateTime());
-        System.out.println("txnMessage: "+receiveMoneyService.receiveMoney(req).getMessage());
-        System.out.println("=================================== PROCESSED ISO MSG ===================================");
-
-        return receiveMoneyService.receiveMoney(req);
+        ReceiveMoneyResponseDto resp = null;
+        try {
+            resp = receiveMoneyService.receiveMoney(req);
+        } catch (Exception ex){
+            System.out.println("Exception message: "+ex.getMessage());
+            ex.printStackTrace();
+            resp.setMessage("GATEWAY ERROR");
+        } finally {
+            return resp;
+        }
     }
 }
