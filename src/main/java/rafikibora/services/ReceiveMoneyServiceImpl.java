@@ -38,13 +38,35 @@ public class ReceiveMoneyServiceImpl implements ReceiveMoneyService{
         double amount = Double.parseDouble(req.getTxnAmount());
         String currencyCode = this.formatCurrencyCode(req.getTxnCurrencyCode());
 
-//        // Get merchant
-//        optionalMerchant = userRepository.findByEmail(req.getMid());
-//        if(optionalMerchant.isPresent())
-//            merchant = optionalMerchant.get();
-//        else
-//            throw new ResourceNotFoundException("Merchant Not Found");
-//
+//        System.out.println("**************Merchant Details**************");
+//        System.out.println("mid: "+req.getMid());
+//        System.out.println("**************Merchant Details**************");
+//        System.out.println();
+
+        // Get merchant
+        optionalMerchant = userRepository.findByMid("123456789123456");
+        if(optionalMerchant.isPresent())
+            merchant = optionalMerchant.get();
+        else
+            throw new ResourceNotFoundException("Merchant Not Found");
+
+        if(merchant != null) {
+            System.out.println("**************Merchant Details**************");
+            System.out.println("user id: "+ merchant.getUserId());
+            System.out.println("buss name: "+merchant.getBusinessName());
+            System.out.println("email: "+merchant.getEmail());
+            System.out.println("name: "+merchant.getFirstName() + merchant.getLastName());
+            System.out.println("mid: "+merchant.getMid());
+            System.out.println("account number: "+merchant.getUserAccount().getAccountNumber());
+            System.out.println("**************Merchant Details**************");
+        }else{
+            System.out.println("**************Merchant Details**************");
+            System.out.println("No merchant...");
+            System.out.println("**************Merchant Details**************");
+            System.out.println();
+        }
+
+
 //        // Get merchant bank account
 //        optionalMerchantAccount = accountRepository.findByAccountNumber(merchant.getUserAccount().getAccountNumber());
 //        if(optionalMerchantAccount.isPresent())
@@ -52,6 +74,24 @@ public class ReceiveMoneyServiceImpl implements ReceiveMoneyService{
 //        else
 //            throw new ResourceNotFoundException("Merchant Account Not Found");
 
+
+//        System.out.println("**************Merchant Details**************");
+//        System.out.println("user id: "+ merchant.getUserId());
+//        System.out.println("buss name: "+merchant.getBusinessName());
+//        System.out.println("email: "+merchant.getEmail());
+//        System.out.println("name: "+merchant.getFirstName() + merchant.getLastName());
+//        System.out.println("mid: "+merchant.getMid());
+//        System.out.println("account number: "+merchant.getUserAccount().getAccountNumber());
+//        System.out.println("**************Merchant Details**************");
+//        System.out.println();
+//        System.out.println("**************Merchant Account Details**************");
+//        System.out.println("account id: "+merchantAccount.getId());
+//        System.out.println("account number: "+merchantAccount.getAccountNumber());
+//        System.out.println("balance: "+merchantAccount.getBalance());
+//        System.out.println("pan: "+merchantAccount.getPan());
+//        System.out.println("phone number: "+merchantAccount.getPhoneNumber());
+//        System.out.println("**************Merchant Account Details**************");
+//        System.out.println();
 
         ReceiveMoneyResponseDto resp = new ReceiveMoneyResponseDto();
         resp.setMessage("successful");
