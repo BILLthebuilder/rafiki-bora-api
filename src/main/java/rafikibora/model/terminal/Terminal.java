@@ -2,6 +2,7 @@ package rafikibora.model.terminal;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.sun.istack.Nullable;
 import rafikibora.model.transactions.Transaction;
 
 import javax.persistence.*;
@@ -43,6 +44,7 @@ public class Terminal implements Serializable {
 //
 //    @JsonBackReference(value = "approved_by_t")
 //    @ManyToOne
+//    @Nullable
 //    @JoinColumn(name="approved_by", referencedColumnName = "user_id")
 //    private User terminalChecker;
 

@@ -25,16 +25,19 @@ import java.util.UUID;
 public class Account implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="account_id")
+    @Column(name="account_id", columnDefinition = "INT(10)")
     private int id;
 
     @Column(name = "name",nullable = false, columnDefinition = "VARCHAR(50)")
     private String name;
 
-    @Column(name = "account_number")
-    private String accountNumber = UUID.randomUUID().toString().replaceAll("[^0.05]","2");
+//    @Column(name = "account_number")
+//    private String accountNumber = UUID.randomUUID().toString().replaceAll("[^0.05]","2");
 
-    @Column(name = "pan",nullable = false, columnDefinition = "INT(19)")
+    @Column(name = "account_number", unique = true, nullable = false, columnDefinition = "VARCHAR(10)")
+    private String accountNumber;
+
+    @Column(name = "pan",nullable = false, columnDefinition = "INT(16)")
     private int pan;
 
     @Column(name = "phone_number",nullable = false, columnDefinition = "VARCHAR(10)")
