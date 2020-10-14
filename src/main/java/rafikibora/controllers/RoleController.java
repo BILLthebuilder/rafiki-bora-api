@@ -20,7 +20,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/roles")
 public class RoleController {
 
     @Autowired
@@ -50,12 +50,12 @@ public class RoleController {
         return service.getRoles();
     }
 
-    @GetMapping("/roles/{roleId}")
+    @GetMapping("/{roleId}")
     public ResponseEntity<Roles> findRoleById(@PathVariable ("roleId") long roleId) {
         return (ResponseEntity<Roles>) service.getRoleById(roleId);
     }
 
-    @GetMapping("role/{roleName}")
+    @GetMapping("/roles/{roleName}")
     public ResponseEntity<Roles> findRoleByName(@PathVariable @Valid String roleName) {
         return (ResponseEntity<Roles>) service.getRoleByName(roleName);
     }

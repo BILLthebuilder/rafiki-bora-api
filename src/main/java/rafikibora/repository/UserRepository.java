@@ -11,6 +11,7 @@ import java.util.Set;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
+    Optional<User> findByMid(String mid);
 
 
     //Optional<User> findByRoles( @Param("roleName") String roleName);

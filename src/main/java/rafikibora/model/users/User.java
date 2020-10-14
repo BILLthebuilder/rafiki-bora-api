@@ -94,7 +94,7 @@ public class User implements Serializable {
 
     @JsonIgnore
     @OneToOne
-    @JoinColumn(name = "account_number", referencedColumnName = "account_id")
+    @JoinColumn(name = "account_number", referencedColumnName = "account_number", columnDefinition = "VARCHAR(10)")
     private Account userAccount;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})

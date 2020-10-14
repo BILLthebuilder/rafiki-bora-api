@@ -75,7 +75,7 @@ public class AccountService {
             existingAccount.setName(account.getName());
         }
 
-        if ((Integer) account.getPan() != null) {
+        if ((String) account.getPan() != null) {
             existingAccount.setPan(account.getPan());
         }
 
