@@ -56,7 +56,8 @@ public class TerminalService implements TerminalInterface {
         terminal.setTid(createTID());
         terminal.setMid(createMID());
         terminal.setTerminalMaker(user.getUser());
-        terminal.setTerminalChecker(user.getUser());
+
+//        terminal.setTerminalChecker(user.getUser());
         return terminalRepository.save(terminal);
     }
 
@@ -68,16 +69,13 @@ public class TerminalService implements TerminalInterface {
     }
 
 
-
-//List Terminal by Id
+    //List Terminal by Id
     @Transactional
     public Terminal getById(Long id) {
         Terminal terminal = terminalRepository.findById(id).get();
         return terminal;
 
     }
-
-
 
 
     //update Terminal by Id
@@ -91,9 +89,45 @@ public class TerminalService implements TerminalInterface {
             terminal.setSerialNo(terminalDto.getSerialNumber());
         }
         terminalRepository.save(terminal);
-
     }
 
+    // approve Terminal by Id
+    @Transactional
+    public void approve(Long id) throws Exception{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+        Terminal terminal = terminalRepository.findById(id).get();
+        Long checkerId = user.getUser().getUserId(); // Logged in user
+
+        Long makerId = terminal.getTerminalMaker().getUserId(); // Person created this resource
+
+        if(checkerId.equals(makerId))
+            throw new Exception("Creator of resource is not allowed to approve.");
+        else{
+            terminal.setTerminalChecker(user.getUser());
+            terminalRepository.save(terminal);
+        }
+    }
+
+    // Approve Terminal by Id
+
+    @Transactional
+    public void approve(TerminalDto terminalDto) throws Exception{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+        Long id = Long.parseLong(terminalDto.getId());
+        Terminal terminal = terminalRepository.findById(id).get();
+        Long checkerId = user.getUser().getUserId();
+        Long makerId = terminal.getTerminalMaker().getUserId();
+        if(checkerId.equals(makerId))
+            throw new Exception("Creator of resource is not allowed to approve.");
+        else{
+            terminal.setTerminalChecker(user.getUser());
+            terminalRepository.save(terminal);
+        }
+    }
+
+//        terminal.setTerminalChecker(user.getUser());
 
     //Delete Terminal by Id
     @Transactional
