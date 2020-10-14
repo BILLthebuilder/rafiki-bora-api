@@ -37,8 +37,8 @@ public class Account implements Serializable {
     @Column(name = "account_number", unique = true, nullable = false, columnDefinition = "VARCHAR(10)")
     private String accountNumber;
 
-    @Column(name = "pan",nullable = false, columnDefinition = "INT(16)")
-    private int pan;
+    @Column(name = "pan",nullable = false, columnDefinition = "VARCHAR(16)")
+    private String pan;
 
     @Column(name = "phone_number",nullable = false, columnDefinition = "VARCHAR(10)")
     private String phoneNumber;
