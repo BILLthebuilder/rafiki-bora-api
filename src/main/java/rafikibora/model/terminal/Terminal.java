@@ -23,7 +23,6 @@ import java.util.List;
 
 
 @Entity
-@SQLDelete(sql = "UPDATE terminals SET is_deleted=true WHERE terminal_id=?")
 @Table(name = "terminals")
 @Data
 @AllArgsConstructor

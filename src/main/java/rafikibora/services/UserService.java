@@ -22,11 +22,8 @@ import rafikibora.repository.RoleRepository;
 import rafikibora.repository.UserRepository;
 import rafikibora.security.util.exceptions.RafikiBoraException;
 
-<<<<<<< HEAD
-=======
 import java.util.List;
 import java.util.Objects;
->>>>>>> d4d899297290a7d39d40454502f0630bd1b9afd5
 import java.util.Set;
 import java.util.stream.Collectors;
 
