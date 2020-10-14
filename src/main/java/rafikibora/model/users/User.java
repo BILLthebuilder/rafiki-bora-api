@@ -89,6 +89,7 @@ public class User implements Serializable {
         UserSummary userSummary = new UserSummary();
         userSummary.setEmail(this.email);
         userSummary.setUserId(this.userId);
+        userSummary.setRoles(this.getRoles());
         return userSummary;
     }
 

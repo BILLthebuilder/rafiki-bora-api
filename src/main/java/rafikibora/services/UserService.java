@@ -9,6 +9,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +22,9 @@ import rafikibora.repository.UserRepository;
 import rafikibora.security.util.exceptions.RafikiBoraException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -70,17 +73,21 @@ public class UserService implements UserServiceI {
         try {
             authenticate(loginRequest.getEmail(), loginRequest.getPassword());
         }catch (Exception ex){
-            authResponse = new AuthenticationResponse(AuthenticationResponse.responseStatus.FAILED, ex.getMessage(),null,null);
+            authResponse = new AuthenticationResponse(AuthenticationResponse.responseStatus.FAILED, ex.getMessage(),null,null,null);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(authResponse);
         }
 
         final UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginRequest.getEmail());
+        List<?> userRoles = userDetails.getAuthorities().stream().map(s ->
+                new SimpleGrantedAuthority(s.getAuthority())).
+                filter(Objects::nonNull).
+                collect(Collectors.toList());
         String token = jwtProvider.generateToken(userDetails);
         boolean validateToken = jwtProvider.validateToken(token);
         if(!validateToken){
             jwtProvider.generateToken(userDetails);
         }
-        authResponse = new AuthenticationResponse(AuthenticationResponse.responseStatus.SUCCESS, "Successful Login",token,loginRequest.getEmail());
+        authResponse = new AuthenticationResponse(AuthenticationResponse.responseStatus.SUCCESS, "Successful Login",token,loginRequest.getEmail(), userRoles);
         return ResponseEntity.ok().body(authResponse);
     }
 
