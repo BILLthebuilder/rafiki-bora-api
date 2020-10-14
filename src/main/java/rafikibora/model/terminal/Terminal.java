@@ -53,7 +53,7 @@ public class Terminal implements Serializable {
     private User terminalMaker;
 
     @ManyToOne
-    @JoinColumn(name="approved_by", nullable = false, referencedColumnName = "user_id")
+    @JoinColumn(name="approved_by", referencedColumnName = "user_id")
     @JsonIgnore
     private User terminalChecker;
 
