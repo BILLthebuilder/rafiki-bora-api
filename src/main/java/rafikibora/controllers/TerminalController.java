@@ -13,6 +13,7 @@ import rafikibora.repository.TerminalRepository;
 import rafikibora.services.TerminalService;
 
 import java.awt.*;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ import java.util.Map;
 
 @RestController
 @Slf4j
-@RequestMapping("terminals")
+@RequestMapping("/api/terminals")
 public class TerminalController {
 
     @Autowired
@@ -28,18 +29,18 @@ public class TerminalController {
     private TerminalRepository terminalRepository;
 
 //Create Terminal
-    @PostMapping(value = "/", consumes = {"application/json"}, produces = {"application/json"})
-    public ResponseEntity<String> create(@RequestBody TerminalDto terminalDto) {
-        System.out.println(terminalDto.toString());
-        terminalService.save(terminalDto);
-        return new ResponseEntity<>("Terminal creation successful", HttpStatus.CREATED);
+    @PostMapping
+    public ResponseEntity<?> create(@RequestBody Terminal terminal) {
+        System.out.println(terminal.toString());
+        Terminal t = terminalService.save(terminal);
+        return new ResponseEntity<Terminal>(t, HttpStatus.CREATED);
     }
 
 //List All Terminals
-    @GetMapping(value = "/",consumes = {"application/json"}, produces = {"application/json"})
+    @GetMapping(produces = {"application/json"})
     public ResponseEntity<List<Terminal>> list() {
         List<Terminal> terminals = terminalService.list();
-        return new ResponseEntity<>(terminals, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(terminals, HttpStatus.OK);
     }
 
     //List by Id
@@ -48,7 +49,7 @@ public class TerminalController {
     public ResponseEntity<Terminal> listOne(@PathVariable("id") Long id) {
         System.out.println(id.toString());
         Terminal terminal = terminalService.getById(id);
-        return new ResponseEntity<>(terminal, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(terminal, HttpStatus.OK);
     }
 
 
@@ -60,7 +61,7 @@ public class TerminalController {
     public ResponseEntity<String> update(@PathVariable("id") Long id, @RequestBody TerminalDto terminalDto) {
         System.out.println(id.toString());
         terminalService.update(id, terminalDto);
-        return new ResponseEntity<>("Terminal updated successfully", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Terminal updated successfully", HttpStatus.OK);
     }
 
 
@@ -68,7 +69,7 @@ public class TerminalController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") Long id) {
         terminalService.deleteById(id);
-        return new ResponseEntity<>("Terminal deletion successful", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Terminal deletion successful", HttpStatus.OK);
     }
 
 

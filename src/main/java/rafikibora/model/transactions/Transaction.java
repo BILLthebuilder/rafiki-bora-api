@@ -1,6 +1,8 @@
 package rafikibora.model.transactions;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@JsonIgnoreProperties
 @Table(name = "transactions")
 public class Transaction implements Serializable {
     @Id
@@ -40,6 +43,7 @@ public class Transaction implements Serializable {
     @Column(name = "stan", columnDefinition = "INT(6)")
     private int stan;
 
+    @JsonFormat(pattern="hhmmss:MMDD")
     @Column(name = "date_time_local_transaction", updatable=false, nullable=false, columnDefinition = "DATETIME")
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date dateTimeLocalTransaction;
@@ -85,4 +89,9 @@ public class Transaction implements Serializable {
     @Column(name = "result_code",columnDefinition = "VARCHAR(6)")
     private String resultCode;
 
+    @Transient
+    private String sourceAccountNumber;
+
+    @Transient
+    private String destinationAccountNumber;
 }

@@ -30,7 +30,7 @@ public class TransactionController {
         return service.getTransactionById(id);
     }
 
-    @GetMapping("/{resultCode}")
+    @GetMapping("transactions/{resultCode}")
     public Transaction findTransactionByResultCode(@PathVariable @Valid String resultCode) {
         return service.getTransactionByName(resultCode);
     }

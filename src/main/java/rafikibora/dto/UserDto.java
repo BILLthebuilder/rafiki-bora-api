@@ -14,4 +14,7 @@ public class UserDto {
     private String phoneNo;
     private String password;
     private String userMaker;
+    private String userChecker;
+    private String userId;
+
 }
