@@ -13,7 +13,6 @@ import rafikibora.model.users.UserRoles;
 import rafikibora.repository.RoleRepository;
 import rafikibora.repository.UserRepository;
 
-import java.util.Random;
 
 @Transactional
 @Component

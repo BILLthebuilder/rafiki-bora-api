@@ -56,9 +56,11 @@ public class AccountService {
     }
 
     @Transactional
-    public void deleteAccount(int id) {
+    public ResponseEntity<?> deleteAccount(int id) {
         if ( repository.findById(id).isPresent()) {
             repository.deleteById(id);
+            // return "account disabled";
+            return new ResponseEntity("Account Deleted", HttpStatus.OK);
         } else {
             throw new ResourceNotFoundException("Account " + id + " Not Found");
         }
@@ -75,7 +77,7 @@ public class AccountService {
             existingAccount.setName(account.getName());
         }
 
-        if ((Integer) account.getPan() != null) {
+        if ((String) account.getPan() != null) {
             existingAccount.setPan(account.getPan());
         }
 

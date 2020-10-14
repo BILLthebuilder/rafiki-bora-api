@@ -9,6 +9,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,8 +22,10 @@ import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.User;
 import rafikibora.repository.UserRepository;
 import rafikibora.security.util.exceptions.RafikiBoraException;
-
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -53,12 +56,16 @@ public class UserService implements UserServiceI {
         }
 
         final UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginRequest.getEmail());
+        List<?> userRoles = userDetails.getAuthorities().stream().map(s ->
+                new SimpleGrantedAuthority(s.getAuthority())).
+                filter(Objects::nonNull).
+                collect(Collectors.toList());
         String token = jwtProvider.generateToken(userDetails);
         boolean validateToken = jwtProvider.validateToken(token);
         if (!validateToken) {
             jwtProvider.generateToken(userDetails);
         }
-        authResponse = new AuthenticationResponse(AuthenticationResponse.responseStatus.SUCCESS, "Successful Login", token, loginRequest.getEmail());
+        authResponse = new AuthenticationResponse(AuthenticationResponse.responseStatus.SUCCESS, "Successful Login",token,loginRequest.getEmail(), userRoles);
         return ResponseEntity.ok().body(authResponse);
     }
 
@@ -137,18 +144,18 @@ public class UserService implements UserServiceI {
     }
 
     // terminal service
-    @Transactional
-    public void addTerminal(Terminal terminal) {
-        User currentUser = getCurrentUser();
-        // Todo
-    }
-
-    @Override
-    public Terminal approveTerminal(String serialNo) {
-        User currentUser = getCurrentUser();
-        // Todo
-
-        return null;
-    }
+//    @Transactional
+//    public void addTerminal(Terminal terminal) {
+//        User currentUser = getCurrentUser();
+//        // Todo
+//    }
+//
+//    @Override
+//    public Terminal approveTerminal(String serialNo) {
+//        User currentUser = getCurrentUser();
+//        // Todo
+//
+//        return null;
+//    }
 
 }

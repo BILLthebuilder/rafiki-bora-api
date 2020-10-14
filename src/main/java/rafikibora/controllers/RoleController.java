@@ -1,6 +1,7 @@
 package rafikibora.controllers;
 
-import org.springframework.data.repository.query.Param;
+
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,29 +11,31 @@ import org.springframework.web.util.UriComponentsBuilder;
 import rafikibora.model.account.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import rafikibora.model.users.Role;
 import rafikibora.services.AccountService;
+import rafikibora.services.RoleService;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/accounts")
-public class AccountController {
+@RequestMapping(value = "/api/roles")
+public class RoleController {
 
     @Autowired
-    private AccountService service;
+    private RoleService service;
 
     @PostMapping
-    public ResponseEntity<?> addAccount(@Valid @RequestBody Account account) {
+    public ResponseEntity<?> addRole(@Valid @RequestBody Role role) {
 
-        Account newAccount = service.saveAccount(account);
+        Role newRole = service.saveRole(role);
 
         // set the location header for the newly created resource
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newEmployeeURI = ServletUriComponentsBuilder.fromCurrentRequest() // get the URI for this request
                 .path("/{id}") // add to it a path variable
-                .buildAndExpand(newAccount.getId()) // populate that path variable with the newly created restaurant id
+                .buildAndExpand(newRole.getRoleid()) // populate that path variable with the newly created restaurant id
                 .toUri(); // convert that work into a human readable URI
         responseHeaders.setLocation(newEmployeeURI); // in the header, set the location location to that URI
 
@@ -43,30 +46,31 @@ public class AccountController {
 
 
     @GetMapping
-    public List<Account> findAllAccounts() {
-        return service.getAccounts();
+    public List<Role> findAllRoles() {
+        return service.getRoles();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Account> findAccountById(@PathVariable int id) {
-        return (ResponseEntity<Account>) service.getAccountById(id);
+    @GetMapping("/{roleId}")
+    public ResponseEntity<Role> findRoleById(@PathVariable ("roleId") long roleId) {
+        return (ResponseEntity<Role>) service.getRoleById(roleId);
     }
 
-    @GetMapping("accounts/{name}")
-    public ResponseEntity<Account> findAccountByName(@PathVariable @Valid String name) {
-        return (ResponseEntity<Account>) service.getAccountByName(name);
+    @GetMapping("/roles/{roleName}")
+    public ResponseEntity<Role> findRoleByName(@PathVariable @Valid String roleName) {
+        return (ResponseEntity<Role>) service.getRoleByName(roleName);
     }
 
     @PatchMapping(value = "/{id}", consumes = {"application/json"})
-    public ResponseEntity<?> updateAccount(@RequestBody Account account, @PathVariable int id) {
-        service.updateAccount(account, id);
+    public ResponseEntity<?> updateRole(@RequestBody Role roles, @PathVariable int roleId) {
+        service.updateRole(roles, roleId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAccount(@PathVariable @Param("id") int id) {
-        return service.deleteAccount(id);
-
+    public ResponseEntity<?> deleteRole(@PathVariable int id) {
+        service.deleteRole(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
+

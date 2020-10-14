@@ -16,8 +16,4 @@ public interface UserServiceI {
     User findByName(String name);
 
     User deleteUser(long id);
-
-    void addTerminal(Terminal terminal);
-
-    Terminal approveTerminal(String serialNo);
 }

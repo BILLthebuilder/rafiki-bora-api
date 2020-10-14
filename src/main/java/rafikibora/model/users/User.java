@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 import rafikibora.dto.UserSummary;
 import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
@@ -24,12 +25,12 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @JsonIgnoreProperties
+@SQLDelete(sql = "UPDATE users SET is_deleted=true WHERE user_id=?")
 @Table(name = "users")
 public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-//    @Column(name = "user_id")
     private Long userid;
 
     @Column(name = "first_name", nullable = false, columnDefinition = "VARCHAR(15)")
@@ -69,7 +70,7 @@ public class User implements Serializable {
     private boolean isDeleted;
 
     @Column(name = "date_created", updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
-    @Temporal(value = TemporalType.TIMESTAMP)
+     @Temporal(value = TemporalType.TIMESTAMP)
     private Date dateCreated;
 
     @PrePersist
@@ -122,12 +123,13 @@ public class User implements Serializable {
         UserSummary userSummary = new UserSummary();
         userSummary.setEmail(this.email);
         userSummary.setUserId(this.userid);
+//        userSummary.setRoles(this.getRoles());
         return userSummary;
     }
 
     @JsonIgnore
     @OneToOne
-    @JoinColumn(name = "account_number", referencedColumnName = "account_id")
+    @JoinColumn(name = "account_id", referencedColumnName = "account_id", columnDefinition = "INT(10)")
     private Account userAccount;
 
 
@@ -153,7 +155,6 @@ public class User implements Serializable {
     {
         this.roles = roles;
     }
-
 }
 
 

@@ -29,6 +29,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+
     /**
      * Returns the User record for the currently authenticated user based off of the supplied access token
      * <br>Example: <a href="http://localhost:8080/users/profile">http://localhost:2019/users/getuserinfo</a>
