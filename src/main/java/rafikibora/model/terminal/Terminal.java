@@ -15,6 +15,7 @@ import rafikibora.model.users.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,36 +44,47 @@ public class Terminal implements Serializable {
     @Column(name = "status",  nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean status;
 
+    @Column(name="mid",  unique = true, columnDefinition = "VARCHAR(16)")
+    private String mid;
 
     @ManyToOne
-    @JoinColumn(name="mid", referencedColumnName = "mid")
-    @JsonIgnore
-    private User merchant;
-
-
-    @ManyToOne
-    @JoinColumn(name="created_by", nullable = false, referencedColumnName = "user_id")
+    @JoinColumn(name="created_by", nullable = false,  referencedColumnName = "user_id")
     @JsonIgnore
     private User terminalMaker;
 
     @ManyToOne
-    @JoinColumn(name="approved_by", referencedColumnName = "user_id")
+    @JoinColumn(name="approved_by", nullable = false, referencedColumnName = "user_id")
     @JsonIgnore
     private User terminalChecker;
-
 
     @Column(name = "is_deleted",  nullable = false,  columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted;
 
-    @CreationTimestamp
-    @Column(name = "date_added", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
-    @Temporal(value = TemporalType.TIMESTAMP)
-    private Date dateCreated;
+    @Column(name = "created_on")
+    private LocalDateTime createdOn;
 
-    @UpdateTimestamp
-    @Column(name = "date_updated", columnDefinition = "DATETIME ON UPDATE CURRENT_TIMESTAMP")
-    @Temporal(value = TemporalType.TIMESTAMP)
-    private Date dateUpdated;
+    @PrePersist
+    public void prePersist() {
+        createdOn = LocalDateTime.now();
+    }
+
+    @Column(name = "updated_on")
+    private LocalDateTime updatedOn;
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedOn = LocalDateTime.now();
+    }
+
+//    @CreationTimestamp
+//    @Column(name = "date_added", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+//    @Temporal(value = TemporalType.TIMESTAMP)
+//    private Date dateCreated;
+
+//    @UpdateTimestamp
+//    @Column(name = "date_updated", columnDefinition = "DATETIME ON UPDATE CURRENT_TIMESTAMP")
+//    @Temporal(value = TemporalType.TIMESTAMP)
+//    private Date dateUpdated;
 
     @OneToMany(mappedBy="terminal",cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JsonIgnore

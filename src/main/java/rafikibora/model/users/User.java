@@ -57,7 +57,7 @@ public class User implements Serializable {
     private boolean isDeleted;
 
     @Column(name = "date_created", updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
-    @Temporal(value = TemporalType.TIMESTAMP)
+     @Temporal(value = TemporalType.TIMESTAMP)
     private Date dateCreated;
 
     @Column(name = "date_updated", columnDefinition = "DATETIME ON UPDATE CURRENT_TIMESTAMP")
