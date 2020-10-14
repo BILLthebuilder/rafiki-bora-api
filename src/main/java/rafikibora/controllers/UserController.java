@@ -2,7 +2,6 @@ package rafikibora.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rafikibora.dto.SignupResponse;
@@ -11,7 +10,6 @@ import rafikibora.services.UserService;
 import rafikibora.services.UserServiceI;
 import rafikibora.dto.UserDto;
 
-import java.util.List;
 import java.util.Set;
 
 
@@ -30,8 +28,8 @@ public class UserController {
         return userServiceI.save(user);
     }
 
-    @DeleteMapping("/deleteUser/{id}")
-    public String deleteAccount(@PathVariable int id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteUser(@PathVariable int id) {
         return userServiceI.deleteUser(id);
     }
 

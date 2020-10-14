@@ -16,13 +16,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rafikibora.dto.*;
+import rafikibora.exceptions.ResourceNotFoundException;
 import rafikibora.model.users.User;
 import rafikibora.repository.RoleRepository;
 import rafikibora.repository.UserRepository;
 import rafikibora.security.util.exceptions.RafikiBoraException;
 
+<<<<<<< HEAD
+=======
 import java.util.List;
 import java.util.Objects;
+>>>>>>> d4d899297290a7d39d40454502f0630bd1b9afd5
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -110,10 +114,21 @@ public class UserService implements UserServiceI {
         return user.toUserSummary();
     }
 
-    @Override
-    public String deleteUser(int id) {
-        userRepository.deleteById((long) id);
-        return "user removed !! " + id;
+//    @Override
+//    public String deleteUser(int id) {
+//        userRepository.deleteById((long) id);
+//        return "user removed !! " + id;
+//    }
+
+    @Transactional
+    public ResponseEntity deleteUser(int id) {
+        if (userRepository.findById((long) id).isPresent()) {
+            userRepository.deleteById((long) id);
+            // return "account disabled";
+            return new ResponseEntity("User Deleted", HttpStatus.OK);
+        } else {
+            throw new ResourceNotFoundException("User " + id + " Not Found");
+        }
     }
 
     @Override
