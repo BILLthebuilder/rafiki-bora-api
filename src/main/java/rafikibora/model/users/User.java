@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 import rafikibora.dto.UserSummary;
 import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
@@ -21,6 +22,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@SQLDelete(sql = "UPDATE users SET is_deleted=true WHERE user_id=?")
 @Table(name = "users")
 public class User implements Serializable {
 

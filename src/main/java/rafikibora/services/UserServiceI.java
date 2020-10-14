@@ -4,7 +4,6 @@ import org.springframework.http.ResponseEntity;
 import rafikibora.dto.*;
 import rafikibora.model.users.User;
 
-import java.util.List;
 import java.util.Set;
 
 public interface UserServiceI {
@@ -15,7 +14,7 @@ public interface UserServiceI {
     ResponseEntity<AuthenticationResponse> login(LoginRequest loginRequest) throws Exception;
 
     ResponseEntity<SignupResponse> save(UserDto user);
-    String deleteUser(int user);
+    ResponseEntity deleteUser(int user);
 
 
     UserSummary getUserProfile();

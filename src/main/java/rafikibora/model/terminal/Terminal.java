@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.lang.Nullable;
 import rafikibora.model.transactions.Transaction;
@@ -22,6 +23,7 @@ import java.util.List;
 
 
 @Entity
+@SQLDelete(sql = "UPDATE terminals SET is_deleted=true WHERE terminal_id=?")
 @Table(name = "terminals")
 @Data
 @AllArgsConstructor
@@ -57,7 +59,7 @@ public class Terminal implements Serializable {
     @JsonIgnore
     private User terminalChecker;
 
-    @Column(name = "is_deleted",  nullable = false,  columnDefinition = "TINYINT(1) DEFAULT 0")
+    @Column(name = "is_deleted", columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted;
 
     @Column(name = "created_on")
