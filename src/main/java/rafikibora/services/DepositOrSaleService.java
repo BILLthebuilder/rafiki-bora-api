@@ -24,9 +24,12 @@ public class DepositOrSaleService {
         String sourceAccountNum = depositSaleData.getSourceAccountNumber();
         String destAccountNum = depositSaleData.getDestinationAccountNumber(); // merchant's account a/c if sale tx;
 
+        System.out.println("============> src account: " + sourceAccountNum);
         try {
             Account sourceAccount = accountRepository.findByAccountNumber(sourceAccountNum);
             Account destAccount = accountRepository.findByAccountNumber(destAccountNum);
+
+            System.out.println("============> src account Name: " + sourceAccount.getName());
 
             double sourceAccBalance = sourceAccount.getBalance();
 
