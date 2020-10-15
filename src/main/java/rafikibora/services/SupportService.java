@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.UUID;
 @Service
 @AllArgsConstructor
-public class SupportService {
+public class SupportService  implements SupportInterface{
     @Autowired
     private SupportRepository supportRepository;
 
