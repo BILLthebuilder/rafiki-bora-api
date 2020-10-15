@@ -56,6 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new HttpSessionEventPublisher();
     }
 
+    //The UserDetailsService is a core interface in Spring Security framework,
+    // which is used to retrieve the user's authentication and authorization information
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
@@ -74,6 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests()
                 .antMatchers("/profile").hasAuthority("ADMIN")
                 .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/users/**").permitAll()
                 .antMatchers("/accounts/**").permitAll()
                 .antMatchers("/api/deposit/**").permitAll()
                 .antMatchers("/api/roles/**").permitAll()

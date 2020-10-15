@@ -17,7 +17,7 @@ public class DepositSaleController {
 
     @PostMapping
     public ResponseEntity<?> createDeposit(@RequestBody Transaction depositSaleData) {
-        System.out.println("=========== Deposit request received =======");
+        System.out.println("=========== request received =======");
         System.out.println(depositSaleData);
         depositOrSaleService.performDepositOrSale(depositSaleData);
 

@@ -1,72 +1,78 @@
 package rafikibora.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import rafikibora.model.users.Roles;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import rafikibora.model.users.Role;
 import rafikibora.model.users.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import rafikibora.model.users.UserRoles;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
- @Data
- public class CustomUserDetails implements UserDetails {
-     private final User user;
+@Data
+public class CustomUserDetails implements UserDetails {
+    private final User user;
 
-     public CustomUserDetails(User user) {
-         this.user = user;
-     }
-
-    //  @Override
-    //  public Collection<? extends GrantedAuthority> getAuthorities() {
-    //      return user.getRoles().stream().map(Roles::grantedAuthority).collect(Collectors.toList());
-    //  }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<Roles> roles = user.getRoles();
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-
-        for (Roles role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-        }
-
-        return authorities;
+    public CustomUserDetails(User user) {
+        this.user = user;
     }
 
-     @Override
-     public String getPassword() {
-         return user.getPassword();
-     }
+    /**
+     * Internally, user security requires a list of authorities, roles, that the user has. This method is a simple way to provide those.
+     * Note that SimpleGrantedAuthority requests the format ROLE_role name all in capital letters!
+     *
+     * @return The list of authorities, roles, this user object has
+     */
+    @JsonIgnore
+    public List<SimpleGrantedAuthority> getAuthorities()
+    {
+        List<SimpleGrantedAuthority> rtnList = new ArrayList<>();
+        Set<UserRoles> roles = user.getRoles();
 
-     @Override
-     public String getUsername() {
-         return user.getEmail();
-     }
+        for (UserRoles r : roles)
+        {
+            String myRole = "ROLE_" + r.getRole()
+                    .getRoleName()
+                    .toUpperCase();
+            rtnList.add(new SimpleGrantedAuthority(myRole));
+        }
 
-     @Override
-     public boolean isAccountNonExpired() {
-         return true;
-     }
+        return rtnList;
+    }
 
-     @Override
-     public boolean isAccountNonLocked() {
-         return true;
-     }
 
-     @Override
-     public boolean isCredentialsNonExpired() {
-         return true;
-     }
+    @Override
+    public String getPassword() {
+        return user.getPassword();
+    }
 
-     @Override
-     public boolean isEnabled() {
-         return user.isStatus();
-     }
- }
+    @Override
+    public String getUsername() {
+        return user.getEmail();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return user.isStatus();
+    }
+}

@@ -3,6 +3,7 @@ package rafikibora.security.conf;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import rafikibora.exceptions.InvalidTokenException;
 import rafikibora.services.CustomUserDetailsService;
 import rafikibora.services.JwtProviderI;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+            throw new InvalidTokenException("Invalid token: " + ex.getMessage());
         }
 
         filterChain.doFilter(httpServletRequest, httpServletResponse);

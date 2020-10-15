@@ -64,7 +64,7 @@ public class Transaction implements Serializable {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="merchant", nullable = false, referencedColumnName = "user_id")
+    @JoinColumn(name="merchant", nullable = false, referencedColumnName = "userid")
     private User merchant;
 
     @Column(name = "recipient_email", columnDefinition = "VARCHAR(30)")

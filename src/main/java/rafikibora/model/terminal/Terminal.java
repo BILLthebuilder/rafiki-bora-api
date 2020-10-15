@@ -55,14 +55,15 @@ public class Terminal implements Serializable {
     private User mid;
 
     @ManyToOne
-    @JoinColumn(name="created_by", nullable = false,  referencedColumnName = "user_id")
+    @JoinColumn(name="created_by", nullable = false,  referencedColumnName = "userid")
     @JsonIgnore
     private User terminalMaker;
 
     @ManyToOne
-    @JoinColumn(name="approved_by", referencedColumnName = "user_id")
+    @JoinColumn(name="approved_by", referencedColumnName = "userid")
     @JsonIgnore
     private User terminalChecker;
+
 
     @Column(name = "is_deleted", columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted;

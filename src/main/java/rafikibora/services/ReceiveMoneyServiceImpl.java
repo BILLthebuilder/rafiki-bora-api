@@ -87,7 +87,7 @@ public class ReceiveMoneyServiceImpl implements ReceiveMoneyService{
 
         if(merchant != null) {
             System.out.println("**************Merchant Details**************");
-            System.out.println("user id: "+ merchant.getUserId());
+            System.out.println("user id: "+ merchant.getUserid());
             System.out.println("buss name: "+merchant.getBusinessName());
             System.out.println("email: "+merchant.getEmail());
             System.out.println("name: "+merchant.getFirstName() + merchant.getLastName());

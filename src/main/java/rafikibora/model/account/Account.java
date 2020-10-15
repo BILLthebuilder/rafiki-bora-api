@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import rafikibora.model.transactions.Transaction;
 import rafikibora.model.users.User;
 
@@ -24,7 +23,6 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 @Entity
 @SQLDelete(sql = "UPDATE accounts SET is_deleted=true WHERE account_id=?")
 @Table(name = "accounts")
@@ -69,9 +67,7 @@ public class Account implements Serializable {
     }
 
     @ManyToOne
-    @CreatedBy
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="created_by", nullable = false, referencedColumnName = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name="created_by", nullable = false, referencedColumnName = "userid", insertable = false, updatable = false)
     @JsonIgnore
     private User accountMaker;
 
@@ -80,7 +76,7 @@ public class Account implements Serializable {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="approved_by", referencedColumnName = "user_id")
+    @JoinColumn(name="approved_by", referencedColumnName = "userid")
     private User accountChecker;
 
     @JsonIgnore

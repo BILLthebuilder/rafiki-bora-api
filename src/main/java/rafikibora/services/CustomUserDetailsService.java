@@ -3,7 +3,6 @@ package rafikibora.services;
  import lombok.AllArgsConstructor;
  import rafikibora.dto.CustomUserDetails;
  import rafikibora.dto.CustomUserDetails;
- import rafikibora.model.terminal.Terminal;
  import rafikibora.repository.UserRepository;
  import rafikibora.model.users.User;
  import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +18,10 @@ package rafikibora.services;
 
      @Override
      public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-         User user = userRepository.findByEmail(s).orElseThrow(() -> new UsernameNotFoundException("User not found with email " + s));
+         User user = userRepository.findByEmail(s);
+         if (user == null) {
+              throw new ResourceNotFoundException("User not found with email " + s);
+         }
          return new CustomUserDetails(user);
      }
  }

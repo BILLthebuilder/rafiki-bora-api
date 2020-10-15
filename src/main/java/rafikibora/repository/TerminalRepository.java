@@ -7,9 +7,8 @@ import java.util.Optional;
 
 @Repository
 public interface TerminalRepository extends JpaRepository<Terminal, Long>{
+    Optional<Terminal> findById(Long id);
     Optional<Terminal> findByTid(String tid);
-
-
 }
 
 

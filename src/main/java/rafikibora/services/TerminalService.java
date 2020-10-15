@@ -127,7 +127,7 @@ public class TerminalService implements TerminalInterface {
         Long id = Long.parseLong(terminalDto.getId());
         Terminal terminal = terminalRepository.findById(id).get();
         Long checkerId = user.getUser().getUserId();
-        Long makerId = terminal.getTerminalMaker().getUserId();
+        Long makerId = terminal.getTerminalMaker().getuserid();
 //        if(checkerId.equals(makerId))
 //            throw new Exception("Creator of resource is not allowed to approve.");
 //        else{

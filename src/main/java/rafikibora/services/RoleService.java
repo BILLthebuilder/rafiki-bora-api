@@ -8,7 +8,7 @@ import rafikibora.model.account.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import rafikibora.model.users.Roles;
+import rafikibora.model.users.Role;
 import rafikibora.repository.RoleRepository;
 
 import java.util.List;
@@ -21,18 +21,18 @@ public class RoleService {
     private RoleRepository repository;
 
     @Transactional
-    public Roles saveRole(Roles roles) {
-        return repository.save(roles);
+    public Role saveRole(Role role) {
+        return repository.save(role);
     }
 
-    public List<Roles> getRoles() {
+    public List<Role> getRoles() {
         return repository.findAll();
     }
 
     public ResponseEntity<?> getRoleById(long roleId) {
         Response response;
-        Optional<Roles> optional = repository.findById((int) roleId);
-        Roles roles = null;
+        Optional<Role> optional = repository.findById(roleId);
+        Role roles = null;
         if (optional.isPresent()) {
             roles = optional.get();
         } else {
@@ -43,8 +43,8 @@ public class RoleService {
     }
     public ResponseEntity<?> getRoleByName(String roleName) {
         Response response;
-        Optional <Roles> optional = repository.findByRoleName(roleName);
-        Roles roles = null;
+        Optional <Role> optional = repository.findByRoleName(roleName);
+        Role roles = null;
         if (optional.isPresent()) {
             roles = optional.get();
             //response = new Response(Response.responseStatus.SUCCESS,"Successful account");
@@ -57,7 +57,7 @@ public class RoleService {
     }
 
     @Transactional
-    public void deleteRole(int id) {
+    public void deleteRole(long id) {
         if ( repository.findById(id).isPresent()) {
             repository.deleteById(id);
         } else {
@@ -66,8 +66,8 @@ public class RoleService {
     }
 
     @Transactional
-    public Roles updateRole(Roles roles, int roleid) {
-        Roles existingRoles = repository.findById(roleid).
+    public Role updateRole(Role roles, long roleid) {
+        Role existingRoles = repository.findById(roleid).
                 orElseThrow(
                         () -> new ResourceNotFoundException
                                 ("Roles " + roleid + " Not Found"));
@@ -79,6 +79,5 @@ public class RoleService {
 
         return repository.save(existingRoles);
     }
-
 
 }

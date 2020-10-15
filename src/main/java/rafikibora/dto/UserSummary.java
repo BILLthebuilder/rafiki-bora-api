@@ -1,7 +1,7 @@
 package rafikibora.dto;
 
 import lombok.Data;
-import rafikibora.model.users.Roles;
+import rafikibora.model.users.Role;
 
 import java.util.Set;
 
@@ -9,5 +9,5 @@ import java.util.Set;
 public class UserSummary {
     private Long userId;
     private String email;
-    private Set<Roles> roles;
+    private Set<Role> roles;
 }
