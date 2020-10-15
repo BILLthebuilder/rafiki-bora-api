@@ -14,11 +14,7 @@ import rafikibora.model.terminal.Terminal;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @AllArgsConstructor
@@ -28,6 +24,7 @@ import java.util.Set;
 @SQLDelete(sql = "UPDATE users SET is_deleted=true WHERE user_id=?")
 @Table(name = "users")
 public class User implements Serializable {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -64,6 +61,7 @@ public class User implements Serializable {
 
     @Column(name = "status", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean status;
+
 
     @Column(name = "mid", unique = true, columnDefinition = "VARCHAR(34)")
     private String mid;
@@ -153,6 +151,9 @@ public class User implements Serializable {
     {
         this.roles = roles;
     }
+
+    @Transient
+    private String role;
 }
 
 

@@ -41,20 +41,24 @@ public class RoleService {
         }
         return ResponseEntity.status(HttpStatus.OK).body(roles);
     }
-    public ResponseEntity<?> getRoleByName(String roleName) {
-        Response response;
-        Optional <Role> optional = repository.findByRoleName(roleName);
-        Role roles = null;
-        if (optional.isPresent()) {
-            roles = optional.get();
-            //response = new Response(Response.responseStatus.SUCCESS,"Successful account");
-        } else {
-//            throw new RuntimeException(" Account not found for name :: " + name);
-            response = new Response(Response.responseStatus.FAILED,"No role found for :: " + roleName);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(roles);
+
+    public Role getRoleByName(String roleName ) {
+        return repository.findByRoleName(roleName);
     }
+//    public ResponseEntity<?> getRoleByName(String roleName) {
+//        Response response;
+//        Role optional = repository.findByRoleName(roleName);
+//        Role roles = null;
+//        if (optional.isPresent()) {
+//            roles = optional.get();
+//            //response = new Response(Response.responseStatus.SUCCESS,"Successful account");
+//        } else {
+////            throw new RuntimeException(" Account not found for name :: " + name);
+//            response = new Response(Response.responseStatus.FAILED,"No role found for :: " + roleName);
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+//        }
+//        return ResponseEntity.status(HttpStatus.OK).body(roles);
+//    }
 
     @Transactional
     public void deleteRole(long id) {
