@@ -24,5 +24,5 @@ public class ReceiveMoneyRequestDto {
     private String srcAccount;
     private String destAccount;
     private String agentAuthToken;
-
+    private String fundsToken;
 }
