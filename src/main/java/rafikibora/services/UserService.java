@@ -137,11 +137,19 @@ public class UserService implements UserServiceI {
 
         // if user has Merchant role generate MID and assign
         // Todo
+//        if(true){
+//            getUserByRole("MERCHANT");
+//            user.setMid();
+//        }
+
+
 
         user.setUserChecker(currentUser);
         user.setStatus(true);
         return userRepository.save(user);
     }
+
+
 
     // terminal service
 //    @Transactional
