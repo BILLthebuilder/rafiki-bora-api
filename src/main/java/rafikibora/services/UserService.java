@@ -22,6 +22,8 @@ import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.User;
 import rafikibora.repository.UserRepository;
 import rafikibora.security.util.exceptions.RafikiBoraException;
+
+import javax.persistence.EntityExistsException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -113,6 +115,9 @@ public class UserService implements UserServiceI {
 
     @Transactional
     public void addUser(User user) {
+        if (userRepository.findByEmail(user.getEmail()) != null) {
+            throw new EntityExistsException("Email already exists");
+        }
         User currentUser = getCurrentUser();
         user.setUserMaker(currentUser);
         userRepository.save(user);
