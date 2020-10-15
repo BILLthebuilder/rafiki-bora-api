@@ -18,15 +18,7 @@ import rafikibora.services.UserServiceI;
 
      private final AuthenticationManager authenticationManager;
 
-
      private final UserServiceI userServiceI;
-
-
-     ///Point to note Should'nt be save admin instead should be add user method
-//     @PostMapping(value = "/signup", produces = {"application/json"}, consumes = {"application/json"})
-//     public ResponseEntity<SignupResponse> signUp(@RequestBody UserDto user) {
-//         return userServiceI.saveAdmin(user);
-//     }
 
 
      @PostMapping(value = "/login")

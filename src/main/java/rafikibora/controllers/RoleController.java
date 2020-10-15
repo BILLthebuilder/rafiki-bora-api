@@ -57,7 +57,8 @@ public class RoleController {
 
     @GetMapping("/roles/{roleName}")
     public ResponseEntity<Role> findRoleByName(@PathVariable @Valid String roleName) {
-        return (ResponseEntity<Role>) service.getRoleByName(roleName);
+        Role r = service.getRoleByName(roleName);
+        return new ResponseEntity<>(r, HttpStatus.OK);
     }
 
     @PatchMapping(value = "/{id}", consumes = {"application/json"})

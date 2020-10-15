@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import rafikibora.exceptions.AddNewUserException;
+import rafikibora.exceptions.BadRequestException;
+import rafikibora.exceptions.InvalidTokenException;
 import rafikibora.exceptions.ResourceNotFoundException;
 import rafikibora.model.ErrorDetail;
 
@@ -78,4 +81,64 @@ public class RestExceptionHandler
                 null,
                 HttpStatus.NOT_FOUND);
     }
+
+    /** annotation to say the following method is meant to handle any time BadRequestExceptionException is thrown */
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<?> handleResourceNotFoundException(BadRequestException rnfe)
+    {
+        ErrorDetail errorDetail = new ErrorDetail();
+        errorDetail.setTimestamp(new Date());
+        errorDetail.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorDetail.setTitle("Bad Request Format");
+        errorDetail.setDetail(rnfe.getMessage());
+        errorDetail.setDeveloperMessage(rnfe.getClass()
+                .getName());
+        errorDetail.setErrors(helper.getConstraintViolation(rnfe));
+
+        return new ResponseEntity<>(errorDetail,
+                null,
+                HttpStatus.BAD_REQUEST);
+    }
+
+    /** annotation to say the following method is meant to handle any time InvalidTokenException is thrown */
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<?> handleResourceNotFoundException(InvalidTokenException rnfe)
+    {
+        ErrorDetail errorDetail = new ErrorDetail();
+        errorDetail.setTimestamp(new Date());
+        errorDetail.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorDetail.setTitle("Invalid Token");
+        errorDetail.setDetail(rnfe.getMessage());
+        errorDetail.setDeveloperMessage(rnfe.getClass()
+                .getName());
+        errorDetail.setErrors(helper.getConstraintViolation(rnfe));
+
+        return new ResponseEntity<>(errorDetail,
+                null,
+                HttpStatus.UNAUTHORIZED);
+    }
+
+    /** annotation to say the following method is meant to handle any time InvalidTokenException is thrown */
+    @ExceptionHandler(AddNewUserException.class)
+    public ResponseEntity<?> handleResourceNotFoundException(AddNewUserException rnfe)
+    {
+        ErrorDetail errorDetail = new ErrorDetail();
+        errorDetail.setTimestamp(new Date());
+        errorDetail.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorDetail.setTitle("Error adding a new user");
+        errorDetail.setDetail(rnfe.getMessage());
+        errorDetail.setDeveloperMessage(rnfe.getClass()
+                .getName());
+        errorDetail.setErrors(helper.getConstraintViolation(rnfe));
+
+        return new ResponseEntity<>(errorDetail,
+                null,
+                HttpStatus.BAD_REQUEST);
+    }
+
+
+
+
+
+
 }
