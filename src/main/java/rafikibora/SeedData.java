@@ -71,7 +71,7 @@ public class SeedData
 
         // agent
         Role agentRole = new Role();
-        agentRole.setRoleName("CUSTOMER");
+        agentRole.setRoleName("AGENT");
         agentRole = roleRepository.save(agentRole);
 
         // Assign roles to create users
