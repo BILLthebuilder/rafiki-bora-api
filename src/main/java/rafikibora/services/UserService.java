@@ -23,6 +23,7 @@ import rafikibora.model.users.User;
 import rafikibora.repository.UserRepository;
 import rafikibora.security.util.exceptions.RafikiBoraException;
 
+import javax.persistence.EntityExistsException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;

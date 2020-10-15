@@ -33,6 +33,14 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userid;
 
+    public Long getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Long userid) {
+        this.userid = userid;
+    }
+
     @Column(name = "first_name", nullable = false, columnDefinition = "VARCHAR(15)")
     private String firstName;
 

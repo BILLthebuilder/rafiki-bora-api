@@ -1,6 +1,7 @@
 package rafikibora.services;
 
  import lombok.AllArgsConstructor;
+ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
  import rafikibora.dto.CustomUserDetails;
  import rafikibora.dto.CustomUserDetails;
  import rafikibora.repository.UserRepository;
@@ -13,7 +14,7 @@ package rafikibora.services;
  @Service
  @AllArgsConstructor
  public class CustomUserDetailsService implements UserDetailsService {
-
+     private final User user;
      private final UserRepository userRepository;
 
      @Override

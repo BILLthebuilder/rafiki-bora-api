@@ -1,78 +1,28 @@
 package rafikibora.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import rafikibora.model.users.Role;
+import lombok.AllArgsConstructor;
+import rafikibora.dto.CustomUserDetails;
+import rafikibora.dto.CustomUserDetails;
+import rafikibora.exceptions.ResourceNotFoundException;
+import rafikibora.repository.UserRepository;
 import rafikibora.model.users.User;
-import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import rafikibora.model.users.UserRoles;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+@Service
+@AllArgsConstructor
+public class CustomUserDetailsService implements UserDetailsService {
 
-@Data
-public class CustomUserDetails implements UserDetails {
-    private final User user;
+    private final UserRepository userRepository;
 
-    public CustomUserDetails(User user) {
-        this.user = user;
-    }
-
-    /**
-     * Internally, user security requires a list of authorities, roles, that the user has. This method is a simple way to provide those.
-     * Note that SimpleGrantedAuthority requests the format ROLE_role name all in capital letters!
-     *
-     * @return The list of authorities, roles, this user object has
-     */
-    @JsonIgnore
-    public List<SimpleGrantedAuthority> getAuthorities()
-    {
-        List<SimpleGrantedAuthority> rtnList = new ArrayList<>();
-        Set<UserRoles> roles = user.getRoles();
-
-        for (UserRoles r : roles)
-        {
-            String myRole = "ROLE_" + r.getRole()
-                    .getRoleName()
-                    .toUpperCase();
-            rtnList.add(new SimpleGrantedAuthority(myRole));
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(s);
+        if (user == null) {
+            throw new ResourceNotFoundException("User not found with email " + s);
         }
-
-        return rtnList;
-    }
-
-
-    @Override
-    public String getPassword() {
-        return user.getPassword();
-    }
-
-    @Override
-    public String getUsername() {
-        return user.getEmail();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return user.isStatus();
+        return new CustomUserDetails(user);
     }
 }
