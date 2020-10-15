@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import rafikibora.dto.TerminalDto;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.repository.TerminalRepository;
+import rafikibora.services.TerminalInterface;
 import rafikibora.services.TerminalService;
 
 import java.awt.*;
@@ -27,6 +28,7 @@ public class TerminalController {
     @Autowired
     private TerminalService terminalService;
     private TerminalRepository terminalRepository;
+    private TerminalInterface terminalInterface;
 
 //Create Terminal
     @PostMapping
@@ -34,7 +36,7 @@ public class TerminalController {
         System.out.println(terminal.getId());
         String msg = "";
         try{
-            terminalService.save(terminal);
+            terminalInterface.save(terminal);
             msg = "Terminal created successfully";
         }catch (Exception ex){
             msg = "Duplicate Entry is not Allowed!!";
@@ -50,7 +52,7 @@ public class TerminalController {
 
     @GetMapping(produces = {"application/json"})
     public ResponseEntity<List<Terminal>> list() {
-        List<Terminal> terminals = terminalService.list();
+        List<Terminal> terminals = terminalInterface.list();
         return new ResponseEntity<>(terminals, HttpStatus.OK);
     }
 
@@ -59,7 +61,7 @@ public class TerminalController {
     @GetMapping(value = "/{id}", produces = {"application/json"})
     public ResponseEntity<Terminal> listOne(@PathVariable("id") Long id) {
         System.out.println(id.toString());
-        Terminal terminal = terminalService.getById(id);
+        Terminal terminal = terminalInterface.getById(id);
         return new ResponseEntity<>(terminal, HttpStatus.OK);
     }
 
@@ -71,7 +73,7 @@ public class TerminalController {
     @PatchMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
     public ResponseEntity<String> update(@PathVariable("id") Long id, @RequestBody TerminalDto terminalDto) {
         System.out.println(id.toString());
-        terminalService.update(id, terminalDto);
+        terminalInterface.update(id, terminalDto);
         return new ResponseEntity<>("Terminal updated successfully", HttpStatus.OK);
     }
 
@@ -85,7 +87,7 @@ public class TerminalController {
         System.out.println(terminalDto.getId());
         String msg = "";
         try{
-            terminalService.approve(terminalDto);
+            terminalInterface.approve(terminalDto);
             msg = "Terminal approved successfully";
         }catch (Exception ex){
             msg = "Creator of resource is not allowed to approve!!";
@@ -99,7 +101,7 @@ public class TerminalController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") Long id) {
-        terminalService.deleteById(id);
+        terminalInterface.deleteById(id);
         return new ResponseEntity<>("Terminal deletion successful", HttpStatus.OK);
     }
 
