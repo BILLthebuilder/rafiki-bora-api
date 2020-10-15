@@ -69,8 +69,7 @@ public class ReceiveMoneyServiceImpl implements ReceiveMoneyService{
             throw new ResourceNotFoundException("Merchant Not Found");
 
         transaction.setAmountTransaction(amount);
-        transaction.setAmountTransactionCurrencyCode(currencyCode);
-        transaction.setDateTimeLocalTransaction(this.formatDateTime(req.getTxnLocalDate()+req.getTxnLocalTime()));
+        transaction.setCurrencyCode(currencyCode);
         transaction.setDateTimeTransmission(this.formatDateTime(req.getTransmissionDateTime()));
         /**
          * If withdrawing with token, merchant account is the debit account.
@@ -78,11 +77,8 @@ public class ReceiveMoneyServiceImpl implements ReceiveMoneyService{
          */
         transaction.setSourceAccount(merchant.getUserAccount());
         transaction.setTerminal(terminal);
-        transaction.setMerchant(merchant);
-        transaction.setPosConditionCode(req.getPosConditionCode());
         transaction.setPan(req.getPan());
         transaction.setProcessingCode(req.getPcode());
-        transaction.setStan(req.getStan());
         transactionRepository.save(transaction);
 
         if(merchant != null) {
