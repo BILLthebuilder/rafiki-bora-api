@@ -2,6 +2,7 @@ package rafikibora.services;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,15 +17,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rafikibora.dto.*;
+import rafikibora.exceptions.BadRequestException;
 import rafikibora.exceptions.InvalidCheckerException;
 import rafikibora.exceptions.ResourceNotFoundException;
 import rafikibora.model.terminal.Terminal;
+import rafikibora.model.users.Role;
 import rafikibora.model.users.User;
+import rafikibora.model.users.UserRoles;
+import rafikibora.repository.RoleRepository;
 import rafikibora.repository.UserRepository;
 import rafikibora.security.util.exceptions.RafikiBoraException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +39,7 @@ import java.util.stream.Collectors;
 public class UserService implements UserServiceI {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final JwtProviderI jwtProvider;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -115,7 +122,32 @@ public class UserService implements UserServiceI {
     public void addUser(User user) {
         User currentUser = getCurrentUser();
         user.setUserMaker(currentUser);
-        userRepository.save(user);
+
+        Role role = null;
+        if (user.getRole().equalsIgnoreCase("ADMIN")) {
+            role = roleRepository.findByRoleName("ADMIN");
+        }
+        if (user.getRole().equalsIgnoreCase("MERCHANT")) {
+            role = roleRepository.findByRoleName("MERCHANT");
+        }
+        if (user.getRole().equalsIgnoreCase("AGENT")) {
+            role = roleRepository.findByRoleName("AGENT");
+        }
+        if (user.getRole().equalsIgnoreCase("CUSTOMER")) {
+            role = roleRepository.findByRoleName("CUSTOMER");
+        }
+
+        else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.getRoles().add(new UserRoles(user, role));
+            userRepository.save(user);
+        }
+
+    }
+
+    @Override
+    public List<User> viewUsers() {
+        return userRepository.findAll();
     }
 
     @Transactional
@@ -126,24 +158,18 @@ public class UserService implements UserServiceI {
         if (user == null) {
             throw new ResourceNotFoundException("This user does not exist");
         }
-
         // a user can only be approved by a user who is an admin
         // Todo
-
         // A user cannot be approved by the same Admin who created them
         if (currentUser == user.getUserMaker()) {
-            throw new InvalidCheckerException("You cannot approve this user!");
-        }
-
+            throw new InvalidCheckerException("You cannot approve this user!"); }
         // if user has Merchant role generate MID and assign
         // Todo
-//        if(true){
-//            getUserByRole("MERCHANT");
-//            user.setMid();
-//        }
-
-
-
+        if (user.getRoles().equals("MERCHANT")){
+            String mid = UUID.randomUUID().toString().substring(0,16);
+            System.out.println(mid);
+            user.setMid(mid);
+        }
         user.setUserChecker(currentUser);
         user.setStatus(true);
         return userRepository.save(user);

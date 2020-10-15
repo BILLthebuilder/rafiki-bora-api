@@ -54,6 +54,10 @@ public class SeedData
         r1.setRoleName("ADMIN");
         r1 = roleRepository.save(r1);
 
+        Role r2 = new Role();
+        r2.setRoleName("MERCHANT");
+        r2 = roleRepository.save(r2);
+
         admin1.getRoles().add(new UserRoles(admin1, r1));
         userrepos.save(admin1);
 

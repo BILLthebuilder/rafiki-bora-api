@@ -5,6 +5,7 @@ import rafikibora.dto.*;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.User;
 
+import java.util.List;
 import java.util.Set;
 
 public interface UserServiceI {
@@ -16,4 +17,7 @@ public interface UserServiceI {
     User findByName(String name);
 
     User deleteUser(long id);
+
+    List<User> viewUsers();
+
 }

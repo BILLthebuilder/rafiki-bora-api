@@ -6,10 +6,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import rafikibora.exceptions.AddNewUserException;
+import rafikibora.exceptions.BadRequestException;
+import rafikibora.model.account.Account;
 import rafikibora.model.users.User;
 import rafikibora.services.UserService;
 import rafikibora.services.UserServiceI;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -25,7 +29,13 @@ public class UserController {
 
     @PostMapping("/createuser")
     public ResponseEntity<?> addUser(@RequestBody User user){
-        userService.addUser(user);
+        if(user.getRole() == null)
+            throw new BadRequestException("User has to have an assigned role");
+        try {
+            userService.addUser(user);
+        } catch (Exception ex) {
+            throw new AddNewUserException(ex.getMessage());
+        }
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -67,6 +77,12 @@ public class UserController {
     @GetMapping("/{roleName}")
     public Set<User> findUserByRoles(@PathVariable("roleName") String roleName) {
         return userService.getUserByRole(roleName);
+    }
+
+
+    @GetMapping
+    public List<User> findAllUsers() {
+        return userServiceI.viewUsers();
     }
 
 }
