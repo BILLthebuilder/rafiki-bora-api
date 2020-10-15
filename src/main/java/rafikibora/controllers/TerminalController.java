@@ -31,19 +31,30 @@ public class TerminalController {
 //Create Terminal
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Terminal terminal) {
-        System.out.println(terminal.toString());
-        Terminal t = terminalService.save(terminal);
-        return new ResponseEntity<Terminal>(t, HttpStatus.CREATED);
+        System.out.println(terminal.getId());
+        String msg = "";
+        try{
+            terminalService.save(terminal);
+            msg = "Terminal created successfully";
+        }catch (Exception ex){
+            msg = "Duplicate Entry is not Allowed!!";
+        }finally {
+            return new ResponseEntity<>(msg, HttpStatus.CREATED);
+        }
+//        System.out.println(terminal.toString());
+//        Terminal t = terminalService.save(terminal);
+//        return new ResponseEntity<Terminal>(t, HttpStatus.CREATED);
     }
 
 //List All Terminals
+
     @GetMapping(produces = {"application/json"})
     public ResponseEntity<List<Terminal>> list() {
         List<Terminal> terminals = terminalService.list();
         return new ResponseEntity<>(terminals, HttpStatus.OK);
     }
 
-    //List by Id
+    //List Terminal by Id
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
     public ResponseEntity<Terminal> listOne(@PathVariable("id") Long id) {
@@ -77,7 +88,7 @@ public class TerminalController {
             terminalService.approve(terminalDto);
             msg = "Terminal approved successfully";
         }catch (Exception ex){
-            msg = ex.getMessage();
+            msg = "Creator of resource is not allowed to approve!!";
         }finally {
             return new ResponseEntity<>(msg, HttpStatus.OK);
         }

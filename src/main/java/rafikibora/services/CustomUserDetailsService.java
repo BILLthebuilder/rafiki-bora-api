@@ -3,6 +3,7 @@ package rafikibora.services;
  import lombok.AllArgsConstructor;
  import rafikibora.dto.CustomUserDetails;
  import rafikibora.dto.CustomUserDetails;
+ import rafikibora.model.terminal.Terminal;
  import rafikibora.repository.UserRepository;
  import rafikibora.model.users.User;
  import org.springframework.security.core.userdetails.UserDetails;
@@ -22,3 +23,4 @@ package rafikibora.services;
          return new CustomUserDetails(user);
      }
  }
+
