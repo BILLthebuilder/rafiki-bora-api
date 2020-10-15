@@ -12,7 +12,7 @@ public class TerminalDto {
 
     String modelType;
     String serialNumber;
-    String Id;
+    String id;
 //    String DateCreated;
 //    String Deleted;
 //    String Status;

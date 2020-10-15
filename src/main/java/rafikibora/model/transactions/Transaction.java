@@ -27,11 +27,11 @@ public class Transaction implements Serializable {
     @Column(name = "transaction_id")
     private int id;
 
-    @Column(name = "primary_account_number", nullable=false, updatable=false, columnDefinition = "INT(16)")
-    private int pan;
+    @Column(name = "pan",nullable = false, columnDefinition = "VARCHAR(16)")
+    private String pan;
 
-    @Column(name = "processing_code", nullable=false, updatable=false, columnDefinition = "INT(6)")
-    private int processingCode;
+    @Column(name = "processing_code", nullable=false, updatable=false, columnDefinition = "VARCHAR(6)")
+    private String processingCode;
 
     @Column(name = "amount_transaction", nullable=false, updatable=false, columnDefinition = "DOUBLE(12,2)")
     private double amountTransaction;
@@ -40,8 +40,8 @@ public class Transaction implements Serializable {
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date dateTimeTransmission;
 
-    @Column(name = "stan", columnDefinition = "INT(6)")
-    private int stan;
+    @Column(name = "stan", columnDefinition = "VARCHAR(6)")
+    private String stan;
 
     @JsonFormat(pattern="hhmmss:MMDD")
     @Column(name = "date_time_local_transaction", updatable=false, nullable=false, columnDefinition = "DATETIME")
@@ -55,16 +55,16 @@ public class Transaction implements Serializable {
     private int functionCode;
 
     @Column(name = "pos_condition_code", columnDefinition = "INT(2)")
-    private int posConditionCode;
+    private String posConditionCode;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="tid", nullable = false, referencedColumnName = "tid")
+    @JoinColumn(name="terminal", nullable = false, referencedColumnName = "terminal_id")
     private Terminal terminal;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="mid", nullable = false, referencedColumnName = "mid")
+    @JoinColumn(name="merchant", nullable = false, referencedColumnName = "userid")
     private User merchant;
 
     @Column(name = "recipient_email", columnDefinition = "VARCHAR(30)")
@@ -78,12 +78,12 @@ public class Transaction implements Serializable {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="debit_account", referencedColumnName = "account_number", columnDefinition = "VARCHAR(10)")
+    @JoinColumn(name="debit_account", referencedColumnName = "account_id", columnDefinition = "INT(10)")
     private Account sourceAccount;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="credit_account", referencedColumnName = "account_number", columnDefinition = "VARCHAR(10)")
+    @JoinColumn(name="credit_account", referencedColumnName = "account_id", columnDefinition = "INT(10)")
     private Account destinationAccount;
 
     @Column(name = "result_code",columnDefinition = "VARCHAR(6)")

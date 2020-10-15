@@ -1,7 +1,6 @@
 package rafikibora.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import rafikibora.model.users.User;
 
@@ -10,14 +9,11 @@ import java.util.Set;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByEmail(String email);
+    User findById(long id);
 
+    Optional<User> findByMid(String mid);
 
-    //Optional<User> findByRoles( @Param("roleName") String roleName);
+    User findByEmail(String email);
 
-//    Set<User> findByroles(Long roleId);
-
-    Set<User> findByRoles_RoleNameContainingIgnoreCase(String roleName);
-
-    //Boolean existsByEmail(String email);
+    Set<User> findByRoles_Role_RoleNameContainingIgnoreCase(String roleName);
 }

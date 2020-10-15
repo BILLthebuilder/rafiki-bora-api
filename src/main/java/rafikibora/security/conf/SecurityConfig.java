@@ -5,6 +5,7 @@ package rafikibora.security.conf;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -28,6 +29,7 @@ import java.util.Arrays;
 
 
 @Configuration
+@EnableJpaAuditing
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
         securedEnabled = true,
@@ -54,6 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new HttpSessionEventPublisher();
     }
 
+    //The UserDetailsService is a core interface in Spring Security framework,
+    // which is used to retrieve the user's authentication and authorization information
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
@@ -72,10 +76,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests()
                 .antMatchers("/profile").hasAuthority("ADMIN")
                 .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/users/**").permitAll()
                 .antMatchers("/accounts/**").permitAll()
                 .antMatchers("/api/deposit/**").permitAll()
+                .antMatchers("/api/roles/**").permitAll()
                 .antMatchers("/api/terminals/**").permitAll()
                 .antMatchers("/api/accounts/**").permitAll()
+                .antMatchers("/api/support/**").permitAll()
                 .antMatchers("/api/transactions/**").permitAll()
                 .antMatchers("/depositSale/**").permitAll()
                 .anyRequest().authenticated().and()

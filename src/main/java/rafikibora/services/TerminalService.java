@@ -18,6 +18,7 @@ import rafikibora.repository.TerminalRepository;
 
 import javax.transaction.Transactional;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -32,6 +33,12 @@ public class TerminalService implements TerminalInterface {
         return UUID.randomUUID().toString().substring(0,16);
     }
 
+    //create MID
+    public String createMID(){
+        return UUID.randomUUID().toString().substring(0,16);
+    }
+
+
     //Create Terminal
     @Transactional
     public Terminal save(Terminal terminal) {
@@ -41,11 +48,16 @@ public class TerminalService implements TerminalInterface {
         terminal.setModelType(terminal.getModelType());
         terminal.setSerialNo(terminal.getSerialNo());
         terminal.setDeleted(false);
-        terminal.setDateCreated(new Date());
-        terminal.setDateUpdated(new Date());
+        terminal.setCreatedOn(( LocalDateTime.now()));
+        terminal.setUpdatedOn(( LocalDateTime.now()));
         terminal.setStatus(true);
+//        terminal.setDateCreated(new Date());
+//        terminal.setDateUpdated(new Date());
         terminal.setTid(createTID());
+        terminal.setMid(createMID());
         terminal.setTerminalMaker(user.getUser());
+
+//        terminal.setTerminalChecker(user.getUser());
         return terminalRepository.save(terminal);
     }
 
@@ -57,16 +69,13 @@ public class TerminalService implements TerminalInterface {
     }
 
 
-
-//List Terminal by Id
+    //List Terminal by Id
     @Transactional
     public Terminal getById(Long id) {
         Terminal terminal = terminalRepository.findById(id).get();
         return terminal;
 
     }
-
-
 
 
     //update Terminal by Id
@@ -80,7 +89,24 @@ public class TerminalService implements TerminalInterface {
             terminal.setSerialNo(terminalDto.getSerialNumber());
         }
         terminalRepository.save(terminal);
+    }
 
+    // Approve Terminal by Id
+
+    @Transactional
+    public void approve(TerminalDto terminalDto) throws Exception{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+        Long id = Long.parseLong(terminalDto.getId());
+        Terminal terminal = terminalRepository.findById(id).get();
+        Long checkerId = user.getUser().getUserid();
+        Long makerId = terminal.getTerminalMaker().getUserid();
+        if(checkerId.equals(makerId))
+            throw new Exception("Creator of resource is not allowed to approve.");
+        else{
+            terminal.setTerminalChecker(user.getUser());
+            terminalRepository.save(terminal);
+        }
     }
 
 
