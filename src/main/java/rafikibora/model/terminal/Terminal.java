@@ -50,7 +50,7 @@ public class Terminal implements Serializable {
 //    private String mid;
 
     @ManyToOne
-    @JoinColumn(name = "mid", nullable = false, referencedColumnName = "mid")
+    @JoinColumn(name = "mid", referencedColumnName = "mid")
     @JsonIgnore
     private User mid;
 

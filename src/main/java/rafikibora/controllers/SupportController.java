@@ -27,8 +27,10 @@ public class SupportController {
         @PostMapping
         public ResponseEntity<?> create(@RequestBody Support support) {
             System.out.println(support.toString());
-            Support s = supportService.save(support);
-            return new ResponseEntity<Support>(s, HttpStatus.CREATED);
+            String msg = "";
+             supportService.save(support);
+            msg = "Support created successfully";
+            return new ResponseEntity<>(msg, HttpStatus.CREATED);
         }
 
         //List support

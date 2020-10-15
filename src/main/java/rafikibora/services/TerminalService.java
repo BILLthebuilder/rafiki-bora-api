@@ -62,6 +62,7 @@ public class TerminalService implements TerminalInterface {
         terminal.setStatus(true);
         terminal.setTid(createTID());
         terminal.setMid(user.getUser());
+        terminal.setMid(user.getUser());
 //        terminal.setMid(createMID());
         terminal.setTerminalMaker(user.getUser());
 //        return terminalRepository.save(terminal);
@@ -114,9 +115,6 @@ public class TerminalService implements TerminalInterface {
         }
         terminalRepository.save(terminal);
     }
-
-
-
 
     // Approve Terminal by Id
 
