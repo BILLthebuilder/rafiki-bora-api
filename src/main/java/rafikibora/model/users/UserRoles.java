@@ -51,7 +51,6 @@ public class UserRoles
     @JoinColumn(name = "roleid")
     @JsonIgnoreProperties(value = "users",
             allowSetters = true)
-    @JsonIgnore
     private Role role;
 
 //    /**

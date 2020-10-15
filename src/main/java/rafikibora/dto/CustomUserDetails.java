@@ -22,21 +22,6 @@ public class CustomUserDetails implements UserDetails {
         this.user = user;
     }
 
-
-//     @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        Set<UserRoles> roles = user.getRoles();
-//        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-//
-//        for (UserRoles role : roles) {
-//            authorities.add(new SimpleGrantedAuthority(
-//                    role.getRole().getRoleName().toUpperCase()
-//            ));
-//        }
-//
-//        return authorities;
-//    }
-
     /**
      * Internally, user security requires a list of authorities, roles, that the user has. This method is a simple way to provide those.
      * Note that SimpleGrantedAuthority requests the format ROLE_role name all in capital letters!

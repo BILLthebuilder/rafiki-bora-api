@@ -97,16 +97,7 @@ public class User implements Serializable {
     @JoinColumn(name = "approved_by", referencedColumnName = "userid")
     private User userChecker;
 
-//     @NotNull
-//     @Enumerated(EnumType.STRING)
-//     private AuthProvider provider;
 
-//    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JoinTable(
-//            name = "user_roles",
-//            joinColumns = {@JoinColumn(name = "user_id")},
-//            inverseJoinColumns = {@JoinColumn(name = "role_id")})
-//    private Set<Role> roles = new HashSet<>();
     /**
      * Part of the join relationship between user and role
      * connects users to the user role combination
@@ -116,7 +107,6 @@ public class User implements Serializable {
             orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = "user",
             allowSetters = true)
-    @JsonIgnore
     private Set<UserRoles> roles = new HashSet<>();
 
     public UserSummary toUserSummary() {
