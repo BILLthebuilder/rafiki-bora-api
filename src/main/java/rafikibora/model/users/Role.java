@@ -35,7 +35,6 @@ public class Role implements Serializable {
             orphanRemoval = true)
     @JsonIgnoreProperties(value = "role",
             allowSetters = true)
-    @JsonIgnore
     private Set<UserRoles> users = new HashSet<>();
 
 //    /**
