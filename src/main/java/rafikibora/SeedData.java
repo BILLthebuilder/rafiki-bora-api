@@ -14,6 +14,9 @@ import rafikibora.repository.RoleRepository;
 import rafikibora.repository.UserRepository;
 
 
+/**
+ * Adds seed data to the database for testing purposes
+ */
 @Transactional
 @Component
 @AllArgsConstructor
@@ -31,7 +34,7 @@ public class SeedData
     @Override
     public void run(String... args)
     {
-        // Adding SeedData for admins
+        // Create users
         User admin1 = new User();
         admin1.setFirstName("Jedidah");
         admin1.setLastName("Wangeci");
@@ -50,14 +53,32 @@ public class SeedData
         admin2.setPassword(passwordEncoder.encode("Ellahruth019"));
         admin2.setStatus(true);
 
-        Role r1 = new Role();
-        r1.setRoleName("ADMIN");
-        r1 = roleRepository.save(r1);
+        // Create roles
+        // admin
+        Role adminRole = new Role();
+        adminRole.setRoleName("ADMIN");
+        adminRole = roleRepository.save(adminRole);
 
-        admin1.getRoles().add(new UserRoles(admin1, r1));
+        // merchant
+        Role merchantRole = new Role();
+        merchantRole.setRoleName("MERCHANT");
+        merchantRole = roleRepository.save(merchantRole);
+
+        // customer
+        Role customerRole = new Role();
+        customerRole.setRoleName("CUSTOMER");
+        customerRole = roleRepository.save(customerRole);
+
+        // agent
+        Role agentRole = new Role();
+        agentRole.setRoleName("AGENT");
+        agentRole = roleRepository.save(agentRole);
+
+        // Assign roles to create users
+        admin1.getRoles().add(new UserRoles(admin1, adminRole));
         userrepos.save(admin1);
 
-        admin2.getRoles().add(new UserRoles(admin2, r1));
+        admin2.getRoles().add(new UserRoles(admin2, adminRole));
         userrepos.save(admin2);
     }
 }
