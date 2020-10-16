@@ -41,24 +41,22 @@ public class Transaction implements Serializable {
     private double amountTransaction;
 
     @Column(name = "date_time_transmission", updatable=false, columnDefinition = "DATETIME")
-    @NotNull
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date dateTimeTransmission;
 
     @JsonIgnore
     @ManyToOne
-    @NotNull
     @JoinColumn(name="terminal", referencedColumnName = "terminal_id")
     private Terminal terminal;
 
     @ManyToOne
-    @NotNull
     @JoinColumn(name="userid")
     @JsonIgnoreProperties(value = "transactions",
             allowSetters = true)
     private User merchant;
 
     @Column(name = "recipient_email", columnDefinition = "VARCHAR(30)")
+    @NotNull
     private String recipientEmail;
 
     @Column(name = "token", columnDefinition = "VARCHAR(9)")
