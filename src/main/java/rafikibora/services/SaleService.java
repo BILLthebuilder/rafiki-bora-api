@@ -22,7 +22,7 @@ public class SaleService {
 
     public void performSale(Transaction saleData) {
         Double amount = saleData.getAmountTransaction();
-        String merchantID = saleData.getTerminal().getMid();
+        String merchantID = saleData.getTerminal().getMid().getMid();
         String customerPan = saleData.getCustomerPan(); // merchant's pan a/c if sale tx;
         try {
             Account sourceAccount = accountRepository.findBycustomerPan(customerPan);
