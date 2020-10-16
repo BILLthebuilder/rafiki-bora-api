@@ -60,7 +60,6 @@ public class TerminalService implements TerminalInterface {
         terminal.setDeleted(false);
         terminal.setCreatedOn((LocalDateTime.now()));
         terminal.setUpdatedOn((LocalDateTime.now()));
-        terminal.setStatus(true);
         terminal.setTid(createTID());
         terminal.setMid(user.getUser());
         terminal.setMid(user.getUser());
@@ -135,6 +134,7 @@ public class TerminalService implements TerminalInterface {
             throw new Exception("Creator of resource is not allowed to approve.");
         else {
             terminal.setTerminalChecker(user.getUser());
+            terminal.setStatus(true);
             terminalRepository.save(terminal);
             // }
         }
