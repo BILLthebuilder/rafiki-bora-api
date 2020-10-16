@@ -126,18 +126,14 @@ public class UserService implements UserServiceI {
         if (user.getRole().equalsIgnoreCase("MERCHANT")) {
             role = roleRepository.findByRoleName("MERCHANT");
         }
-//        if (user.getRole().equalsIgnoreCase("AGENT")) {
-//            role = roleRepository.findByRoleName("AGENT");
-//        }
         if (user.getRole().equalsIgnoreCase("CUSTOMER")) {
             role = roleRepository.findByRoleName("CUSTOMER");
         }
 
-        else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.getRoles().add(new UserRoles(user, role));
             userRepository.save(user);
-        }
+
 
     }
 
