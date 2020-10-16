@@ -12,7 +12,7 @@ import rafikibora.services.SaleService;
 
 
 @RestController
-@RequestMapping("/api/Sale")
+@RequestMapping("/depositSale")
 public class SaleController {
     @Autowired
      private SaleService saleService;
