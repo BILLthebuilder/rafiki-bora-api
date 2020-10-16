@@ -22,6 +22,7 @@ import java.util.Date;
 @Entity
 @JsonIgnoreProperties
 @Table(name = "transactions")
+//@NamedQueries({ @NamedQuery(name = "findAll", query = "select SUM(name) from Transaction e where e.name = :name")})
 public class Transaction implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
