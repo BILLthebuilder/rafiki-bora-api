@@ -11,7 +11,7 @@ import rafikibora.services.DepositService;
 
 @RestController
 @RequestMapping("/api/deposit")
-public class DepositSaleController {
+public class DepositController {
     @Autowired
     private DepositService depositService;
 

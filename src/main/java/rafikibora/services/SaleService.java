@@ -21,12 +21,15 @@ public class SaleService {
     }
 
     public void performSale(Transaction saleData) {
-        Double amount = saleData.getAmountTransaction();
-        String merchantID = saleData.getTerminal().getMid().getMid();
-        String customerPan = saleData.getCustomerPan(); // merchant's pan a/c if sale tx;
+        //amount sent from pos
+         Double amount = saleData.getAmountTransaction();
+
+         //get merchant id using terminals table
+         String merchantID = saleData.getTerminal().getMid().getMid();
+         String customerPan = saleData.getCustomerPan(); // merchant's pan a/c if sale tx;
         try {
-            Account sourceAccount = accountRepository.findBycustomerPan(customerPan);
-            Account destAccount  = accountRepository.findBymerchantID(merchantID);
+            Account sourceAccount = accountRepository.findByPan(customerPan);
+            Account destAccount  = accountRepository.findByPan(merchantID);
 
             //System.out.println("============> src account Name: " + sourceAccount.getName());
 
@@ -36,11 +39,15 @@ public class SaleService {
                 throw new Exception("Insufficient funds");
             }
 
+            //Debit customer account
             double newSourceAccBalance = customerAccBalance - amount;
 
             double merchantAccBalance = destAccount.getBalance();
+
+            //Credit merchant account
             double newDestBalance = merchantAccBalance + amount;
 
+            //Set updated account
             sourceAccount.setBalance(newSourceAccBalance);
             destAccount.setBalance(newDestBalance);
 
