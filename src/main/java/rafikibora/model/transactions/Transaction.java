@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
 
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -68,4 +69,11 @@ public class Transaction implements Serializable {
     @ManyToOne
     @JoinColumn(name="credit_account", referencedColumnName = "account_id", columnDefinition = "INT(10)")
     private Account destinationAccount;
+
+    @Transient
+    private String merchantPan;
+
+    @Transient
+    private String customerPan;
+
 }

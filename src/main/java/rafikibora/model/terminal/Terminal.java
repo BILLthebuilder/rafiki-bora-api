@@ -45,8 +45,13 @@ public class Terminal implements Serializable {
     @Column(name = "status",  nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean status;
 
-    @Column(name="mid",  unique = true, columnDefinition = "VARCHAR(16)")
-    private String mid;
+//    @Column(name="mid",  nullable = false, columnDefinition = "VARCHAR(16)")
+//    private String mid;
+
+    @ManyToOne
+    @JoinColumn(name = "mid", referencedColumnName = "mid")
+    @JsonIgnore
+    private User mid;
 
     @ManyToOne
     @JoinColumn(name="created_by", nullable = false,  referencedColumnName = "userid")
@@ -78,15 +83,6 @@ public class Terminal implements Serializable {
         updatedOn = LocalDateTime.now();
     }
 
-//    @CreationTimestamp
-//    @Column(name = "date_added", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
-//    @Temporal(value = TemporalType.TIMESTAMP)
-//    private Date dateCreated;
-
-//    @UpdateTimestamp
-//    @Column(name = "date_updated", columnDefinition = "DATETIME ON UPDATE CURRENT_TIMESTAMP")
-//    @Temporal(value = TemporalType.TIMESTAMP)
-//    private Date dateUpdated;
 
     @OneToMany(mappedBy="terminal",cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JsonIgnore
