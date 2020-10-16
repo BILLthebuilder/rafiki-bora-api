@@ -26,8 +26,8 @@ public class DepositService {
         String customerPan = depositData.getCustomerPan(); // customer's pan a/c;
 
         try {
-            Account sourceAccount = accountRepository.findBymerchantPan(merchantPan);
-            Account destAccount = accountRepository.findBycustomerPan(customerPan);
+            Account sourceAccount = accountRepository.findByPan(merchantPan);
+            Account destAccount = accountRepository.findByPan(customerPan);
 
             //System.out.println("============> src account Name: " + sourceAccount.getName());
 

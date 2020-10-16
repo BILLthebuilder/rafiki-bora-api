@@ -25,8 +25,8 @@ public class SaleService {
         String merchantID = saleData.getTerminal().getMid().getMid();
         String customerPan = saleData.getCustomerPan(); // merchant's pan a/c if sale tx;
         try {
-            Account sourceAccount = accountRepository.findBycustomerPan(customerPan);
-            Account destAccount  = accountRepository.findBymerchantID(merchantID);
+            Account sourceAccount = accountRepository.findByPan(customerPan);
+            Account destAccount  = accountRepository.findByPan(merchantID);
 
             //System.out.println("============> src account Name: " + sourceAccount.getName());
 

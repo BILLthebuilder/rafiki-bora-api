@@ -10,10 +10,12 @@ public interface AccountRepository extends JpaRepository<Account,Integer> {
     Account findByAccountNumber(String accountNumber);
     
 
-    Account findBymerchantPan(String merchantPan);
+//    Account findBymerchantPan(String merchantPan);
 
-    Account findBycustomerPan(String customerPan);
+//    Account findBycustomerPan(String customerPan);
+//
+//    Account findBymerchantID(String merchantID);
 
-    Account findBymerchantID(String merchantID);
+    Account findByPan(String merchantPan);
 }
 
