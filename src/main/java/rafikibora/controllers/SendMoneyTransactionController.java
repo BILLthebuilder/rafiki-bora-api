@@ -12,6 +12,10 @@ import rafikibora.model.transactions.Transaction;
 import rafikibora.services.SendMoneyService;
 import javax.validation.Valid;
 
+/**
+ * This controller handles all transactions pertaining to sending money
+ * to a given user.
+ */
 @RestController
 @RequestMapping(value = "/api/transactions/send_money")
 public class SendMoneyTransactionController {
@@ -20,10 +24,8 @@ public class SendMoneyTransactionController {
     private SendMoneyService sendMoneyService;
 
     @PostMapping
-    public ResponseEntity<?> sendMoney(@Valid @RequestBody Transaction sendMoneyData) {
-        System.out.println("==========================>" + sendMoneyData);
-        //sendMoneyService.sendMoney(sendMoneyData);
-
+    public ResponseEntity<?> sendMoney(@RequestBody Transaction sendMoneyData) {
+        sendMoneyService.sendMoney(sendMoneyData);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
