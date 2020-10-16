@@ -1,5 +1,5 @@
-package rafikibora.model.users;
-
- public enum AuthProvider {
-     LOCAL
- }
+//package rafikibora.model.users;
+//
+// public enum AuthProvider {
+//     LOCAL
+// }

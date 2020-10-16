@@ -1,5 +1,6 @@
 package rafikibora.controllers;
 
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,8 +65,8 @@ public class AccountController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAccount(@PathVariable int id) {
-        service.deleteAccount(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> deleteAccount(@PathVariable @Param("id") int id) {
+        return service.deleteAccount(id);
+
     }
 }

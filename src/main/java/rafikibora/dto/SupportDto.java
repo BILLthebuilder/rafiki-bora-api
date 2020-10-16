@@ -3,12 +3,12 @@ package rafikibora.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReceiveMoneyResponseDto {
-    private String message;
-    private String txnAmount;
-}
+public class SupportDto {
+        String name;
+        String id;
+        String reason;
+    }
+

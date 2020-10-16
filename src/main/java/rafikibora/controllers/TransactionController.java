@@ -30,10 +30,6 @@ public class TransactionController {
         return service.getTransactionById(id);
     }
 
-    @GetMapping("transactions/{resultCode}")
-    public Transaction findTransactionByResultCode(@PathVariable @Valid String resultCode) {
-        return service.getTransactionByName(resultCode);
-    }
 
     @PatchMapping
     public Transaction updateAccount(@RequestBody Transaction transaction) {

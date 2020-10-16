@@ -15,6 +15,9 @@ public class AuthenticationResponse {
     private String email;
     private List<?> roles;
 
+    public AuthenticationResponse(responseStatus failed, String message, Object o, Object o1) {
+    }
+
     public enum responseStatus{
         SUCCESS, FAILED
     }

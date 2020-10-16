@@ -3,42 +3,31 @@ package rafikibora.controllers;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import rafikibora.dto.AuthenticationResponse;
-import rafikibora.dto.LoginRequest;
-import rafikibora.dto.UserSummary;
+import rafikibora.dto.*;
+import rafikibora.model.users.User;
 import rafikibora.services.UserServiceI;
 
-import javax.validation.Valid;
-
  @RestController
- //@RequestMapping("api/auth")
+ @RequestMapping("api/auth")
  @AllArgsConstructor
  @Slf4j
  public class AuthController {
 
      private final AuthenticationManager authenticationManager;
 
-
      private final UserServiceI userServiceI;
 
 
-
-     @GetMapping("/profile")
-     public ResponseEntity<UserSummary> me() {
-         return ResponseEntity.ok(userServiceI.getUserProfile());
-     }
-
-     @PostMapping(value = "api/auth/login")
+     @PostMapping(value = "/login")
      public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest loginRequest) throws Exception {
          return userServiceI.login(loginRequest);
      }
+
+
+
 
 //     @PostMapping(value = "/refresh", produces = MediaType.APPLICATION_JSON_VALUE)
 //     public ResponseEntity<LoginResponse> refreshToken(@CookieValue(name = "accessToken", required = false) String accessToken,

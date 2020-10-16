@@ -39,10 +39,6 @@ public class TransactionService {
         return transaction;
     }
 
-    public Transaction getTransactionByName(String resultCode) {
-        return repository.findByResultCode(resultCode);
-    }
-
     public String deleteTransaction(int id) {
         repository.deleteById(id);
         return "product removed !! " + id;
@@ -51,7 +47,7 @@ public class TransactionService {
     public Transaction updateTransaction(Transaction transaction) {
         Transaction existingTransaction = repository.findById(transaction.getId()).orElse(null);
         existingTransaction.setAmountTransaction(transaction.getAmountTransaction());
-        existingTransaction.setAmountTransactionCurrencyCode(transaction.getAmountTransactionCurrencyCode());
+        existingTransaction.setCurrencyCode(transaction.getCurrencyCode());
         existingTransaction.setProcessingCode(transaction.getProcessingCode());
         existingTransaction.setSourceAccount(transaction.getSourceAccount());
         return repository.save(existingTransaction);

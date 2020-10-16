@@ -11,7 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import rafikibora.model.account.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import rafikibora.model.users.Roles;
+import rafikibora.model.users.Role;
 import rafikibora.services.AccountService;
 import rafikibora.services.RoleService;
 
@@ -27,15 +27,15 @@ public class RoleController {
     private RoleService service;
 
     @PostMapping
-    public ResponseEntity<?> addRole(@Valid @RequestBody Roles roles) {
+    public ResponseEntity<?> addRole(@Valid @RequestBody Role role) {
 
-        Roles newRole = service.saveRole(roles);
+        Role newRole = service.saveRole(role);
 
         // set the location header for the newly created resource
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newEmployeeURI = ServletUriComponentsBuilder.fromCurrentRequest() // get the URI for this request
                 .path("/{id}") // add to it a path variable
-                .buildAndExpand(newRole.getRoleId()) // populate that path variable with the newly created restaurant id
+                .buildAndExpand(newRole.getRoleid()) // populate that path variable with the newly created restaurant id
                 .toUri(); // convert that work into a human readable URI
         responseHeaders.setLocation(newEmployeeURI); // in the header, set the location location to that URI
 
@@ -46,22 +46,23 @@ public class RoleController {
 
 
     @GetMapping
-    public List<Roles> findAllRoles() {
+    public List<Role> findAllRoles() {
         return service.getRoles();
     }
 
     @GetMapping("/{roleId}")
-    public ResponseEntity<Roles> findRoleById(@PathVariable ("roleId") long roleId) {
-        return (ResponseEntity<Roles>) service.getRoleById(roleId);
+    public ResponseEntity<Role> findRoleById(@PathVariable ("roleId") long roleId) {
+        return (ResponseEntity<Role>) service.getRoleById(roleId);
     }
 
     @GetMapping("/roles/{roleName}")
-    public ResponseEntity<Roles> findRoleByName(@PathVariable @Valid String roleName) {
-        return (ResponseEntity<Roles>) service.getRoleByName(roleName);
+    public ResponseEntity<Role> findRoleByName(@PathVariable @Valid String roleName) {
+        Role r = service.getRoleByName(roleName);
+        return new ResponseEntity<>(r, HttpStatus.OK);
     }
 
     @PatchMapping(value = "/{id}", consumes = {"application/json"})
-    public ResponseEntity<?> updateRole(@RequestBody Roles roles, @PathVariable int roleId) {
+    public ResponseEntity<?> updateRole(@RequestBody Role roles, @PathVariable int roleId) {
         service.updateRole(roles, roleId);
 
         return new ResponseEntity<>(HttpStatus.OK);

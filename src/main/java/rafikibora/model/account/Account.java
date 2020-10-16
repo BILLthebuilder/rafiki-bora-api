@@ -7,11 +7,14 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.springframework.data.annotation.CreatedBy;
 import rafikibora.model.transactions.Transaction;
 import rafikibora.model.users.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +24,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@SQLDelete(sql = "UPDATE accounts SET is_deleted=true WHERE account_id=?")
 @Table(name = "accounts")
 public class Account implements Serializable {
     @Id
@@ -46,16 +50,24 @@ public class Account implements Serializable {
     @Column(name = "is_deleted", columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "date_created", updatable=false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
-    private Date dateCreated;
+    @Column(name = "date_created")
+    private LocalDateTime dateCreated;
 
-    @Column(name = "date_updated", columnDefinition = "DATETIME ON UPDATE CURRENT_TIMESTAMP")
-    @Temporal(value = TemporalType.TIMESTAMP)
-    private Date dateUpdated;
+    @PrePersist
+    public void prePersist() {
+        dateCreated = LocalDateTime.now();
+    }
+
+
+    @Column(name = "date_updated")
+    private LocalDateTime dateUpdated;
+
+    @PreUpdate
+    public void preUpdate() { dateUpdated = LocalDateTime.now();
+    }
 
     @ManyToOne
-    @JoinColumn(name="created_by", nullable = false, referencedColumnName = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name="created_by", nullable = false, referencedColumnName = "userid", insertable = false, updatable = false)
     @JsonIgnore
     private User accountMaker;
 
@@ -64,7 +76,7 @@ public class Account implements Serializable {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="approved_by", referencedColumnName = "user_id")
+    @JoinColumn(name="approved_by", referencedColumnName = "userid")
     private User accountChecker;
 
     @JsonIgnore
