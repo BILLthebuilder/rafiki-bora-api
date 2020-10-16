@@ -7,9 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
-import rafikibora.dto.UserSummary;
 import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
+import rafikibora.model.transactions.Transaction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -115,18 +115,21 @@ public class User implements Serializable {
             allowSetters = true)
     private Set<UserRoles> roles = new HashSet<>();
 
-    public UserSummary toUserSummary() {
-        UserSummary userSummary = new UserSummary();
-        userSummary.setEmail(this.email);
-        userSummary.setUserId(this.userid);
-//        userSummary.setRoles(this.getRoles());
-        return userSummary;
-    }
-
     @JsonIgnore
     @OneToOne
     @JoinColumn(name = "account_id", referencedColumnName = "account_id", columnDefinition = "INT(10)")
     private Account userAccount;
+
+    /**
+     * Part of the join relationship between user and transactions
+     * maps users to their set of transactions
+     */
+    @OneToMany(mappedBy = "merchant",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonIgnoreProperties(value = "merchant",
+            allowSetters = true)
+    private List<Transaction> transactions = new ArrayList<>();
 
 
     @JsonIgnore
@@ -152,6 +155,10 @@ public class User implements Serializable {
         this.roles = roles;
     }
 
+    /**
+     * A transient field, for mapping to the required role field of
+     * incoming json formatted requests during user creation
+     */
     @Transient
     private String role;
 }
