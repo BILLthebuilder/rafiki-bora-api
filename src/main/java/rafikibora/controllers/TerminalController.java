@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import rafikibora.dto.TerminalDto;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.repository.TerminalRepository;
+import rafikibora.services.TerminalInterface;
 import rafikibora.services.TerminalService;
 
 import java.awt.*;
@@ -27,6 +28,7 @@ public class TerminalController {
     @Autowired
     private TerminalService terminalService;
     private TerminalRepository terminalRepository;
+    private TerminalInterface terminalInterface;
 
 //Create Terminal
     @PostMapping

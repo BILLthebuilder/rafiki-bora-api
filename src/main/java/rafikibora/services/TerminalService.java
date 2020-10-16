@@ -26,6 +26,7 @@ import java.security.Principal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLOutput;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -126,6 +127,10 @@ public class TerminalService implements TerminalInterface {
         Terminal terminal = terminalRepository.findById(id).get();
         Long checkerId = user.getUser().getUserid();
         Long makerId = terminal.getTerminalMaker().getUserid();
+        System.out.println("******************************************");
+        System.out.println("Maker id: "+makerId);
+        System.out.println("Cehecker id: "+checkerId);
+        System.out.println("******************************************");
         if (checkerId.equals(makerId))
             throw new Exception("Creator of resource is not allowed to approve.");
         else {
