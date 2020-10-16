@@ -7,9 +7,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import rafikibora.model.account.Account;
+import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.Role;
 import rafikibora.model.users.User;
 import rafikibora.model.users.UserRoles;
+import rafikibora.repository.AccountRepository;
 import rafikibora.repository.RoleRepository;
 import rafikibora.repository.UserRepository;
 
@@ -26,6 +29,9 @@ public class SeedData
 
     @Autowired
     UserRepository userrepos;
+
+    @Autowired
+    AccountRepository accountRepository;
 
     private RoleRepository roleRepository;
 
@@ -80,5 +86,28 @@ public class SeedData
 
         admin2.getRoles().add(new UserRoles(admin2, adminRole));
         userrepos.save(admin2);
+
+        // Add merchant accounts
+        Account merchantAcc1 = new Account();
+        merchantAcc1.setAccountNumber("555555");
+        merchantAcc1.setBalance(100000);
+        merchantAcc1.setName("Mitishamba");
+        merchantAcc1.setStatus(true);
+        merchantAcc1.setPan("777777");
+        merchantAcc1.setAccountMaker(admin1);
+        merchantAcc1.setAccountChecker(admin2);
+        merchantAcc1.setPhoneNumber("0722555555");
+        accountRepository.save(merchantAcc1);
+
+        Account merchantAcc2 = new Account();
+        merchantAcc2.setAccountNumber("666666");
+        merchantAcc2.setBalance(100000);
+        merchantAcc2.setName("Mitishamba#2");
+        merchantAcc2.setStatus(true);
+        merchantAcc2.setPan("888888");
+        merchantAcc2.setAccountMaker(admin1);
+        merchantAcc2.setAccountChecker(admin2);
+        merchantAcc2.setPhoneNumber("0722444444");
+        accountRepository.save(merchantAcc2);
     }
 }
