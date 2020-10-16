@@ -55,7 +55,7 @@ public class SendMoneyService {
         Double amountToSend = sendMoneyData.getAmountTransaction(); //4
         String emailOfRecipient = sendMoneyData.getRecipientEmail(); // 47
         String currencyCode = sendMoneyData.getCurrencyCode(); // 49
-        Date dateTimeTransmission = sendMoneyData.getDateTimeTransmission(); // 7
+        String dateTime = sendMoneyData.getDateTime(); // 7
         String TID = sendMoneyData.getTID(); // 41
 
         System.out.println("######### pan: " + merchantPan);
@@ -63,7 +63,7 @@ public class SendMoneyService {
         System.out.println("######### amount: " + amountToSend);
         System.out.println("######### email: " + emailOfRecipient);
         System.out.println("######### currency code: " + currencyCode);
-        System.out.println("######### datetime: " + dateTimeTransmission);
+        System.out.println("######### datetime: " + dateTime);git
 
         try {
             // Validate TID and MID

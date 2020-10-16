@@ -2,7 +2,6 @@ package rafikibora.services;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,11 +15,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import rafikibora.dto.*;
-import rafikibora.exceptions.BadRequestException;
+import rafikibora.dto.AuthenticationResponse;
+import rafikibora.dto.LoginRequest;
 import rafikibora.exceptions.InvalidCheckerException;
 import rafikibora.exceptions.ResourceNotFoundException;
-import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.Role;
 import rafikibora.model.users.User;
 import rafikibora.model.users.UserRoles;
@@ -47,10 +45,10 @@ public class UserService implements UserServiceI {
     private final AuthenticationManager authenticationManager;
     private final CustomUserDetailsService customUserDetailsService;
 
+    //it is where we store details of the present security context of the application
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = this.findByName(authentication.getName());
-        ;
         return user;
     }
 
@@ -78,6 +76,7 @@ public class UserService implements UserServiceI {
         return ResponseEntity.ok().body(authResponse);
     }
 
+    //test validity of credentials
     private void authenticate(String email, String password) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
@@ -88,21 +87,19 @@ public class UserService implements UserServiceI {
         }
     }
 
-
+    //soft delete user
     @Override
     public User deleteUser(long id) {
-        //User currentUser = getCurrentUser();
         User user = userRepository.findById(id);
-
         if (user == null) {
-            throw new ResourceNotFoundException("This user does not exist");
-        }
+            throw new ResourceNotFoundException("This user does not exist"); }
 
         user.setDeleted(true);
-
         return user;
+
     }
 
+    //find user by name
     @Override
     public User findByName(String name) {
         User user = userRepository.findByEmail(name.toLowerCase());
@@ -112,6 +109,7 @@ public class UserService implements UserServiceI {
         return user;
     }
 
+    //list users of specific roles
     @Override
     public Set<User> getUserByRole(String roleName) {
 
@@ -120,6 +118,13 @@ public class UserService implements UserServiceI {
         return users;
     }
 
+    //list all users
+    @Override
+    public List<User> viewUsers() {
+        return userRepository.findAll();
+    }
+
+    //Setting user Maker
     @Transactional
     public void addUser(User user) {
         if (userRepository.findByEmail(user.getEmail()) != null) {
@@ -135,26 +140,18 @@ public class UserService implements UserServiceI {
         if (user.getRole().equalsIgnoreCase("MERCHANT")) {
             role = roleRepository.findByRoleName("MERCHANT");
         }
-        if (user.getRole().equalsIgnoreCase("AGENT")) {
-            role = roleRepository.findByRoleName("AGENT");
-        }
         if (user.getRole().equalsIgnoreCase("CUSTOMER")) {
             role = roleRepository.findByRoleName("CUSTOMER");
         }
 
-        else {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.getRoles().add(new UserRoles(user, role));
-            userRepository.save(user);
-        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.getRoles().add(new UserRoles(user, role));
+        userRepository.save(user);
+
 
     }
 
-    @Override
-    public List<User> viewUsers() {
-        return userRepository.findAll();
-    }
-
+    //Setting user Checker
     @Transactional
     public User approveUser(String email) {
         User currentUser = getCurrentUser();
@@ -163,38 +160,60 @@ public class UserService implements UserServiceI {
         if (user == null) {
             throw new ResourceNotFoundException("This user does not exist");
         }
+
         // a user can only be approved by a user who is an admin
-        // Todo
+//        Role admin = roleRepository.findByRoleName("ADMIN");
+//        if (!currentUser.getRoles().contains(admin)){
+//            throw new InvalidCheckerException("You cannot approve this user you are not an admin!");
+//        }
+
         // A user cannot be approved by the same Admin who created them
         if (currentUser == user.getUserMaker()) {
-            throw new InvalidCheckerException("You cannot approve this user!"); }
+            throw new InvalidCheckerException("You cannot approve this user!");
+        }
+
         // if user has Merchant role generate MID and assign
-        // Todo
-        if (user.getRoles().equals("MERCHANT")){
+        boolean merchant=false;
+        Set<UserRoles> retrievedRoles = user.getRoles();
+        for (UserRoles userRole : retrievedRoles) {
+            if (userRole.getRole().getRoleName().equalsIgnoreCase("MERCHANT")) {
+                merchant=true;
+                break;
+            }
+        }
+        if (merchant==true){
             String mid = UUID.randomUUID().toString().substring(0,16);
-            System.out.println(mid);
             user.setMid(mid);
         }
+
         user.setUserChecker(currentUser);
         user.setStatus(true);
         return userRepository.save(user);
     }
 
+    //Make merchant On board their Agents
+    @Override
+    public void addAgent(User user) {
+        User currentUser = getCurrentUser();
+        Role role = null;
+        if (user.getRole().equalsIgnoreCase("AGENT")) {
+            role = roleRepository.findByRoleName("AGENT");
+            Set<UserRoles> retrievedRoles = currentUser.getRoles();
+
+            for (UserRoles userRole : retrievedRoles) {
+                if (userRole.getRole().getRoleName().equalsIgnoreCase("MERCHANT")) {
+
+                    user.setStatus(true);
+                    user.setUserMaker(currentUser);
+                    user.setUserChecker(null);
+                    user.setPassword(passwordEncoder.encode(user.getPassword()));
+                    userRepository.save(user);
+
+                }
+            }
+
+        }
+    }
 
 
-    // terminal service
-//    @Transactional
-//    public void addTerminal(Terminal terminal) {
-//        User currentUser = getCurrentUser();
-//        // Todo
-//    }
-//
-//    @Override
-//    public Terminal approveTerminal(String serialNo) {
-//        User currentUser = getCurrentUser();
-//        // Todo
-//
-//        return null;
-//    }
-
-}
+    }

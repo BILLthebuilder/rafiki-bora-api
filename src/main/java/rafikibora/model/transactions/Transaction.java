@@ -1,6 +1,5 @@
 package rafikibora.model.transactions;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -9,6 +8,7 @@ import lombok.NoArgsConstructor;
 import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.User;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -22,6 +22,7 @@ import java.util.Date;
 @Entity
 @JsonIgnoreProperties
 @Table(name = "transactions")
+//@NamedQueries({ @NamedQuery(name = "findAll", query = "select SUM(name) from Transaction e where e.name = :name")})
 public class Transaction implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -100,5 +101,11 @@ public class Transaction implements Serializable {
      * Will not be persited
      */
     @Transient
-    private String TID;
+    private String dateTime;
+
+    @Transient
+    private String merchantPan;
+
+    @Transient
+    private String customerPan;
 }

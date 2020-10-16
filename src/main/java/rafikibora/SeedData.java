@@ -8,7 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import rafikibora.model.account.Account;
-import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.Role;
 import rafikibora.model.users.User;
 import rafikibora.model.users.UserRoles;
@@ -109,5 +108,35 @@ public class SeedData
         merchantAcc2.setAccountChecker(admin2);
         merchantAcc2.setPhoneNumber("0722444444");
         accountRepository.save(merchantAcc2);
+
+        // Create customer
+        User cust1 = new User();
+        cust1.setFirstName("Maulid");
+        cust1.setLastName("Bulle");
+        cust1.setEmail("maulid@gmail.com");
+        cust1.setUsername("mauli@gmail.com");
+        cust1.setPhoneNo("555555");
+        cust1.setPassword(passwordEncoder.encode("maulid"));
+        cust1.setStatus(true);
+
+        userrepos.save(cust1);
+
+        // Add account info data
+        Account account1 = new Account();
+        account1.setAccountNumber("0714385056");
+        account1.setName("Maulid Bulle");
+        account1.setBalance(50000.0);
+//        account1.setPhoneNumber("0714385056");
+        account1.setPan("123");
+
+        Account account2 = new Account();
+        account2.setAccountNumber("0720305056");
+        account2.setName("John Mulongo");
+        account2.setBalance(50000.0);
+//        account2.setPhoneNumber("0720305056");
+        account2.setPan("123");
+
+        accountRepository.save(account1);
+        accountRepository.save(account2);
     }
 }

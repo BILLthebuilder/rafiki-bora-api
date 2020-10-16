@@ -69,6 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().exceptionHandling()
@@ -79,6 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/users/**").permitAll()
                 .antMatchers("/accounts/**").permitAll()
                 .antMatchers("/api/deposit/**").permitAll()
+                .antMatchers("/api/sale/**").permitAll()
                 .antMatchers("/api/roles/**").permitAll()
                 .antMatchers("/api/terminals/**").permitAll()
                 .antMatchers("/api/accounts/**").permitAll()
@@ -96,6 +98,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
+
+//    that provides a CorsConfiguration instance based on the provided request
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
