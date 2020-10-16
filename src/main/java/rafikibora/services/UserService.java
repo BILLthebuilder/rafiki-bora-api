@@ -120,7 +120,7 @@ public class UserService implements UserServiceI {
         return users;
     }
 
-    @Transactional
+    //@Transactional
     public void addUser(User user) {
         if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new EntityExistsException("Email already exists");

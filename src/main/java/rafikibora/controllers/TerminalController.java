@@ -36,7 +36,7 @@ public class TerminalController {
         System.out.println(terminal.getId());
         String msg = "";
         try{
-            terminalInterface.save(terminal);
+            terminalService.save(terminal);
             msg = "Terminal created successfully";
         }catch (Exception ex){
             msg = "Duplicate Entry is not Allowed!!";
@@ -52,7 +52,7 @@ public class TerminalController {
 
     @GetMapping(produces = {"application/json"})
     public ResponseEntity<List<Terminal>> list() {
-        List<Terminal> terminals = terminalInterface.list();
+        List<Terminal> terminals = terminalService.list();
         return new ResponseEntity<>(terminals, HttpStatus.OK);
     }
 
@@ -61,7 +61,7 @@ public class TerminalController {
     @GetMapping(value = "/{id}", produces = {"application/json"})
     public ResponseEntity<Terminal> listOne(@PathVariable("id") Long id) {
         System.out.println(id.toString());
-        Terminal terminal = terminalInterface.getById(id);
+        Terminal terminal = terminalService.getById(id);
         return new ResponseEntity<>(terminal, HttpStatus.OK);
     }
 
@@ -73,7 +73,7 @@ public class TerminalController {
     @PatchMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
     public ResponseEntity<String> update(@PathVariable("id") Long id, @RequestBody TerminalDto terminalDto) {
         System.out.println(id.toString());
-        terminalInterface.update(id, terminalDto);
+        terminalService.update(id, terminalDto);
         return new ResponseEntity<>("Terminal updated successfully", HttpStatus.OK);
     }
 
@@ -87,7 +87,7 @@ public class TerminalController {
         System.out.println(terminalDto.getId());
         String msg = "";
         try{
-            terminalInterface.approve(terminalDto);
+            terminalService.approve(terminalDto);
             msg = "Terminal approved successfully";
         }catch (Exception ex){
             msg = "Creator of resource is not allowed to approve!!";
@@ -101,7 +101,7 @@ public class TerminalController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") Long id) {
-        terminalInterface.deleteById(id);
+        terminalService.deleteById(id);
         return new ResponseEntity<>("Terminal deletion successful", HttpStatus.OK);
     }
 
