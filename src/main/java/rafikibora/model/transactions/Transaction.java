@@ -51,6 +51,13 @@ public class Transaction implements Serializable {
     @JoinColumn(name="terminal", referencedColumnName = "terminal_id")
     private Terminal terminal;
 
+    @ManyToOne
+    @NotNull
+    @JoinColumn(name="userid")
+    @JsonIgnoreProperties(value = "transactions",
+            allowSetters = true)
+    private User merchant;
+
     @Column(name = "recipient_email", columnDefinition = "VARCHAR(30)")
     private String recipientEmail;
 
@@ -70,4 +77,20 @@ public class Transaction implements Serializable {
     @ManyToOne
     @JoinColumn(name="credit_account", referencedColumnName = "account_id", columnDefinition = "INT(10)")
     private Account destinationAccount;
+
+    /**
+     * A transient field, for mapping to a destinationPan field,
+     * a String, from a transaction request object.
+     * Will not be persited
+     */
+    @Transient
+    private String destinationPan;
+
+    /**
+     * A transient field, for mapping to a TID field,
+     * a String, from a transaction request object.
+     * Will not be persited
+     */
+    @Transient
+    private String TID;
 }
