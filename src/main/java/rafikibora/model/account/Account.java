@@ -96,4 +96,6 @@ public class Account implements Serializable {
     @OneToMany(mappedBy="destinationAccount",cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Transaction> deposits = new ArrayList<Transaction>();
+
+
 }
