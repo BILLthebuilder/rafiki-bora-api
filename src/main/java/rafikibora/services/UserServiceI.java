@@ -12,6 +12,8 @@ public interface UserServiceI {
 
     ResponseEntity<AuthenticationResponse> login(LoginRequest loginRequest) throws Exception;
 
+//    ResponseEntity<AuthenticationResponse> logout(LoginRequest loginRequest) throws Exception;
+
     Set<User> getUserByRole(String roleName);
 
     User findByName(String name);
@@ -21,5 +23,9 @@ public interface UserServiceI {
     List<User> viewUsers();
 
     void addAgent(User user);
+
+    void  addUser(User user);
+
+    User approveUser(String email);
 
 }

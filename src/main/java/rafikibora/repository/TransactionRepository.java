@@ -8,4 +8,6 @@ import java.util.Optional;
 //extends crud methods
 public interface TransactionRepository extends JpaRepository<Transaction,Integer> {
     Optional<Transaction> findById(Integer id);
+    Optional<Transaction> findByToken(String fundsToken);
+
 }

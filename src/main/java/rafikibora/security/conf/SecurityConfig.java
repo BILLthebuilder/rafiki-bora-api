@@ -80,6 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/users/**").permitAll()
                 .antMatchers("/accounts/**").permitAll()
                 .antMatchers("/api/deposit/**").permitAll()
+                .antMatchers("/api/sale/**").permitAll()
                 .antMatchers("/api/roles/**").permitAll()
                 .antMatchers("/api/terminals/**").permitAll()
                 .antMatchers("/api/accounts/**").permitAll()
