@@ -26,6 +26,6 @@ public class SendMoneyTransactionController {
     @PostMapping
     public ResponseEntity<?> sendMoney(@RequestBody Transaction sendMoneyData) {
         sendMoneyService.sendMoney(sendMoneyData);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 }

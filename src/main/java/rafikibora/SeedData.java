@@ -93,7 +93,7 @@ public class SeedData
         merchantAcc1.setBalance(100000);
         merchantAcc1.setName("Mitishamba");
         merchantAcc1.setStatus(true);
-        merchantAcc1.setPan("777777");
+        merchantAcc1.setPan("4478150055546780");
         merchantAcc1.setAccountMaker(admin1);
         merchantAcc1.setAccountChecker(admin2);
         merchantAcc1.setPhoneNumber("0722555555");
@@ -101,10 +101,10 @@ public class SeedData
 
         Account merchantAcc2 = new Account();
         merchantAcc2.setAccountNumber("666666");
-        merchantAcc2.setBalance(100000);
+        merchantAcc2.setBalance(250000);
         merchantAcc2.setName("Mitishamba#2");
         merchantAcc2.setStatus(true);
-        merchantAcc2.setPan("888888");
+        merchantAcc2.setPan("5196010116943992");
         merchantAcc2.setAccountMaker(admin1);
         merchantAcc2.setAccountChecker(admin2);
         merchantAcc2.setPhoneNumber("0722444444");

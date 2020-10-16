@@ -58,6 +58,12 @@ public class SendMoneyService {
         Date dateTimeTransmission = sendMoneyData.getDateTimeTransmission(); // 7
         String TID = sendMoneyData.getTID(); // 41
 
+        System.out.println("######### pan: " + merchantPan);
+        System.out.println("######### process code: " + processingCode);
+        System.out.println("######### amount: " + amountToSend);
+        System.out.println("######### email: " + emailOfRecipient);
+        System.out.println("######### currency code: " + currencyCode);
+        System.out.println("######### datetime: " + dateTimeTransmission);
 
         try {
             // Validate TID and MID
@@ -105,7 +111,7 @@ public class SendMoneyService {
     private void validateTID(String TID) {
         Optional<Terminal> terminal = terminalRepository.findByTid(TID);
         if (terminal == null) {
-            throw new ResourceNotFoundException("No terminal with the given TID exists");
+            throw new ResourceNotFoundException("Invalid Terminal Indentification Number");
         }
     }
 
@@ -117,7 +123,7 @@ public class SendMoneyService {
     private void validateMID(String MID) {
         Optional<User> merchant = userRepository.findByMid(MID);
         if (merchant == null) {
-            throw new ResourceNotFoundException("No terminal with the given TID exists");
+            throw new ResourceNotFoundException("Invalid Merchant Identification Number");
         }
     }
 

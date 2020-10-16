@@ -91,4 +91,14 @@ public class Transaction implements Serializable {
      */
     @Transient
     private String TID;
+
+    /**
+     * A transient field, for mapping to a date-time field as
+     * a String.
+     * This will prevent the String field from being converted into
+     * a wrongly formatted date.
+     * Will not be persited
+     */
+    @Transient
+    private String TID;
 }
