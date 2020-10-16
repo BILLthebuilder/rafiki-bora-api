@@ -63,7 +63,7 @@ public class SendMoneyService {
         System.out.println("######### amount: " + amountToSend);
         System.out.println("######### email: " + emailOfRecipient);
         System.out.println("######### currency code: " + currencyCode);
-        System.out.println("######### datetime: " + dateTime);git
+        System.out.println("######### datetime: " + dateTime);
 
         try {
             // Validate TID and MID
