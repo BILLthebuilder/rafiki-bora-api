@@ -103,14 +103,14 @@ public class SeedData
         account1.setAccountNumber("0714385056");
         account1.setName("Maulid Bulle");
         account1.setBalance(50000.0);
-        account1.setPhoneNumber("0714385056");
+//        account1.setPhoneNumber("0714385056");
         account1.setPan("123");
 
         Account account2 = new Account();
         account2.setAccountNumber("0720305056");
         account2.setName("John Mulongo");
         account2.setBalance(50000.0);
-        account2.setPhoneNumber("0720305056");
+//        account2.setPhoneNumber("0720305056");
         account2.setPan("123");
 
         accountRepository.save(account1);
