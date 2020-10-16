@@ -13,5 +13,6 @@ public interface AccountRepository extends JpaRepository<Account,Integer> {
 //    (String merchantID);
 
     Account findByPan(String customerPan);
+
 }
 
