@@ -2,7 +2,6 @@ package rafikibora.services;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,11 +15,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import rafikibora.dto.*;
-import rafikibora.exceptions.BadRequestException;
+import rafikibora.dto.AuthenticationResponse;
+import rafikibora.dto.LoginRequest;
 import rafikibora.exceptions.InvalidCheckerException;
 import rafikibora.exceptions.ResourceNotFoundException;
-import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.Role;
 import rafikibora.model.users.User;
 import rafikibora.model.users.UserRoles;
@@ -29,7 +27,10 @@ import rafikibora.repository.UserRepository;
 import rafikibora.security.util.exceptions.RafikiBoraException;
 
 import javax.persistence.EntityExistsException;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -84,18 +85,12 @@ public class UserService implements UserServiceI {
         }
     }
 
-
     @Override
     public User deleteUser(long id) {
-        //User currentUser = getCurrentUser();
         User user = userRepository.findById(id);
-
         if (user == null) {
-            throw new ResourceNotFoundException("This user does not exist");
-        }
-
+            throw new ResourceNotFoundException("This user does not exist"); }
         user.setDeleted(true);
-
         return user;
     }
 
@@ -131,9 +126,9 @@ public class UserService implements UserServiceI {
         if (user.getRole().equalsIgnoreCase("MERCHANT")) {
             role = roleRepository.findByRoleName("MERCHANT");
         }
-        if (user.getRole().equalsIgnoreCase("AGENT")) {
-            role = roleRepository.findByRoleName("AGENT");
-        }
+//        if (user.getRole().equalsIgnoreCase("AGENT")) {
+//            role = roleRepository.findByRoleName("AGENT");
+//        }
         if (user.getRole().equalsIgnoreCase("CUSTOMER")) {
             role = roleRepository.findByRoleName("CUSTOMER");
         }
@@ -150,7 +145,6 @@ public class UserService implements UserServiceI {
     public List<User> viewUsers() {
         return userRepository.findAll();
     }
-
 
     @Transactional
     public User approveUser(String email) {
@@ -193,14 +187,31 @@ public class UserService implements UserServiceI {
 
     //Make merchant On board Agents
     // Todo
-    public void addAgent(User user){
+    @Override
+    public void addAgent(User user) {
+        User currentUser = getCurrentUser();
+        Role role = null;
+        if (user.getRole().equalsIgnoreCase("AGENT")) {
+            role = roleRepository.findByRoleName("AGENT");
+            Set<UserRoles> retrievedRoles = currentUser.getRoles();
 
+            for (UserRoles userRole : retrievedRoles) {
+                if (userRole.getRole().getRoleName().equalsIgnoreCase("MERCHANT")) {
 
+                    user.setStatus(true);
+                    user.setUserMaker(currentUser);
+                    user.setUserChecker(null);
+                    user.setPassword(passwordEncoder.encode(user.getPassword()));
+                    userRepository.save(user);
+
+                }
+            }
+
+        }
     }
 
 
-
-    // terminal service
+        // terminal service
 //    @Transactional
 //    public void addTerminal(Terminal terminal) {
 //        User currentUser = getCurrentUser();
@@ -215,4 +226,4 @@ public class UserService implements UserServiceI {
 //        return null;
 //    }
 
-}
+    }
