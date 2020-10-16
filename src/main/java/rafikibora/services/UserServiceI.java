@@ -24,4 +24,8 @@ public interface UserServiceI {
 
     void addAgent(User user);
 
+    void  addUser(User user);
+
+    User approveUser(String email);
+
 }
