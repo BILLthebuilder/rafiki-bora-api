@@ -39,7 +39,6 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-
     /**
      * Returns the User record for the currently authenticated user based off of the supplied access token
      * <br>Example: <a href="http://localhost:8080/users/profile">http://localhost:2019/users/getuserinfo</a>
@@ -57,7 +56,6 @@ public class UserController {
                 HttpStatus.OK);
     }
 
-
     @PostMapping("/user/approve/{email}")
     public ResponseEntity<?> approve(@PathVariable("email") String email){
 
@@ -66,11 +64,9 @@ public class UserController {
         return new ResponseEntity<>(approvedUser, HttpStatus.OK);
     }
 
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/deleteuser/{id}")
     public ResponseEntity<?> deleteAccount(@PathVariable long id) {
-
-        User user = userServiceI.deleteUser(id);
-
+        User user = userService.deleteUser(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -79,10 +75,13 @@ public class UserController {
         return userService.getUserByRole(roleName);
     }
 
-
     @GetMapping
     public List<User> findAllUsers() {
         return userServiceI.viewUsers();
+    }
+    @PostMapping("/addagent")
+    public void addAgent (@RequestBody User user){
+         userServiceI.addAgent(user);
     }
 
 }
