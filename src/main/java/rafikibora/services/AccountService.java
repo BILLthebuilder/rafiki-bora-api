@@ -84,10 +84,6 @@ public class AccountService {
         if ((Double) account.getBalance() != null) {
             existingAccount.setBalance(account.getBalance());
         }
-//
-//        if (account.getAccountMakers() != null) {
-//            existingAccount.setAccountMakers(account.getAccountMakers());
-//        }
 
         return repository.save(existingAccount);
     }
