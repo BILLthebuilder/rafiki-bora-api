@@ -70,10 +70,10 @@ public class SendMoneyService {
             validateTID(TID);
 
             // get merchant's account using pan
-            Account merchantAccount = accountRepository.findByPan(merchantPan);
+            Optional<Account> merchantAccount = accountRepository.findByPan(merchantPan);
 
             // Add amount to merchant's account
-            merchantAccount.setBalance(merchantAccount.getBalance() + amountToSend);
+            merchantAccount.get().setBalance(merchantAccount.get().getBalance() + amountToSend);
 
             // Generate withdrawal token
             String recipientToken = generateRecipientToken(9); // Generates a unique ID or length 9
