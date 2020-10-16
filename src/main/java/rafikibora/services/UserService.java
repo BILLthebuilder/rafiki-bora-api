@@ -29,10 +29,7 @@ import rafikibora.repository.UserRepository;
 import rafikibora.security.util.exceptions.RafikiBoraException;
 
 import javax.persistence.EntityExistsException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,7 +47,6 @@ public class UserService implements UserServiceI {
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = this.findByName(authentication.getName());
-        ;
         return user;
     }
 
@@ -155,6 +151,7 @@ public class UserService implements UserServiceI {
         return userRepository.findAll();
     }
 
+
     @Transactional
     public User approveUser(String email) {
         User currentUser = getCurrentUser();
@@ -163,21 +160,42 @@ public class UserService implements UserServiceI {
         if (user == null) {
             throw new ResourceNotFoundException("This user does not exist");
         }
+
         // a user can only be approved by a user who is an admin
-        // Todo
+//        Role admin = roleRepository.findByRoleName("ADMIN");
+//        if (!currentUser.getRoles().contains(admin)){
+//            throw new InvalidCheckerException("You cannot approve this user you are not an admin!");
+//        }
+
         // A user cannot be approved by the same Admin who created them
         if (currentUser == user.getUserMaker()) {
-            throw new InvalidCheckerException("You cannot approve this user!"); }
+            throw new InvalidCheckerException("You cannot approve this user!");
+        }
+
         // if user has Merchant role generate MID and assign
-        // Todo
-        if (user.getRoles().equals("MERCHANT")){
+        boolean merchant=false;
+        Set<UserRoles> retrievedRoles = user.getRoles();
+        for (UserRoles userRole : retrievedRoles) {
+            if (userRole.getRole().getRoleName().equalsIgnoreCase("MERCHANT")) {
+                merchant=true;
+                break;
+            }
+        }
+        if (merchant==true){
             String mid = UUID.randomUUID().toString().substring(0,16);
-            System.out.println(mid);
             user.setMid(mid);
         }
+
         user.setUserChecker(currentUser);
         user.setStatus(true);
         return userRepository.save(user);
+    }
+
+    //Make merchant On board Agents
+    // Todo
+    public void addAgent(User user){
+
+
     }
 
 

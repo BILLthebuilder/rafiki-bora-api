@@ -20,4 +20,6 @@ public interface UserServiceI {
 
     List<User> viewUsers();
 
+    void addAgent(User user);
+
 }
