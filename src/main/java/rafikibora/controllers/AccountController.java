@@ -10,6 +10,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import rafikibora.model.account.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import rafikibora.repository.AccountRepository;
 import rafikibora.services.AccountService;
 
 import javax.validation.Valid;
@@ -69,4 +70,5 @@ public class AccountController {
         return service.deleteAccount(id);
 
     }
+
 }

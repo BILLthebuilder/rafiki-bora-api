@@ -2,12 +2,15 @@ package rafikibora.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import rafikibora.dto.TerminalAssignmentRequest;
 import rafikibora.exceptions.AddNewUserException;
 import rafikibora.exceptions.BadRequestException;
+import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.User;
 import rafikibora.services.UserService;
 import rafikibora.services.UserServiceI;
@@ -63,10 +66,10 @@ public class UserController {
         return new ResponseEntity<>(approvedUser, HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteuser/{id}")
-    public ResponseEntity<?> deleteAccount(@PathVariable long id) {
-        User user = userServiceI.deleteUser(id);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable @Param("id") int id) {
+        return userService.deleteUser(id);
+
     }
 
     @GetMapping("/{roleName}")
@@ -79,10 +82,26 @@ public class UserController {
         return userServiceI.viewUsers();
     }
 
+
     @PostMapping("/addagent")
     public void addAgent (@RequestBody User user){
          userServiceI.addAgent(user);
     }
 
+
+//
+//    @PostMapping(value = "/assignmerchantterminal")
+//    public ResponseEntity<?> assignmerchantterminal(@RequestBody TerminalAssignmentRequest terminalAssignmentRequest) throws Exception {
+//         Terminal t = userServiceI.assignTerminals(terminalAssignmentRequest);
+//
+//        return new ResponseEntity<>(t, HttpStatus.OK);
+//    }
+
+    @PatchMapping(value = "/{id}", consumes = {"application/json"})
+    public ResponseEntity<?> updateAccount(@RequestBody User user, @PathVariable int id) {
+        userServiceI.updateUser(user, id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
 

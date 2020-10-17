@@ -17,20 +17,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rafikibora.dto.AuthenticationResponse;
 import rafikibora.dto.LoginRequest;
+import rafikibora.dto.TerminalAssignmentRequest;
+import rafikibora.dto.UserDto;
 import rafikibora.exceptions.InvalidCheckerException;
 import rafikibora.exceptions.ResourceNotFoundException;
+import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.Role;
 import rafikibora.model.users.User;
 import rafikibora.model.users.UserRoles;
 import rafikibora.repository.RoleRepository;
+import rafikibora.repository.TerminalRepository;
 import rafikibora.repository.UserRepository;
 import rafikibora.security.util.exceptions.RafikiBoraException;
 
 import javax.persistence.EntityExistsException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,6 +40,7 @@ import java.util.stream.Collectors;
 public class UserService implements UserServiceI {
 
     private final UserRepository userRepository;
+    private final TerminalRepository terminalRepository;
     private final RoleRepository roleRepository;
     private final JwtProviderI jwtProvider;
     private final PasswordEncoder passwordEncoder;
@@ -72,7 +74,7 @@ public class UserService implements UserServiceI {
         if (!validateToken) {
             jwtProvider.generateToken(userDetails);
         }
-        authResponse = new AuthenticationResponse(AuthenticationResponse.responseStatus.SUCCESS, "Successful Login",token,loginRequest.getEmail(), userRoles);
+        authResponse = new AuthenticationResponse(AuthenticationResponse.responseStatus.SUCCESS, "Successful Login", token, loginRequest.getEmail(), userRoles);
         return ResponseEntity.ok().body(authResponse);
     }
 
@@ -88,15 +90,16 @@ public class UserService implements UserServiceI {
     }
 
     //soft delete user
-    @Override
-    public User deleteUser(long id) {
-        User user = userRepository.findById(id);
-        if (user == null) {
-            throw new ResourceNotFoundException("This user does not exist"); }
-
-        user.setDeleted(true);
-        return user;
-
+    @Transactional
+    public ResponseEntity<?> deleteUser(int id) {
+        User user = new User();
+        if (user!=null) {
+            userRepository.deleteById((long) id);
+            // return "account disabled";
+            return new ResponseEntity("UserAccount Deleted", HttpStatus.OK);
+        } else {
+            throw new ResourceNotFoundException("User with id   " + id + " Not Found");
+        }
     }
 
     //find user by name
@@ -161,28 +164,22 @@ public class UserService implements UserServiceI {
             throw new ResourceNotFoundException("This user does not exist");
         }
 
-        // a user can only be approved by a user who is an admin
-//        Role admin = roleRepository.findByRoleName("ADMIN");
-//        if (!currentUser.getRoles().contains(admin)){
-//            throw new InvalidCheckerException("You cannot approve this user you are not an admin!");
-//        }
-
         // A user cannot be approved by the same Admin who created them
         if (currentUser == user.getUserMaker()) {
             throw new InvalidCheckerException("You cannot approve this user!");
         }
 
         // if user has Merchant role generate MID and assign
-        boolean merchant=false;
+        boolean merchant = false;
         Set<UserRoles> retrievedRoles = user.getRoles();
         for (UserRoles userRole : retrievedRoles) {
             if (userRole.getRole().getRoleName().equalsIgnoreCase("MERCHANT")) {
-                merchant=true;
+                merchant = true;
                 break;
             }
         }
-        if (merchant==true){
-            String mid = UUID.randomUUID().toString().substring(0,16);
+        if (merchant == true) {
+            String mid = UUID.randomUUID().toString().substring(0, 16);
             user.setMid(mid);
         }
 
@@ -215,5 +212,70 @@ public class UserService implements UserServiceI {
         }
     }
 
+    //assign terminals to Merchants
+    // Todo incomplete
+    public void assignTerminals(TerminalAssignmentRequest terminalAssignmentRequest) {
+        long merchantID = terminalAssignmentRequest.getMerchantid();
+        long terminalID = terminalAssignmentRequest.getTerminalid();
+
+        User merchant;
+        Optional<Terminal> terminal = null;
+
+        try {
+            merchant = userRepository.findById(merchantID);
+            terminal = terminalRepository.findById(terminalID);
+
+            terminal.get().setMid(merchant);
+            System.out.println("================================> " + terminal);
+
+        } catch (Exception ex) {
+            log.error("Error assigning terminals: " + ex.getMessage());
+
+            throw ex;
+        }
+
 
     }
+
+
+    public void passwordVerification(){
+        UserDto user=null;
+        if(!user.getEmail().isEmpty()){
+
+
+
+        }
+
+    }
+
+//    public Terminal assignTerminals(Terminal terminal){
+//
+//    }
+
+    public User updateUser(User user, int userid) {
+        User existinguser = userRepository.findById(userid);
+           if(existinguser==null)    {
+               log.error("User " + userid + " Not Found");
+           }
+
+           if (user.getEmail() != null) {
+            existinguser.setEmail(user.getEmail()); }
+
+            if (user.getPhoneNo() != null) {
+            existinguser.setPhoneNo(user.getPhoneNo()); }
+
+            if (user.getFirstName() != null) {
+            existinguser.setFirstName(user.getFirstName()); }
+
+            if (user.getLastName() != null) {
+            existinguser.setLastName(user.getLastName()); }
+
+        if (user.getPassword() != null) {
+            existinguser.setPassword(user.getPassword()); }
+
+
+        return userRepository.save(existinguser);
+    }
+
+
+}
