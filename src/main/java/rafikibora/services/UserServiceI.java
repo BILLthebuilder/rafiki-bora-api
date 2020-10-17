@@ -12,8 +12,6 @@ public interface UserServiceI {
 
     ResponseEntity<AuthenticationResponse> login(LoginRequest loginRequest) throws Exception;
 
-//    ResponseEntity<AuthenticationResponse> logout(LoginRequest loginRequest) throws Exception;
-
     Set<User> getUserByRole(String roleName);
 
     User findByName(String name);
@@ -27,5 +25,9 @@ public interface UserServiceI {
     void  addUser(User user);
 
     User approveUser(String email);
+
+     User updateUser(User user, int userid);
+
+//    Terminal assignTerminals(TerminalAssignmentRequest terminalAssignmentRequest);
 
 }

@@ -82,7 +82,7 @@ public class TerminalController {
 
     //Approve Terminal by Id
 
-    @PatchMapping(value = "/approve", consumes = {"application/json"}, produces = {"application/json"})
+    @PatchMapping(value = "/approve{id}", consumes = {"application/json"}, produces = {"application/json"})
     public ResponseEntity<String> approve(@RequestBody TerminalDto terminalDto) {
         System.out.println(terminalDto.getId());
         String msg = "";

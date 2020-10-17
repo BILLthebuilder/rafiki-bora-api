@@ -79,10 +79,26 @@ public class UserController {
         return userServiceI.viewUsers();
     }
 
+
     @PostMapping("/addagent")
     public void addAgent (@RequestBody User user){
          userServiceI.addAgent(user);
     }
 
+
+//
+//    @PostMapping(value = "/assignmerchantterminal")
+//    public ResponseEntity<?> assignmerchantterminal(@RequestBody TerminalAssignmentRequest terminalAssignmentRequest) throws Exception {
+//         Terminal t = userServiceI.assignTerminals(terminalAssignmentRequest);
+//
+//        return new ResponseEntity<>(t, HttpStatus.OK);
+//    }
+
+    @PatchMapping(value = "/{id}", consumes = {"application/json"})
+    public ResponseEntity<?> updateAccount(@RequestBody User user, @PathVariable int id) {
+        userServiceI.updateUser(user, id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
 
