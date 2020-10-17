@@ -4,6 +4,8 @@ package rafikibora.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import rafikibora.model.transactions.Transaction;
+import rafikibora.repository.AccountRepository;
+import rafikibora.repository.TransactionRepository;
 import rafikibora.services.TransactionService;
 
 import javax.validation.Valid;
@@ -14,6 +16,9 @@ import java.util.List;
 public class TransactionController {
     @Autowired
     private TransactionService service;
+
+    @Autowired
+    private TransactionRepository repository;
 
     @PostMapping
     public Transaction addTransaction(@RequestBody Transaction transaction) {
@@ -39,5 +44,10 @@ public class TransactionController {
     @DeleteMapping("/{id}")
     public String deleteTransaction(@PathVariable int id) {
         return service.deleteTransaction(id);
+    }
+
+    @GetMapping("/totals")
+    public double totals() {
+        return repository.totals();
     }
 }
