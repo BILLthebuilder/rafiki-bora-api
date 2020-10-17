@@ -17,9 +17,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rafikibora.dto.AuthenticationResponse;
 import rafikibora.dto.LoginRequest;
+import rafikibora.dto.TerminalAssignmentRequest;
 import rafikibora.dto.UserDto;
 import rafikibora.exceptions.InvalidCheckerException;
 import rafikibora.exceptions.ResourceNotFoundException;
+import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.Role;
 import rafikibora.model.users.User;
 import rafikibora.model.users.UserRoles;
@@ -29,10 +31,7 @@ import rafikibora.repository.UserRepository;
 import rafikibora.security.util.exceptions.RafikiBoraException;
 
 import javax.persistence.EntityExistsException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -92,13 +91,12 @@ public class UserService implements UserServiceI {
 
     //soft delete user
     @Override
-    public User deleteUser(long id) {
-        User user = userRepository.findById(id);
-        if (user == null) {
-            throw new ResourceNotFoundException("This user does not exist");
-        }
-
-        user.setDeleted(true);
+    public User deleteUser(String email) {
+        User user = userRepository.findByEmail(email);
+//        if (user == null) {
+//            throw new ResourceNotFoundException("This user does not exist");
+//        }
+        user.setDeleted(false);
         return user;
 
     }
@@ -215,29 +213,28 @@ public class UserService implements UserServiceI {
 
     //assign terminals to Merchants
     // Todo incomplete
-//    public Terminal assignTerminals(TerminalAssignmentRequest terminalAssignmentRequest) {
-//        long merchantID = terminalAssignmentRequest.getMerchantid();
-//        long terminalID = terminalAssignmentRequest.getTerminalid();
-//
-//        User merchant;
-//        Optional<Terminal> terminal = null;
-//
-//        try {
-//            merchant = userRepository.findById(merchantID);
-//            terminal = terminalRepository.findById(terminalID);
-//
-//            terminal.get().setMid(merchant);
-//            System.out.println("================================> " + terminal);
-//
-//        } catch (Exception ex) {
-//            log.error("Error assigning terminals: " + ex.getMessage());
-//
-//            throw ex;
-//        }
-//
-//        return terminal.get();
-//
-//    }
+    public void assignTerminals(TerminalAssignmentRequest terminalAssignmentRequest) {
+        long merchantID = terminalAssignmentRequest.getMerchantid();
+        long terminalID = terminalAssignmentRequest.getTerminalid();
+
+        User merchant;
+        Optional<Terminal> terminal = null;
+
+        try {
+            merchant = userRepository.findById(merchantID);
+            terminal = terminalRepository.findById(terminalID);
+
+            terminal.get().setMid(merchant);
+            System.out.println("================================> " + terminal);
+
+        } catch (Exception ex) {
+            log.error("Error assigning terminals: " + ex.getMessage());
+
+            throw ex;
+        }
+
+
+    }
 
 
     public void passwordVerification(){

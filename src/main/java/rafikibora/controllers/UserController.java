@@ -6,8 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import rafikibora.dto.TerminalAssignmentRequest;
 import rafikibora.exceptions.AddNewUserException;
 import rafikibora.exceptions.BadRequestException;
+import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.User;
 import rafikibora.services.UserService;
 import rafikibora.services.UserServiceI;
@@ -64,8 +66,8 @@ public class UserController {
     }
 
     @DeleteMapping("/deleteuser/{id}")
-    public ResponseEntity<?> deleteAccount(@PathVariable long id) {
-        User user = userServiceI.deleteUser(id);
+    public ResponseEntity<?> deleteAccount(@PathVariable String email) {
+        User user = userServiceI.deleteUser(email);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 

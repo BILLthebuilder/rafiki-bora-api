@@ -16,7 +16,7 @@ public interface UserServiceI {
 
     User findByName(String name);
 
-    User deleteUser(long id);
+    User deleteUser(String email);
 
     List<User> viewUsers();
 
