@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
+import rafikibora.model.users.User;
 
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ import java.util.Date;
 @Entity
 @JsonIgnoreProperties
 @Table(name = "transactions")
+//@NamedQueries({ @NamedQuery(name = "findAll", query = "select SUM(name) from Transaction e where e.name = :name")})
 public class Transaction implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +34,7 @@ public class Transaction implements Serializable {
     private String pan;
 
     @Column(name = "processing_code", updatable=false, columnDefinition = "VARCHAR(6)")
-    @NotNull
+//    @NotNull
     private String processingCode;
 
     @Column(name = "amount_transaction", updatable=false, columnDefinition = "DOUBLE(12,2)")
@@ -40,15 +42,19 @@ public class Transaction implements Serializable {
     private double amountTransaction;
 
     @Column(name = "date_time_transmission", updatable=false, columnDefinition = "DATETIME")
-    @NotNull
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date dateTimeTransmission;
 
     @JsonIgnore
     @ManyToOne
-    @NotNull
     @JoinColumn(name="terminal", referencedColumnName = "terminal_id")
     private Terminal terminal;
+
+    @ManyToOne
+    @JoinColumn(name="userid")
+    @JsonIgnoreProperties(value = "transactions",
+            allowSetters = true)
+    private User merchant;
 
     @Column(name = "recipient_email", columnDefinition = "VARCHAR(30)")
     private String recipientEmail;
@@ -70,10 +76,35 @@ public class Transaction implements Serializable {
     @JoinColumn(name="credit_account", referencedColumnName = "account_id", columnDefinition = "INT(10)")
     private Account destinationAccount;
 
+    /**
+     * A transient field, for mapping to a destinationPan field,
+     * a String, from a transaction request object.
+     * Will not be persited
+     */
+    @Transient
+    private String destinationPan;
+
+    /**
+     * A transient field, for mapping to a TID field,
+     * a String, from a transaction request object.
+     * Will not be persited
+     */
+    @Transient
+    private String TID;
+
+    /**
+     * A transient field, for mapping to a date-time field as
+     * a String.
+     * This will prevent the String field from being converted into
+     * a wrongly formatted date.
+     * Will not be persited
+     */
+    @Transient
+    private String dateTime;
+
     @Transient
     private String merchantPan;
 
     @Transient
     private String customerPan;
-
 }

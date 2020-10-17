@@ -13,34 +13,36 @@ import rafikibora.services.ReceiveMoneyService;
 
 
 @RestController
-@RequestMapping("api/auth/")
+@RequestMapping("/api/auth/receive_money")
 public class ReceiveMoneyController {
 
     @Autowired
     private ReceiveMoneyService receiveMoneyService;
 
-    @PostMapping(value = "receive_money", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ReceiveMoneyResponseDto receiveMoneyTransaction(@RequestBody ReceiveMoneyRequestDto req) {
         System.out.println("=================================== INCOMING ISO MSG ===================================");
         System.out.println("processingCode: "+ req.getProcessingCode());
         System.out.println("pan: " + req.getPan());
         System.out.println("txnAmount: " + req.getTxnAmount());
-        System.out.println("txnCurrencyCode: " + req.getTxnCurrencyCode());
+        System.out.println("currency: " + req.getCurrency());
         System.out.println("txnTransmissionDate: " + req.getTransmissionDateTime());
         System.out.println("tid: " + req.getTid());
         System.out.println("mid: " + req.getMid());
         System.out.println("receiveMoneyToken: "+req.getReceiveMoneyToken());
         System.out.println("=================================== INCOMING ISO MSG ===================================");
+//        ReceiveMoneyResponseDto resp = new ReceiveMoneyResponseDto();
+//        resp.setTxnAmount("5500");
+//        resp.setMessage("00");
         ReceiveMoneyResponseDto resp = null;
-        resp.setTxnAmount("5500");
-        resp.setMessage("00");
-//        try {
-//            resp = receiveMoneyService.receiveMoney(req);
-//        } catch (Exception ex){
-//            System.out.println("ERROR MESSAGE: "+ex.getMessage());
-//            ex.printStackTrace();
-//            resp.setMessage("96");
-//        }
+
+        try {
+            resp = receiveMoneyService.receiveMoney(req);
+        } catch (Exception ex){
+            System.out.println("ERROR MESSAGE: "+ex.getMessage());
+            ex.printStackTrace();
+            resp.setMessage("96");
+        }
         return resp;
     }
 }

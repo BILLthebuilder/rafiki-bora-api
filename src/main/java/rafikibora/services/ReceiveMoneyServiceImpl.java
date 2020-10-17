@@ -75,16 +75,16 @@ public class ReceiveMoneyServiceImpl implements ReceiveMoneyService {
         if(optionalMerchantAccount.isPresent()) {
             merchantAccount = optionalMerchantAccount.get();
             accountBalance = merchantAccount.getBalance();
-
-            /** debit merchant */
-            if(accountBalance >= transaction.getAmountTransaction()){
-                merchantAccount.setBalance((accountBalance - amount));
-                accountRepository.save(merchantAccount);
-            }else
-                throw new AccountTransactionException("51"); /** not sufficient amounts */
-
         } else
             throw new AccountTransactionException("56"); /** no card record */
+
+
+        /** debit merchant account */
+        if(accountBalance >= transaction.getAmountTransaction()){
+            merchantAccount.setBalance((accountBalance - amount));
+            accountRepository.save(merchantAccount);
+        }else
+            throw new AccountTransactionException("51"); /** not sufficient amounts */
 
 
         /** get terminal and merchant used in transaction */
@@ -94,11 +94,11 @@ public class ReceiveMoneyServiceImpl implements ReceiveMoneyService {
         else
             throw new AccountTransactionException("03"); /** invalid merchant */
 
-        optionalMerchant = userRepository.findByMid(req.getTid());
-        if(optionalMerchant.isPresent())
-            merchant= optionalMerchant.get();
-        else
-            throw new AccountTransactionException("03"); /** invalid merchant */
+//        optionalMerchant = userRepository.findByMid(req.getMid());
+//        if(optionalMerchant.isPresent())
+//            merchant= optionalMerchant.get();
+//        else
+//            throw new AccountTransactionException("03"); /** invalid merchant */
 
         /** save transaction */
         Transaction newTransaction = new Transaction();
@@ -106,14 +106,16 @@ public class ReceiveMoneyServiceImpl implements ReceiveMoneyService {
         newTransaction.setCurrencyCode("KES");
         newTransaction.setDateTimeTransmission(this.formatDateTime(req.getTransmissionDateTime()));
         newTransaction.setTerminal(terminal);
+//        newTransaction.setMerchant(merchant);
+        newTransaction.setRecipientEmail("merchant@email.com");
         newTransaction.setPan(req.getPan());
         newTransaction.setProcessingCode(req.getProcessingCode());
-        newTransaction.setSourceAccount(merchant.getUserAccount());
+        newTransaction.setSourceAccount(merchantAccount);
         transactionRepository.save(newTransaction);
 
         ReceiveMoneyResponseDto resp = new ReceiveMoneyResponseDto();
         resp.setMessage("00");
-        resp.setTxnAmount(String.valueOf(amount));
+        resp.setTxnAmount(String.valueOf(amount+"00"));
         return resp;
     }
 

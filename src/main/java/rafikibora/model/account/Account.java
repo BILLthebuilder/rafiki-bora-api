@@ -19,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+//set delete account to true (is_deleted) using the account_id
 @SQLDelete(sql = "UPDATE accounts SET is_deleted=true WHERE account_id=?")
 @Table(name = "accounts")
 public class Account implements Serializable {
@@ -39,8 +40,8 @@ public class Account implements Serializable {
     @Column(name = "pan",nullable = false, columnDefinition = "VARCHAR(16)")
     private String pan;
 
-//    @Column(name = "phone_number",nullable = false, columnDefinition = "VARCHAR(10)")
-//    private String phoneNumber;
+    @Column(name = "phone_number", columnDefinition = "VARCHAR(10)")
+    private String phoneNumber;
 
     @Column(name = "is_deleted", columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted;
@@ -61,25 +62,25 @@ public class Account implements Serializable {
     public void preUpdate() { dateUpdated = LocalDateTime.now();
     }
 
-//    @ManyToOne
-//    @JoinColumn(name="created_by", nullable = false, referencedColumnName = "userid", insertable = false, updatable = false)
-//    @JsonIgnore
-//    private User accountMaker;
-//
-//    @Column(name = "created_by")
-//    private Integer accountMakers;
+    @ManyToOne
+    @JoinColumn(name="created_by", referencedColumnName = "userid", insertable = false, updatable = false)
+    @JsonIgnore
+    private User accountMaker;
 
-//    @JsonIgnore
-//    @ManyToOne
-//    @JoinColumn(name="approved_by", referencedColumnName = "userid")
-//    private User accountChecker;
+    @Column(name = "created_by")
+    private Integer accountMakers;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name="approved_by", referencedColumnName = "userid")
+    private User accountChecker;
 
     @JsonIgnore
     @OneToOne(mappedBy="userAccount",cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private User user;
 
-//    @Column(name = "status", columnDefinition = "TINYINT(1) DEFAULT 0")
-//    private boolean status;
+    @Column(name = "status", columnDefinition = "TINYINT(1) DEFAULT 0")
+    private boolean status;
 
     @Column(name = "balance", columnDefinition = "DOUBLE(12,2) DEFAULT 0.00")
     private double balance;
@@ -91,6 +92,4 @@ public class Account implements Serializable {
     @OneToMany(mappedBy="destinationAccount",cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Transaction> deposits = new ArrayList<Transaction>();
-
-
 }

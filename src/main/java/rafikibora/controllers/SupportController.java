@@ -11,7 +11,6 @@ import rafikibora.model.support.Support;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.repository.SupportRepository;
 import rafikibora.repository.TerminalRepository;
-import rafikibora.services.SupportInterface;
 import rafikibora.services.SupportService;
 import rafikibora.services.TerminalService;
 
@@ -23,14 +22,13 @@ public class SupportController {
         @Autowired
         private SupportService supportService;
         private SupportRepository supportRepository;
-        private SupportInterface supportInterface;
 
         //Create support
         @PostMapping
         public ResponseEntity<?> create(@RequestBody Support support) {
             System.out.println(support.toString());
             String msg = "";
-            supportInterface.save(support);
+             supportService.save(support);
             msg = "Support created successfully";
             return new ResponseEntity<>(msg, HttpStatus.CREATED);
         }
@@ -38,7 +36,7 @@ public class SupportController {
         //List support
         @GetMapping(produces = {"application/json"})
         public ResponseEntity<List<Support>> list() {
-            List<Support> support = supportInterface.list();
+            List<Support> support = supportService.list();
             return new ResponseEntity<>(support, HttpStatus.OK);
         }
 
@@ -47,7 +45,7 @@ public class SupportController {
         @GetMapping(value = "/{id}", produces = {"application/json"})
         public ResponseEntity<Support> listOne(@PathVariable("id") Long id) {
             System.out.println(id.toString());
-            Support support = supportInterface.getById(id);
+            Support support = supportService.getById(id);
             return new ResponseEntity<>(support, HttpStatus.OK);
         }
 
@@ -58,7 +56,7 @@ public class SupportController {
         @PatchMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
         public ResponseEntity<String> update(@PathVariable("id") Long id, @RequestBody SupportDto supportDto) {
             System.out.println(id.toString());
-            supportInterface.update(id, supportDto);
+            supportService.update(id, supportDto);
             return new ResponseEntity<>("Support updated successfully", HttpStatus.OK);
         }
 
@@ -68,7 +66,7 @@ public class SupportController {
 
         @DeleteMapping(value = "/{id}")
         public ResponseEntity<String> delete(@PathVariable("id") Long id) {
-            supportInterface.deleteById(id);
+            supportService.deleteById(id);
             return new ResponseEntity<>("Support deleted successful", HttpStatus.OK);
         }
 

@@ -15,18 +15,20 @@ public class TransactionService {
     @Autowired
     private TransactionRepository repository;
 
+    //save a single transaction
     public Transaction saveTransaction(Transaction transaction) {
         return repository.save(transaction);
     }
 
+    //save multiple transaction
     public List<Transaction> saveTransactions(List<Transaction> transaction) {
         return repository.saveAll(transaction);
     }
 
-    public List<Transaction> getTransactions() {
-        return repository.findAll();
-    }
+    //get transactions
+    public List<Transaction> getTransactions() { return repository.findAll();}
 
+    //get transaction by id
     public Transaction getTransactionById(int id) {
 
         Optional<Transaction> optional = repository.findById(id);
@@ -39,11 +41,13 @@ public class TransactionService {
         return transaction;
     }
 
+    //delete transaction and set is_deleted to true
     public String deleteTransaction(int id) {
         repository.deleteById(id);
         return "product removed !! " + id;
     }
 
+    //update transactions
     public Transaction updateTransaction(Transaction transaction) {
         Transaction existingTransaction = repository.findById(transaction.getId()).orElse(null);
         existingTransaction.setAmountTransaction(transaction.getAmountTransaction());
@@ -52,6 +56,5 @@ public class TransactionService {
         existingTransaction.setSourceAccount(transaction.getSourceAccount());
         return repository.save(existingTransaction);
     }
-
 
 }
