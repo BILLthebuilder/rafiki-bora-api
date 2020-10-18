@@ -34,7 +34,7 @@ public class Transaction implements Serializable {
     private String pan;
 
     @Column(name = "processing_code", updatable=false, columnDefinition = "VARCHAR(6)")
-    @NotNull
+//    @NotNull
     private String processingCode;
 
     @Column(name = "amount_transaction", updatable=false, columnDefinition = "DOUBLE(12,2)")
@@ -57,7 +57,6 @@ public class Transaction implements Serializable {
     private User merchant;
 
     @Column(name = "recipient_email", columnDefinition = "VARCHAR(30)")
-    @NotNull
     private String recipientEmail;
 
     @Column(name = "token", columnDefinition = "VARCHAR(9)")

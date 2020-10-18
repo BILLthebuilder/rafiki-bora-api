@@ -2,6 +2,7 @@ package rafikibora.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -66,10 +67,10 @@ public class UserController {
         return new ResponseEntity<>(approvedUser, HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteuser/{id}")
-    public ResponseEntity<?> deleteAccount(@PathVariable String email) {
-        User user = userServiceI.deleteUser(email);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable @Param("id") int id) {
+        return userService.deleteUser(id);
+
     }
 
     @GetMapping("/{roleName}")

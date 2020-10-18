@@ -15,5 +15,5 @@ public class ReceiveMoneyRequestDto {
     private String tid;
     private String mid;
     private String receiveMoneyToken;
-    private String txnCurrencyCode;
+    private String currency;
 }

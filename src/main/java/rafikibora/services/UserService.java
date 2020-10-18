@@ -93,16 +93,16 @@ public class UserService implements UserServiceI {
     }
 
     //soft delete user
-    // Todo confirm working of the delete function
-    @Override
-    public User deleteUser(String email) {
-        User user = userRepository.findByEmail(email);
-//        if (user == null) {
-//            throw new ResourceNotFoundException("This user does not exist");
-//        }
-        user.setDeleted(false);
-        return user;
-
+    @Transactional
+    public ResponseEntity<?> deleteUser(int id) {
+        User user = new User();
+        if (user!=null) {
+            userRepository.deleteById((long) id);
+            // return "account disabled";
+            return new ResponseEntity("UserAccount Deleted", HttpStatus.OK);
+        } else {
+            throw new ResourceNotFoundException("User with id   " + id + " Not Found");
+        }
     }
 
     //find user by name
