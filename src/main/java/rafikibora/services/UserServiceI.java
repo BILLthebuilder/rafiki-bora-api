@@ -28,6 +28,7 @@ public interface UserServiceI {
 
      User updateUser(User user, int userid);
 
-//    Terminal assignTerminals(TerminalAssignmentRequest terminalAssignmentRequest);
+   void  assignTerminals(TerminalAssignmentRequest terminalAssignmentRequest);
 
+   void assignTerminalsToAgent (TerminalToAgentResponse terminalToAgentResponse);
 }

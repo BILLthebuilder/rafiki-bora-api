@@ -47,7 +47,7 @@ public class Terminal implements Serializable {
 
 //    @Column(name="mid",  nullable = false, columnDefinition = "VARCHAR(16)")
 //    private String mid;
-
+//
     @ManyToOne
     @JoinColumn(name = "mid", referencedColumnName = "mid")
     @JsonIgnore
@@ -87,5 +87,6 @@ public class Terminal implements Serializable {
     @OneToMany(mappedBy="terminal",cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Transaction> transactions = new ArrayList<Transaction>();
+
 
 }

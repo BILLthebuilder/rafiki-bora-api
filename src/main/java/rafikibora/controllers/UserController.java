@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import rafikibora.dto.TerminalAssignmentRequest;
+import rafikibora.dto.TerminalToAgentResponse;
 import rafikibora.exceptions.AddNewUserException;
 import rafikibora.exceptions.BadRequestException;
 import rafikibora.model.terminal.Terminal;
@@ -88,13 +89,13 @@ public class UserController {
     }
 
 
-//
-//    @PostMapping(value = "/assignmerchantterminal")
-//    public ResponseEntity<?> assignmerchantterminal(@RequestBody TerminalAssignmentRequest terminalAssignmentRequest) throws Exception {
-//         Terminal t = userServiceI.assignTerminals(terminalAssignmentRequest);
-//
-//        return new ResponseEntity<>(t, HttpStatus.OK);
-//    }
+
+    @PostMapping(value = "/assignmerchantterminal")
+    public ResponseEntity<?> assignmerchantterminal(@RequestBody TerminalAssignmentRequest terminalAssignmentRequest) throws Exception {
+       userServiceI.assignTerminals(terminalAssignmentRequest);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @PatchMapping(value = "/{id}", consumes = {"application/json"})
     public ResponseEntity<?> updateAccount(@RequestBody User user, @PathVariable int id) {
@@ -102,5 +103,17 @@ public class UserController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
+
+    @PostMapping(value = "/agenttoterminal")
+        public ResponseEntity<?> terminalToAgent(@RequestBody TerminalToAgentResponse terminalToAgentResponse) throws Exception {
+        userServiceI.assignTerminalsToAgent(terminalToAgentResponse);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+
+    }
+
+
 }
 
