@@ -25,12 +25,21 @@ public class SupportService  implements SupportInterface{
     @Autowired
     private SupportRepository supportRepository;
 
-    //Create Tid
+    /**
+     Create Unique TID
+     */
+
+
     public String createTID(){
         return UUID.randomUUID().toString().substring(0,16);
     }
 
-    //Create Support
+
+    /**
+     Create Support
+     */
+
+
     @Transactional
     public Support save(Support support) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -43,7 +52,12 @@ public class SupportService  implements SupportInterface{
         return supportRepository.save(support);
     }
 
-    //List All Support
+
+    /**
+     List All Support
+     */
+
+
     @Transactional
     public List<Support> list() {
         return supportRepository.findAll();
@@ -51,7 +65,10 @@ public class SupportService  implements SupportInterface{
     }
 
 
-    //List Support by Id
+    /**
+     List Support By ID
+     */
+
     @Transactional
     public Support getById(Long id) {
         Support support = supportRepository.findById(id).get();
@@ -60,7 +77,11 @@ public class SupportService  implements SupportInterface{
     }
 
 
-    //update Support by Id
+    /**
+     Update Support By ID
+     */
+
+
     @Transactional
     public void update(Long id, SupportDto supportDto) {
         Support support = supportRepository.findById(id).get();
@@ -76,15 +97,15 @@ public class SupportService  implements SupportInterface{
 
 
     //Delete Support by Id
-    @Transactional
-    public void deleteById(Long id) {
-        try {
-            supportRepository.deleteById(id);
-        }catch (EmptyResultDataAccessException e){
-
-        }
-
-    }
+//    @Transactional
+//    public void deleteById(Long id) {
+//        try {
+//            supportRepository.deleteById(id);
+//        }catch (EmptyResultDataAccessException e){
+//
+//        }
+//
+//    }
 
 
 }
