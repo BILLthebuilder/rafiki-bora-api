@@ -15,12 +15,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import rafikibora.dto.AuthenticationResponse;
-import rafikibora.dto.LoginRequest;
-import rafikibora.dto.TerminalAssignmentRequest;
-import rafikibora.dto.UserDto;
+import rafikibora.dto.*;
 import rafikibora.exceptions.InvalidCheckerException;
 import rafikibora.exceptions.ResourceNotFoundException;
+import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.Role;
 import rafikibora.model.users.User;
@@ -89,6 +87,20 @@ public class UserService implements UserServiceI {
         }
     }
 
+//   find user by Id
+public ResponseEntity<?> getUserById(int id) {
+    Response response;
+    Optional<User> optional = Optional.ofNullable(userRepository.findById(id));
+    User user = null;
+    if (optional.isPresent()){
+        user = optional.get();
+    } else {
+        response = new Response(Response.responseStatus.FAILED," User not found for id :: " + id);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+    return ResponseEntity.status(HttpStatus.OK).body(user);
+}
+
     //soft delete user
     @Transactional
     public ResponseEntity<?> deleteUser(int id) {
@@ -119,6 +131,14 @@ public class UserService implements UserServiceI {
         Set<User> users = userRepository.findByRoles_Role_RoleNameContainingIgnoreCase(roleName);
 
         return users;
+    }
+
+   //list user by id
+    public User getUserById(long id) {
+
+        User user = userRepository.findById(id);
+        log.info("user:",user);
+        return user;
     }
 
     //list all users
@@ -163,12 +183,10 @@ public class UserService implements UserServiceI {
         if (user == null) {
             throw new ResourceNotFoundException("This user does not exist");
         }
-
         // A user cannot be approved by the same Admin who created them
         if (currentUser == user.getUserMaker()) {
             throw new InvalidCheckerException("You cannot approve this user!");
         }
-
         // if user has Merchant role generate MID and assign
         boolean merchant = false;
         Set<UserRoles> retrievedRoles = user.getRoles();
@@ -191,16 +209,21 @@ public class UserService implements UserServiceI {
     //Make merchant On board their Agents
     @Override
     public void addAgent(User user) {
+        if (userRepository.findByEmail(user.getEmail()) != null) {
+            throw new EntityExistsException("Email already exists");
+        }
         User currentUser = getCurrentUser();
         Role role = null;
         if (user.getRole().equalsIgnoreCase("AGENT")) {
             role = roleRepository.findByRoleName("AGENT");
+        }
             Set<UserRoles> retrievedRoles = currentUser.getRoles();
 
             for (UserRoles userRole : retrievedRoles) {
                 if (userRole.getRole().getRoleName().equalsIgnoreCase("MERCHANT")) {
 
                     user.setStatus(true);
+                    user.getRoles().add(new UserRoles(user, role));
                     user.setUserMaker(currentUser);
                     user.setUserChecker(null);
                     user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -210,72 +233,86 @@ public class UserService implements UserServiceI {
             }
 
         }
-    }
 
-    //assign terminals to Merchants
-    // Todo incomplete
-    public void assignTerminals(TerminalAssignmentRequest terminalAssignmentRequest) {
-        long merchantID = terminalAssignmentRequest.getMerchantid();
-        long terminalID = terminalAssignmentRequest.getTerminalid();
-
-        User merchant;
-        Optional<Terminal> terminal = null;
-
-        try {
-            merchant = userRepository.findById(merchantID);
-            terminal = terminalRepository.findById(terminalID);
-
-            terminal.get().setMid(merchant);
-            System.out.println("================================> " + terminal);
-
-        } catch (Exception ex) {
-            log.error("Error assigning terminals: " + ex.getMessage());
-
-            throw ex;
-        }
-
-
-    }
-
-
-    public void passwordVerification(){
-        UserDto user=null;
-        if(!user.getEmail().isEmpty()){
-
-
-
-        }
-
-    }
-
-//    public Terminal assignTerminals(Terminal terminal){
-//
-//    }
-
+    //allow uses to update their information
     public User updateUser(User user, int userid) {
         User existinguser = userRepository.findById(userid);
-           if(existinguser==null)    {
-               log.error("User " + userid + " Not Found");
-           }
+        if (existinguser == null) {
+            UserService.log.error("User " + userid + " Not Found");
+        }
 
-           if (user.getEmail() != null) {
-            existinguser.setEmail(user.getEmail()); }
+        if (user.getEmail() != null) {
+            existinguser.setEmail(user.getEmail());
+        }
 
-            if (user.getPhoneNo() != null) {
-            existinguser.setPhoneNo(user.getPhoneNo()); }
+        if (user.getPhoneNo() != null) {
+            existinguser.setPhoneNo(user.getPhoneNo());
+        }
 
-            if (user.getFirstName() != null) {
-            existinguser.setFirstName(user.getFirstName()); }
+        if (user.getFirstName() != null) {
+            existinguser.setFirstName(user.getFirstName());
+        }
 
-            if (user.getLastName() != null) {
-            existinguser.setLastName(user.getLastName()); }
+        if (user.getLastName() != null) {
+            existinguser.setLastName(user.getLastName());
+        }
 
         if (user.getPassword() != null) {
-            existinguser.setPassword(user.getPassword()); }
+            existinguser.setPassword(user.getPassword());
+        }
 
 
         return userRepository.save(existinguser);
     }
 
+    //assign terminals to Merchants
+    public void assignTerminals(TerminalAssignmentRequest terminalAssignmentRequest) {
+
+        long merchantID = terminalAssignmentRequest.getMerchantid();
+        long terminalID = terminalAssignmentRequest.getTerminalid();
+
+
+        User merchant = userRepository.findById(merchantID);
+        Terminal terminal = terminalRepository.findById(terminalID);
+
+        try {
+            terminal.setMid(merchant);
+            terminalRepository.save(terminal);
+
+        } catch (Exception ex) {
+            log.error("Error assigning terminals: " + ex.getMessage());
+            throw ex;
+        }
+
+    }
+
+    //assign terminals from merchants to agents
+    public void assignTerminalsToAgent(TerminalToAgentResponse terminalToAgentResponse) {
+        User merchant = getCurrentUser();
+        User agent= null;
+        Terminal terminal;
+
+        long merchantid = terminalToAgentResponse.getMerchantid();
+        long agentid = terminalToAgentResponse.getAgentid();
+        long terminalid = terminalToAgentResponse.getTerminalid();
+
+         merchant = userRepository.findById(merchantid);
+         agent=userRepository.findById(agentid);
+         terminal = terminalRepository.findById(terminalid);
+
+         if(merchant==agent.getUserMaker()&& merchant==terminal.getMid()){
+             agent.getAssignedTerminals().add(terminal);
+             userRepository.save(agent);
+         }
+    }
+
+    //allow User to update password
+    public void ChangePassword( PasswordCheckRequest passwordCheckRequest){
+        User existingUser = getCurrentUser();
+        String priorPassword = existingUser.getPassword();
+        existingUser.setPassword(passwordEncoder.encode(passwordCheckRequest.getUserPassword()));
+        userRepository.save(existingUser);
+
+    }
 
 }

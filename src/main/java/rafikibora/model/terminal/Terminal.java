@@ -88,4 +88,5 @@ public class Terminal implements Serializable {
     @JsonIgnore
     private List<Transaction> transactions = new ArrayList<Transaction>();
 
+
 }
