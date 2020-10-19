@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -75,21 +76,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable().exceptionHandling()
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and().authorizeRequests()
+                .antMatchers("/api/auth/**")
+                .permitAll()
                 .antMatchers("/profile").hasAuthority("ADMIN")
-                .antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/users/**").permitAll()
-                .antMatchers("/accounts/**").permitAll()
-                .antMatchers("/api/deposit/**").permitAll()
-                .antMatchers("/api/sale/**").permitAll()
-                .antMatchers("/api/roles/**").permitAll()
-                .antMatchers("/api/terminals/**").permitAll()
-                .antMatchers("/api/accounts/**").permitAll()
-                .antMatchers("/api/support/**").permitAll()
-                .antMatchers("/api/transactions/**").permitAll()
-                .antMatchers("/api/receive_money").permitAll()
-
-                .anyRequest().authenticated().and()
-                .formLogin().disable().httpBasic().disable()
+                .anyRequest()
+                .authenticated().and()
+                .formLogin().disable()
+                .httpBasic().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 //                .maximumSessions(1)
