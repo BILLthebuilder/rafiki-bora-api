@@ -87,8 +87,8 @@ public class UserController {
 
     //find user by the Id
     @GetMapping("ser/{id}")
-    public ResponseEntity<Account> findUserById(@PathVariable @Param("id") int id) {
-        return (ResponseEntity<Account>) userService.getUserById(id);
+    public ResponseEntity<User> findUserById(@PathVariable @Param("id") int id) {
+        return (ResponseEntity<User>) userService.getUserById(id);
     }
 
 
