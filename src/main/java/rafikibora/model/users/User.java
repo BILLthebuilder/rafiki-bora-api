@@ -21,7 +21,7 @@ import java.util.*;
 @NoArgsConstructor
 @Entity
 @JsonIgnoreProperties
-@SQLDelete(sql = "UPDATE users SET is_deleted=true WHERE userid=?")
+@SQLDelete(sql = "UPDATE users SET is_deleted=true,status=false WHERE userid=?")
 @Table(name = "users")
 public class User implements Serializable {
 

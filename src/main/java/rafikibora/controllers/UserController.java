@@ -94,6 +94,7 @@ public class UserController {
          userServiceI.addAgent(user);
     }
 
+
     @PostMapping(value = "/assignmerchantterminal")
     public ResponseEntity<?> assignmerchantterminal(@RequestBody TerminalAssignmentRequest terminalAssignmentRequest) throws Exception {
        userServiceI.assignTerminals(terminalAssignmentRequest);
@@ -101,12 +102,14 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
     @PatchMapping(value = "/{id}", consumes = {"application/json"})
     public ResponseEntity<?> updateAccount(@RequestBody User user, @PathVariable int id) {
         userServiceI.updateUser(user, id);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 
     @PostMapping(value = "/agenttoterminal")
         public ResponseEntity<?> terminalToAgent(@RequestBody TerminalToAgentResponse terminalToAgentResponse) throws Exception {
