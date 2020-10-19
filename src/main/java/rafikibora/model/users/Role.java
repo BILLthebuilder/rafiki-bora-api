@@ -1,6 +1,7 @@
 package rafikibora.model.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+@ApiModel(value = "Role", description="Roles record")
 @Entity
 @Data
 @Table(name = "roles")
