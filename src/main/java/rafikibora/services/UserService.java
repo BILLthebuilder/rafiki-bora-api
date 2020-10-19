@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import rafikibora.dto.*;
 import rafikibora.exceptions.InvalidCheckerException;
 import rafikibora.exceptions.ResourceNotFoundException;
-import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.Role;
 import rafikibora.model.users.User;
@@ -87,8 +86,8 @@ public class UserService implements UserServiceI {
         }
     }
 
-//   find user by Id
-public ResponseEntity<?> getUserById(int id) {
+    //find user by Id
+    public ResponseEntity<?> getUserById(int id) {
     Response response;
     Optional<User> optional = Optional.ofNullable(userRepository.findById(id));
     User user = null;
@@ -306,13 +305,5 @@ public ResponseEntity<?> getUserById(int id) {
          }
     }
 
-    //allow User to update password
-    public void ChangePassword( PasswordCheckRequest passwordCheckRequest){
-        User existingUser = getCurrentUser();
-        String priorPassword = existingUser.getPassword();
-        existingUser.setPassword(passwordEncoder.encode(passwordCheckRequest.getUserPassword()));
-        userRepository.save(existingUser);
-
-    }
 
 }

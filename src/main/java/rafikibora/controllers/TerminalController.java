@@ -30,7 +30,10 @@ public class TerminalController {
     private TerminalRepository terminalRepository;
     private TerminalInterface terminalInterface;
 
-//Create Terminal
+    /**
+     Create Terminal
+     */
+
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Terminal terminal) {
         System.out.println(terminal.getId());
@@ -48,11 +51,23 @@ public class TerminalController {
 //        return new ResponseEntity<Terminal>(t, HttpStatus.CREATED);
     }
 
-//List All Terminals
+
+    /**
+     List All Terminal
+     */
+
 
     @GetMapping(produces = {"application/json"})
     public ResponseEntity<List<Terminal>> list() {
         List<Terminal> terminals = terminalService.list();
+        return new ResponseEntity<>(terminals, HttpStatus.OK);
+    }
+
+
+//   //List All Unassigned Terminals
+    @GetMapping(value ="/fetch",produces = {"application/json"})
+    public ResponseEntity<List<Terminal>> unassignedTerminals() {
+        List<Terminal> terminals = terminalService.unassignedTerminals();
         return new ResponseEntity<>(terminals, HttpStatus.OK);
     }
 
@@ -66,9 +81,9 @@ public class TerminalController {
     }
 
 
-
-
-    //Update Terminal by Id
+    /**
+     Update Terminal by ID
+     */
 
     @PatchMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
     public ResponseEntity<String> update(@PathVariable("id") Long id, @RequestBody TerminalDto terminalDto) {
@@ -78,9 +93,9 @@ public class TerminalController {
     }
 
 
-
-
-    //Approve Terminal by Id
+    /**
+    Approve Terminal by ID
+     */
 
     @PatchMapping(value = "/approve{id}", consumes = {"application/json"}, produces = {"application/json"})
     public ResponseEntity<String> approve(@RequestBody TerminalDto terminalDto) {
@@ -97,7 +112,9 @@ public class TerminalController {
     }
 
 
-    //Delete Terminal by Id
+    /**
+     Delete Terminal by ID
+     */
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") Long id) {

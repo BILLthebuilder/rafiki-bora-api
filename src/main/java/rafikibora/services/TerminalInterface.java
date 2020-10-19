@@ -15,4 +15,5 @@ public interface TerminalInterface {
 //    public void approve(TerminalDto terminalDto) throws Exception;
 //    void deleteById(Long id);
 
+
 }

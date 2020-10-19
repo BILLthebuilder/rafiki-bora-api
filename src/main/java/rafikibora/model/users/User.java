@@ -34,10 +34,6 @@ public class User implements Serializable {
         return userid;
     }
 
-    public void setUserid(Long userid) {
-        this.userid = userid;
-    }
-
     @Column(name = "first_name", nullable = false, columnDefinition = "VARCHAR(15)")
     private String firstName;
 
@@ -65,6 +61,7 @@ public class User implements Serializable {
 
     @Column(name = "mid", unique = true, columnDefinition = "VARCHAR(34)")
     private String mid;
+
 
     @Column(name = "business_name", columnDefinition = "VARCHAR(35)")
     private String businessName;
