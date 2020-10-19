@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import rafikibora.dto.PasswordCheckRequest;
 import rafikibora.dto.TerminalAssignmentRequest;
 import rafikibora.dto.TerminalToAgentResponse;
 import rafikibora.exceptions.AddNewUserException;
@@ -53,7 +54,7 @@ public class UserController {
     @GetMapping(value = "/user/profile",
             produces = {"application/json"})
     public ResponseEntity<?> getCurrentUserInfo(Authentication authentication)
-    {
+     {
         User user = userServiceI.findByName(authentication.getName());
         return new ResponseEntity<>(user,
                 HttpStatus.OK);
@@ -83,13 +84,10 @@ public class UserController {
         return userServiceI.viewUsers();
     }
 
-
     @PostMapping("/addagent")
     public void addAgent (@RequestBody User user){
          userServiceI.addAgent(user);
     }
-
-
 
     @PostMapping(value = "/assignmerchantterminal")
     public ResponseEntity<?> assignmerchantterminal(@RequestBody TerminalAssignmentRequest terminalAssignmentRequest) throws Exception {
@@ -105,14 +103,22 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
-
     @PostMapping(value = "/agenttoterminal")
         public ResponseEntity<?> terminalToAgent(@RequestBody TerminalToAgentResponse terminalToAgentResponse) throws Exception {
         userServiceI.assignTerminalsToAgent(terminalToAgentResponse);
 
         return new ResponseEntity<>(HttpStatus.OK);
 
+    }
+
+    @PostMapping("/changepassword")
+    public void changePassword(@RequestBody PasswordCheckRequest passwordCheckRequest){
+        userServiceI.ChangePassword(passwordCheckRequest);
+    }
+
+    @GetMapping("id/{id}")
+    public User findById(@PathVariable("id") long id) {
+        return userService.getUserById(id);
     }
 
 

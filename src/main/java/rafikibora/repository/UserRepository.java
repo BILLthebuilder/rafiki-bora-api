@@ -19,7 +19,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
 
+
     Set<User> findByRoles_Role_RoleNameContainingIgnoreCase(String roleName);
+
+    // Set<User> findByUserId(long id);
 
     @Query("SELECT u FROM User u WHERE UPPER(u.roles) = UPPER(:roles)")
     public List<User> find(@Param("roles") String roles);

@@ -15,10 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import rafikibora.dto.AuthenticationResponse;
-import rafikibora.dto.LoginRequest;
-import rafikibora.dto.TerminalAssignmentRequest;
-import rafikibora.dto.TerminalToAgentResponse;
+import rafikibora.dto.*;
 import rafikibora.exceptions.InvalidCheckerException;
 import rafikibora.exceptions.ResourceNotFoundException;
 import rafikibora.model.terminal.Terminal;
@@ -124,6 +121,14 @@ public class UserService implements UserServiceI {
         return users;
     }
 
+   //list user by id
+    public User getUserById(long id) {
+
+        User user = userRepository.findById(id);
+        log.info("user:",user);
+        return user;
+    }
+
     //list all users
     @Override
     public List<User> viewUsers() {
@@ -192,16 +197,21 @@ public class UserService implements UserServiceI {
     //Make merchant On board their Agents
     @Override
     public void addAgent(User user) {
+        if (userRepository.findByEmail(user.getEmail()) != null) {
+            throw new EntityExistsException("Email already exists");
+        }
         User currentUser = getCurrentUser();
         Role role = null;
         if (user.getRole().equalsIgnoreCase("AGENT")) {
             role = roleRepository.findByRoleName("AGENT");
+        }
             Set<UserRoles> retrievedRoles = currentUser.getRoles();
 
             for (UserRoles userRole : retrievedRoles) {
                 if (userRole.getRole().getRoleName().equalsIgnoreCase("MERCHANT")) {
 
                     user.setStatus(true);
+                    user.getRoles().add(new UserRoles(user, role));
                     user.setUserMaker(currentUser);
                     user.setUserChecker(null);
                     user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -211,7 +221,6 @@ public class UserService implements UserServiceI {
             }
 
         }
-    }
 
     //allow uses to update their information
     public User updateUser(User user, int userid) {
@@ -284,4 +293,14 @@ public class UserService implements UserServiceI {
              userRepository.save(agent);
          }
     }
+
+    //allow User to update password
+    public void ChangePassword( PasswordCheckRequest passwordCheckRequest){
+        User existingUser = getCurrentUser();
+        String priorPassword = existingUser.getPassword();
+        existingUser.setPassword(passwordEncoder.encode(passwordCheckRequest.getUserPassword()));
+        userRepository.save(existingUser);
+
+    }
+
 }
