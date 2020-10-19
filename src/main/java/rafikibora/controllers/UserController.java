@@ -11,6 +11,7 @@ import rafikibora.dto.TerminalAssignmentRequest;
 import rafikibora.dto.TerminalToAgentResponse;
 import rafikibora.exceptions.AddNewUserException;
 import rafikibora.exceptions.BadRequestException;
+import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.User;
 import rafikibora.services.UserService;
@@ -81,6 +82,13 @@ public class UserController {
     @GetMapping
     public List<User> findAllUsers() {
         return userServiceI.viewUsers();
+    }
+
+
+    //find user by the Id
+    @GetMapping("ser/{id}")
+    public ResponseEntity<Account> findUserById(@PathVariable @Param("id") int id) {
+        return (ResponseEntity<Account>) userService.getUserById(id);
     }
 
 

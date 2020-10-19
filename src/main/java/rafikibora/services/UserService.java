@@ -15,12 +15,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import rafikibora.dto.AuthenticationResponse;
-import rafikibora.dto.LoginRequest;
-import rafikibora.dto.TerminalAssignmentRequest;
-import rafikibora.dto.TerminalToAgentResponse;
+import rafikibora.dto.*;
 import rafikibora.exceptions.InvalidCheckerException;
 import rafikibora.exceptions.ResourceNotFoundException;
+import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.Role;
 import rafikibora.model.users.User;
@@ -31,10 +29,7 @@ import rafikibora.repository.UserRepository;
 import rafikibora.security.util.exceptions.RafikiBoraException;
 
 import javax.persistence.EntityExistsException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -91,6 +86,20 @@ public class UserService implements UserServiceI {
             throw new RafikiBoraException("Invalid Credentials");
         }
     }
+
+//   find user by Id
+public ResponseEntity<?> getUserById(int id) {
+    Response response;
+    Optional<User> optional = Optional.ofNullable(userRepository.findById(id));
+    User user = null;
+    if (optional.isPresent()){
+        user = optional.get();
+    } else {
+        response = new Response(Response.responseStatus.FAILED," User not found for id :: " + id);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+    return ResponseEntity.status(HttpStatus.OK).body(user);
+}
 
     //soft delete user
     @Transactional
