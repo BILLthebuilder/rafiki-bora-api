@@ -21,7 +21,7 @@ import java.util.*;
 @NoArgsConstructor
 @Entity
 @JsonIgnoreProperties
-@SQLDelete(sql = "UPDATE users SET is_deleted=true WHERE userid=?")
+@SQLDelete(sql = "UPDATE users SET is_deleted=true,status=false WHERE userid=?")
 @Table(name = "users")
 public class User implements Serializable {
 
@@ -32,10 +32,6 @@ public class User implements Serializable {
 
     public Long getUserid() {
         return userid;
-    }
-
-    public void setUserid(Long userid) {
-        this.userid = userid;
     }
 
     @Column(name = "first_name", nullable = false, columnDefinition = "VARCHAR(15)")
@@ -65,6 +61,7 @@ public class User implements Serializable {
 
     @Column(name = "mid", unique = true, columnDefinition = "VARCHAR(34)")
     private String mid;
+
 
     @Column(name = "business_name", columnDefinition = "VARCHAR(35)")
     private String businessName;

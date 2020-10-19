@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import rafikibora.dto.PasswordCheckRequest;
 import rafikibora.dto.TerminalAssignmentRequest;
 import rafikibora.dto.TerminalToAgentResponse;
 import rafikibora.exceptions.AddNewUserException;
@@ -94,12 +93,14 @@ public class UserController {
          userServiceI.addAgent(user);
     }
 
+
     @PostMapping(value = "/assignmerchantterminal")
     public ResponseEntity<?> assignmerchantterminal(@RequestBody TerminalAssignmentRequest terminalAssignmentRequest) throws Exception {
        userServiceI.assignTerminals(terminalAssignmentRequest);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 
     @PatchMapping(value = "/{id}", consumes = {"application/json"})
     public ResponseEntity<?> updateAccount(@RequestBody User user, @PathVariable int id) {
@@ -108,17 +109,13 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
     @PostMapping(value = "/agenttoterminal")
         public ResponseEntity<?> terminalToAgent(@RequestBody TerminalToAgentResponse terminalToAgentResponse) throws Exception {
         userServiceI.assignTerminalsToAgent(terminalToAgentResponse);
 
         return new ResponseEntity<>(HttpStatus.OK);
 
-    }
-
-    @PostMapping("/changepassword")
-    public void changePassword(@RequestBody PasswordCheckRequest passwordCheckRequest){
-        userServiceI.ChangePassword(passwordCheckRequest);
     }
 
     @GetMapping("id/{id}")

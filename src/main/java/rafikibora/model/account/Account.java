@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 //set delete account to true (is_deleted) using the account_id
-@SQLDelete(sql = "UPDATE accounts SET is_deleted=true WHERE account_id=?")
+@SQLDelete(sql = "UPDATE accounts SET is_deleted=true,status=false WHERE account_id=?")
 @Table(name = "accounts")
 public class Account implements Serializable {
     @Id
