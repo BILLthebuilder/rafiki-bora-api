@@ -2,6 +2,7 @@ package rafikibora.model.account;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@ApiModel(value = "Account", description="Accunts record")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
