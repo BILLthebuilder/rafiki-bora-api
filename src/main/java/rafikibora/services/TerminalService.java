@@ -38,8 +38,10 @@ import java.util.*;
 public class TerminalService implements TerminalInterface {
     @Autowired
     private TerminalRepository terminalRepository;
+    /**
+     Generate A Unique TID
+     */
 
-    //Generate a unique Tid
     public String createTID(){
         return UUID.randomUUID().toString().substring(0,16);
     }
@@ -49,8 +51,9 @@ public class TerminalService implements TerminalInterface {
 //        return UUID.randomUUID().toString().substring(0,16);
 //    }
 
-
-    //Create Terminal
+    /**
+     Create Terminal
+     */
 
     @Transactional
     public Terminal save(Terminal terminal) throws Exception {
@@ -81,7 +84,10 @@ public class TerminalService implements TerminalInterface {
             }
         return terminal;
         }
-        //List All Terminals
+
+        /**
+     List All Terminal
+     */
     @Transactional
     public List<Terminal> list() {
         return terminalRepository.findAll();
@@ -95,7 +101,9 @@ public class TerminalService implements TerminalInterface {
     }
 
 
-    //List Terminal by Id
+    /**
+     List Terminal by ID
+     */
 
     @Transactional
     public Terminal getById(Long id) {
@@ -105,7 +113,10 @@ public class TerminalService implements TerminalInterface {
     }
 
 
-    //Update Terminal by Id
+    /**
+     Update Terminal by ID
+     */
+
 
     @Transactional
     public void update(Long id, TerminalDto terminalDto) {
@@ -119,7 +130,10 @@ public class TerminalService implements TerminalInterface {
         terminalRepository.save(terminal);
     }
 
-    // Approve Terminal by Id
+
+    /**
+     Approve Terminal by ID
+     */
 
     @Transactional
     public void approve(TerminalDto terminalDto) throws Exception {
@@ -144,7 +158,9 @@ public class TerminalService implements TerminalInterface {
     }
 
 
-    //Delete Terminal by Id
+    /**
+     Delete Terminal by ID
+     */
 
     @Transactional
     public void deleteById(Long id) {

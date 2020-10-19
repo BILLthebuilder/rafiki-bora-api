@@ -13,6 +13,7 @@ import rafikibora.model.users.User;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -46,7 +47,7 @@ public class Transaction implements Serializable {
     private Date dateTimeTransmission;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="terminal", referencedColumnName = "terminal_id")
     private Terminal terminal;
 
@@ -107,4 +108,33 @@ public class Transaction implements Serializable {
 
     @Transient
     private String customerPan;
+
+    @Transient
+    public String getTransactionType(){
+        String type = "";
+        switch (this.processingCode){
+            case "00":
+                type = "SALE";
+                break;
+            case "01":
+                type = "RECEIVE MONEY";
+                break;
+            case "26":
+                type = "SEND MONEY";
+                break;
+            case "21":
+                type = "DEPOSIT";
+                break;
+            default:break;
+        }
+        return type;
+    }
+
+    @Transient
+    public String getTransactionDate(Date date){
+        String pattern = "yyyy-MM-dd HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String prettyDateAdded = simpleDateFormat.format(date);
+        return  prettyDateAdded;
+    }
 }
