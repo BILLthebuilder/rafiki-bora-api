@@ -48,7 +48,7 @@ public class Terminal implements Serializable {
 //    @Column(name="mid",  nullable = false, columnDefinition = "VARCHAR(16)")
 //    private String mid;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "mid", referencedColumnName = "mid")
     @JsonIgnore
     private User mid;
