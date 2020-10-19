@@ -11,8 +11,6 @@ import rafikibora.dto.TerminalAssignmentRequest;
 import rafikibora.dto.TerminalToAgentResponse;
 import rafikibora.exceptions.AddNewUserException;
 import rafikibora.exceptions.BadRequestException;
-import rafikibora.model.account.Account;
-import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.User;
 import rafikibora.services.UserService;
 import rafikibora.services.UserServiceI;
@@ -54,7 +52,7 @@ public class UserController {
     @GetMapping(value = "/user/profile",
             produces = {"application/json"})
     public ResponseEntity<?> getCurrentUserInfo(Authentication authentication)
-    {
+     {
         User user = userServiceI.findByName(authentication.getName());
         return new ResponseEntity<>(user,
                 HttpStatus.OK);
@@ -84,19 +82,16 @@ public class UserController {
         return userServiceI.viewUsers();
     }
 
-
     //find user by the Id
     @GetMapping("ser/{id}")
-    public ResponseEntity<Account> findUserById(@PathVariable @Param("id") int id) {
-        return (ResponseEntity<Account>) userService.getUserById(id);
+    public ResponseEntity<User> findUserById(@PathVariable @Param("id") int id) {
+        return (ResponseEntity<User>) userService.getUserById(id);
     }
-
 
     @PostMapping("/addagent")
     public void addAgent (@RequestBody User user){
          userServiceI.addAgent(user);
     }
-
 
 
     @PostMapping(value = "/assignmerchantterminal")
@@ -106,6 +101,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
     @PatchMapping(value = "/{id}", consumes = {"application/json"})
     public ResponseEntity<?> updateAccount(@RequestBody User user, @PathVariable int id) {
         userServiceI.updateUser(user, id);
@@ -114,13 +110,17 @@ public class UserController {
     }
 
 
-
     @PostMapping(value = "/agenttoterminal")
         public ResponseEntity<?> terminalToAgent(@RequestBody TerminalToAgentResponse terminalToAgentResponse) throws Exception {
         userServiceI.assignTerminalsToAgent(terminalToAgentResponse);
 
         return new ResponseEntity<>(HttpStatus.OK);
 
+    }
+
+    @GetMapping("id/{id}")
+    public User findById(@PathVariable("id") long id) {
+        return userService.getUserById(id);
     }
 
 

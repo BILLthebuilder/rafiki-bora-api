@@ -15,22 +15,8 @@ public class TransactionService {
     @Autowired
     private TransactionRepository repository;
 
-    //save a single transaction
-    public Transaction saveTransaction(Transaction transaction) {
-        return repository.save(transaction);
-    }
-
-    //save multiple transaction
-    public List<Transaction> saveTransactions(List<Transaction> transaction) {
-        return repository.saveAll(transaction);
-    }
-
-    //get transactions
-    public List<Transaction> getTransactions() { return repository.findAll();}
-
     //get transaction by id
     public Transaction getTransactionById(int id) {
-
         Optional<Transaction> optional = repository.findById(id);
         Transaction transaction = null;
         if (optional.isPresent()) {
@@ -41,20 +27,23 @@ public class TransactionService {
         return transaction;
     }
 
-    //delete transaction and set is_deleted to true
-    public String deleteTransaction(int id) {
-        repository.deleteById(id);
-        return "product removed !! " + id;
+    // get all transactions on  a specific account
+    public List<Transaction> getTransactionsByPan(String pan){
+        return repository.findByPan(pan);
     }
 
-    //update transactions
-    public Transaction updateTransaction(Transaction transaction) {
-        Transaction existingTransaction = repository.findById(transaction.getId()).orElse(null);
-        existingTransaction.setAmountTransaction(transaction.getAmountTransaction());
-        existingTransaction.setCurrencyCode(transaction.getCurrencyCode());
-        existingTransaction.setProcessingCode(transaction.getProcessingCode());
-        existingTransaction.setSourceAccount(transaction.getSourceAccount());
-        return repository.save(existingTransaction);
+    // All transactions by type
+    public List<Transaction> getTransactionsByProcessingCode(String type){
+        return  repository.findByProcessingCode(type);
     }
 
+    // All transactions by merchant
+    public List<Transaction> getMerchantTransactions(String mid){
+        return repository.merchantTransactions(mid);
+    }
+
+    // All transactions by terminal
+    public List<Transaction> getTerminalTransactions(String tid){
+        return repository.terminalTransactions(tid);
+    }
 }

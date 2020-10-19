@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import rafikibora.dto.*;
 import rafikibora.exceptions.InvalidCheckerException;
 import rafikibora.exceptions.ResourceNotFoundException;
-import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.Role;
 import rafikibora.model.users.User;
@@ -87,8 +86,8 @@ public class UserService implements UserServiceI {
         }
     }
 
-//   find user by Id
-public ResponseEntity<?> getUserById(int id) {
+    //find user by Id
+    public ResponseEntity<?> getUserById(int id) {
     Response response;
     Optional<User> optional = Optional.ofNullable(userRepository.findById(id));
     User user = null;
@@ -131,6 +130,14 @@ public ResponseEntity<?> getUserById(int id) {
         Set<User> users = userRepository.findByRoles_Role_RoleNameContainingIgnoreCase(roleName);
 
         return users;
+    }
+
+   //list user by id
+    public User getUserById(long id) {
+
+        User user = userRepository.findById(id);
+        log.info("user:",user);
+        return user;
     }
 
     //list all users
@@ -201,16 +208,21 @@ public ResponseEntity<?> getUserById(int id) {
     //Make merchant On board their Agents
     @Override
     public void addAgent(User user) {
+        if (userRepository.findByEmail(user.getEmail()) != null) {
+            throw new EntityExistsException("Email already exists");
+        }
         User currentUser = getCurrentUser();
         Role role = null;
         if (user.getRole().equalsIgnoreCase("AGENT")) {
             role = roleRepository.findByRoleName("AGENT");
+        }
             Set<UserRoles> retrievedRoles = currentUser.getRoles();
 
             for (UserRoles userRole : retrievedRoles) {
                 if (userRole.getRole().getRoleName().equalsIgnoreCase("MERCHANT")) {
 
                     user.setStatus(true);
+                    user.getRoles().add(new UserRoles(user, role));
                     user.setUserMaker(currentUser);
                     user.setUserChecker(null);
                     user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -220,7 +232,6 @@ public ResponseEntity<?> getUserById(int id) {
             }
 
         }
-    }
 
     //allow uses to update their information
     public User updateUser(User user, int userid) {
@@ -293,4 +304,6 @@ public ResponseEntity<?> getUserById(int id) {
              userRepository.save(agent);
          }
     }
+
+
 }

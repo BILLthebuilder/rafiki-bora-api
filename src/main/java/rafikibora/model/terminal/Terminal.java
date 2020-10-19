@@ -27,7 +27,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE terminals SET is_deleted=true WHERE terminal_id=?")
+@SQLDelete(sql = "UPDATE terminals SET is_deleted=true,status=false WHERE terminal_id=?")
 public class Terminal implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,8 +48,8 @@ public class Terminal implements Serializable {
 
 //    @Column(name="mid",  nullable = false, columnDefinition = "VARCHAR(16)")
 //    private String mid;
-//
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "mid", referencedColumnName = "mid")
     @JsonIgnore
     private User mid;
