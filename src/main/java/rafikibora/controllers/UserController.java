@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import rafikibora.dto.PasswordCheckRequest;
 import rafikibora.dto.TerminalAssignmentRequest;
 import rafikibora.dto.TerminalToAgentResponse;
 import rafikibora.exceptions.AddNewUserException;
@@ -114,11 +113,6 @@ public class UserController {
 
         return new ResponseEntity<>(HttpStatus.OK);
 
-    }
-
-    @PostMapping("/changepassword")
-    public void changePassword(@RequestBody PasswordCheckRequest passwordCheckRequest){
-        userServiceI.ChangePassword(passwordCheckRequest);
     }
 
     @GetMapping("id/{id}")

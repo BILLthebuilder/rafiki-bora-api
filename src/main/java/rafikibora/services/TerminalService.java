@@ -1,5 +1,6 @@
 package rafikibora.services;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -33,6 +34,7 @@ import java.util.*;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class TerminalService implements TerminalInterface {
     @Autowired
     private TerminalRepository terminalRepository;
@@ -83,16 +85,19 @@ public class TerminalService implements TerminalInterface {
         return terminal;
         }
 
-
-
-    /**
+        /**
      List All Terminal
      */
-
     @Transactional
     public List<Terminal> list() {
         return terminalRepository.findAll();
 
+    }
+
+    //List All Unassigned Terminals
+    @Transactional
+    public List<Terminal> unassignedTerminals() {
+      return  terminalRepository.findByMid_MidIsNull();
     }
 
 

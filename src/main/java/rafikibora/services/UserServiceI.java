@@ -32,7 +32,6 @@ public interface UserServiceI {
 
    void assignTerminalsToAgent (TerminalToAgentResponse terminalToAgentResponse);
 
-    void ChangePassword(PasswordCheckRequest passwordCheckRequest);
 
 
 }
