@@ -115,7 +115,7 @@ public class ReceiveMoneyServiceImpl implements ReceiveMoneyService {
 
         ReceiveMoneyResponseDto resp = new ReceiveMoneyResponseDto();
         resp.setMessage("00");
-        resp.setTxnAmount(String.valueOf(amount+"00"));
+        resp.setTxnAmount(this.formatAmountForPos(amount));
         return resp;
     }
 
@@ -142,5 +142,23 @@ public class ReceiveMoneyServiceImpl implements ReceiveMoneyService {
             throw new AccountTransactionException("Failed to parse transaction date");
         }
         return date;
+    }
+
+    /**
+     * format amount to what pos expects
+     * @param txnAmount
+     * @return
+     */
+    private String formatAmountForPos(double txnAmount){
+        Double amount = txnAmount;
+        String posAmount = "";
+        String[] splitAmount = amount.toString().split("\\.");
+
+        // String decimalPart
+        if(splitAmount[1].length() == 1){
+            splitAmount[1] += "0";
+        }
+        posAmount = splitAmount[0] + splitAmount[1];
+        return posAmount;
     }
 }
