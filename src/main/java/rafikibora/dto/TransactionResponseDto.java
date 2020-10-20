@@ -1,2 +1,4 @@
-package rafikibora.dto;public class TransactionResponseDto {
+package rafikibora.dto;
+
+public class TransactionResponseDto {
 }
