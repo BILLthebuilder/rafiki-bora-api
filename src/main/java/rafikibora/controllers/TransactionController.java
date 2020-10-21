@@ -93,7 +93,7 @@ public class TransactionController {
 
         if(transactions.isEmpty()){
             jsonNodes.put("found", false);
-            jsonNodes.put("msg", "No transactions found for type: "+this.getTransactionType(type));
+            jsonNodes.put("msg", "No transactions found for type: "+type);
             data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNodes);
         } else{
             data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.buildTransactionListJson(transactions));
@@ -165,23 +165,23 @@ public class TransactionController {
 
     /**
      * Transaction type
-     * @param processingCode
+     * @param transType
      * @return
      */
-    private String getTransactionType(String processingCode){
+    private String getTransactionType(String transType){
         String type = "";
-        switch (processingCode){
-            case "00":
-                type = "SALE";
+        switch (transType){
+            case "sale":
+                type = "000000";
                 break;
-            case "01":
-                type = "RECEIVE MONEY";
+            case "receive_money":
+                type = "010000";
                 break;
-            case "26":
-                type = "SEND MONEY";
+            case "send_money":
+                type = "260000";
                 break;
-            case "21":
-                type = "DEPOSIT";
+            case "deposit":
+                type = "210000";
                 break;
             default:
                 type = "UNKNOWN TRANSACTION TYPE";

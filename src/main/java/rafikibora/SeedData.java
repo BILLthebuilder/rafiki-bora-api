@@ -87,23 +87,23 @@ public class SeedData
 
         // Customers
         User cust1 = new User();
-        cust1.setFirstName("Maulid");
-        cust1.setLastName("Bulle");
-        cust1.setEmail("maulid@gmail.com");
-        cust1.setUsername("mauli@gmail.com");
-        cust1.setPhoneNo("555555");
-        cust1.setPassword(passwordEncoder.encode("maulid"));
+        cust1.setFirstName("ANTHONY");
+        cust1.setLastName("MUTHUMA");
+        cust1.setEmail("anthony.muthuma@rafiki.com");
+        cust1.setUsername("anthony.muthuma@rafiki.com");
+        cust1.setPhoneNo("0714385058");
+        cust1.setPassword(passwordEncoder.encode("password"));
         cust1.setStatus(true);
         cust1.getRoles().add(new UserRoles(cust1, customerRole));
         userRepository.save(cust1);
 
         User cust2 = new User();
-        cust2.setFirstName("John");
-        cust2.setLastName("Paul");
-        cust2.setEmail("mulongojohnpaul1@gmail.com");
-        cust2.setUsername("mulongojohnpaul1@gmail.com");
-        cust2.setPhoneNo("999999");
-        cust2.setPassword(passwordEncoder.encode("mulongo"));
+        cust2.setFirstName("RUFUSY");
+        cust2.setLastName("IDACHI");
+        cust2.setEmail("rufusy.idachi@rafiki.com");
+        cust2.setUsername("rufusy.idachi@rafiki.com");
+        cust2.setPhoneNo("0714385059");
+        cust2.setPassword(passwordEncoder.encode("password"));
         cust2.setStatus(true);
         cust2.getRoles().add(new UserRoles(cust2, customerRole));
         userRepository.save(cust2);
@@ -111,74 +111,76 @@ public class SeedData
         // Merchant
 
         User merchant1 = new User();
-        merchant1.setFirstName("Merchant1-First");
-        merchant1.setLastName("Merchant1-Last");
-        merchant1.setEmail("mulongojohnpaul@gmail.com");
-        merchant1.setUsername("mulongojohnpaul@gmail.com");
-        merchant1.setPhoneNo("928273");
-        merchant1.setMid("123456789");
-        merchant1.setPassword(passwordEncoder.encode("merchant"));
+        merchant1.setFirstName("BETTY");
+        merchant1.setLastName("KIRII");
+        merchant1.setEmail("betty.kirii@rafiki.com");
+        merchant1.setUsername("betty.kirii@rafiki.com");
+        merchant1.setBusinessName("BETTY'S SHOP");
+        merchant1.setPhoneNo("0714385056");
+        merchant1.setMid("123456789123456");
+        merchant1.setPassword(passwordEncoder.encode("password"));
         merchant1.setStatus(true);
         merchant1.getRoles().add(new UserRoles(merchant1, merchantRole));
         userRepository.save(merchant1);
 
         User merchant2 = new User();
-        merchant2.setFirstName("Merchant2-First");
-        merchant2.setLastName("Merchant2-Last");
-        merchant2.setEmail("merchant2@gmail.com");
-        merchant2.setUsername("merchant2@gmail.com");
-        merchant2.setPhoneNo("928273");
-        merchant2.setMid("112233445");
-        merchant2.setPassword(passwordEncoder.encode("merchant"));
+        merchant2.setFirstName("BILL");
+        merchant2.setLastName("BRANDON");
+        merchant2.setEmail("bill.brandon@rafiki.com");
+        merchant2.setUsername("bill.brandon@rafiki.com");
+        merchant1.setBusinessName("BILL'S SHOP");
+        merchant2.setPhoneNo("0714385057");
+        merchant2.setMid("123456789123457");
+        merchant2.setPassword(passwordEncoder.encode("password"));
         merchant2.setStatus(true);
-        merchant2.getRoles().add(new UserRoles(merchant1, merchantRole));
+        merchant2.getRoles().add(new UserRoles(merchant2, merchantRole));
         userRepository.save(merchant2);
 
 
         //#################### ACCOUNTS ########################
         // Merchant accounts
         Account merchantAcc1 = new Account();
-        merchantAcc1.setAccountNumber("555555");
+        merchantAcc1.setAccountNumber("0714385056");
         merchantAcc1.setBalance(100000);
-        merchantAcc1.setName("Merchant One Account");
+        merchantAcc1.setName("BETTY'S SHOP");
         merchantAcc1.setStatus(true);
-        merchantAcc1.setPan("4478150055546780");
+        merchantAcc1.setPan("5196010116643992");
         merchantAcc1.setAccountMaker(admin1);
         merchantAcc1.setAccountChecker(admin2);
-        merchantAcc1.setPhoneNumber("0722555555");
+        merchantAcc1.setPhoneNumber("0714385056");
         merchantAcc1.setUser(merchant1);
         accountRepository.save(merchantAcc1);
 
         Account merchantAcc2 = new Account();
-        merchantAcc2.setAccountNumber("666666");
+        merchantAcc2.setAccountNumber("0714385057");
         merchantAcc2.setBalance(250000);
-        merchantAcc2.setName("Mitishamba#2");
+        merchantAcc2.setName("BILL'S SHOP");
         merchantAcc2.setStatus(true);
-        merchantAcc2.setPan("5196010116943992");
+        merchantAcc2.setPan("4478150181885102");
         merchantAcc2.setUser(merchant2);
         merchantAcc2.setAccountMaker(admin1);
         merchantAcc2.setAccountChecker(admin2);
-        merchantAcc2.setPhoneNumber("0722444444");
+        merchantAcc2.setPhoneNumber("0714385057");
         accountRepository.save(merchantAcc2);
 
         // Customer accounts
         Account custAcc1 = new Account();
-        custAcc1.setAccountNumber("0714385056");
-        custAcc1.setName("Maulid Bulle");
+        custAcc1.setAccountNumber("0714385058");
+        custAcc1.setName("ANTHONY MUTHUMA");
         custAcc1.setBalance(50000.0);
-        custAcc1.setPhoneNumber("0714385056");
-        custAcc1.setPan("123");
+        custAcc1.setPhoneNumber("0714385058");
+        custAcc1.setPan("4478150096571201");
         custAcc1.setAccountMaker(admin1);
         custAcc1.setAccountChecker(admin2);
         custAcc1.setUser(cust1);
         accountRepository.save(custAcc1);
 
         Account custAcc2 = new Account();
-        custAcc2.setAccountNumber("0720305056");
-        custAcc2.setName("John Mulongo");
+        custAcc2.setAccountNumber("0714385059");
+        custAcc2.setName("RUFUSY IDACHI");
         custAcc2.setBalance(50000.0);
-        custAcc2.setPhoneNumber("0720305056");
-        custAcc2.setPan("123");
+        custAcc2.setPhoneNumber("0714385059");
+        custAcc2.setPan("5196010174673147");
         custAcc2.setUser(cust2);
         custAcc2.setAccountMaker(admin1);
         custAcc2.setAccountChecker(admin2);
@@ -186,14 +188,34 @@ public class SeedData
 
         // ####################### TERMINALS #######################################
         Terminal terminal1 = new Terminal();
-        terminal1.setTid("987654321");
-        terminal1.setSerialNo("qwerty");
-        terminal1.setModelType("Move220");
+        terminal1.setTid("00000001");
+        terminal1.setSerialNo("2006173003221017313880837");
+        terminal1.setModelType("Move/2500");
         terminal1.setStatus(true);
         terminal1.setMid(merchant1);
         terminal1.setTerminalMaker(admin1);
         terminal1.setTerminalChecker(admin2);
         terminalRepository.save(terminal1);
+
+        Terminal terminal2 = new Terminal();
+        terminal2.setTid("00000002");
+        terminal2.setSerialNo("2006173003221017313880838");
+        terminal2.setModelType("Move/2500");
+        terminal2.setStatus(true);
+        terminal2.setMid(merchant1);
+        terminal2.setTerminalMaker(admin1);
+        terminal2.setTerminalChecker(admin2);
+        terminalRepository.save(terminal2);
+
+        Terminal terminal3 = new Terminal();
+        terminal3.setTid("00000003");
+        terminal3.setSerialNo("2006173003221017313880839");
+        terminal3.setModelType("Move/2500");
+        terminal3.setStatus(true);
+        terminal3.setMid(merchant2);
+        terminal3.setTerminalMaker(admin1);
+        terminal3.setTerminalChecker(admin2);
+        terminalRepository.save(terminal3);
 
         // ####################### TRANSACTIONS #######################################
         Transaction transaction1 = new Transaction();

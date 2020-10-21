@@ -110,7 +110,9 @@ public class SendMoneyService {
             emailService.sendEmail(emailOfRecipient, recipientToken);
         } catch (Exception ex) {
             log.error("Error sending money: " + ex.getMessage());
-            throw new RafikiBoraException("Error sending money: " + ex.getMessage());
+            ex.printStackTrace();
+            return false;
+            //throw new RafikiBoraException("Error sending money: " + ex.getMessage());
         }
 
         return true;
@@ -152,12 +154,12 @@ public class SendMoneyService {
      * Formats a string representation of date and time
      * into a valid format that can be parsed by the DateFormatter object.
      *
-     * @param dateTimeString a string formatted as 'yymmddhhmmss'
+     * @param dateTimeString a string formatted as 'yymmddhhmm'
      * @return a string with the format 'dd-MM-yyyy hh:mm:ss'
      */
     private Date parseDateTime(String dateTimeString) throws ParseException {
         Date date = null;
-        Pattern dayTime = Pattern.compile("(\\d\\d)(\\d\\d)(\\d\\d)(\\d\\d)(\\d\\d)(\\d\\d)");
+        Pattern dayTime = Pattern.compile("(\\d\\d)(\\d\\d)(\\d\\d)(\\d\\d)(\\d\\d)");
         Matcher m = dayTime.matcher(dateTimeString);
 
         String formattedDateTimeString = null;
@@ -167,7 +169,7 @@ public class SendMoneyService {
             String day =  m.group(3);
             String hr =  m.group(4);
             String min =  m.group(5);
-            String sec =  m.group(6);
+            String sec =  "00";
             formattedDateTimeString = day + "-" + month + "-" + "20" + year + " " + hr + ":" + min + ":" + sec;
 
             SimpleDateFormat d = new SimpleDateFormat(DATE_TIME_FORMAT_BIT_7);

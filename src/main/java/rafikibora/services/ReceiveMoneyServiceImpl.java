@@ -109,7 +109,7 @@ public class ReceiveMoneyServiceImpl implements ReceiveMoneyService {
 //        newTransaction.setMerchant(merchant);
         newTransaction.setRecipientEmail("merchant@email.com");
         newTransaction.setPan(req.getPan());
-        newTransaction.setProcessingCode("01");
+        newTransaction.setProcessingCode(req.getProcessingCode());
         newTransaction.setSourceAccount(merchantAccount);
         transactionRepository.save(newTransaction);
 
