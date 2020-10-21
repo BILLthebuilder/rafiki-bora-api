@@ -53,7 +53,7 @@ public class TerminalController {
 
 
     /**
-     List All Terminal
+     List All Terminals
      */
 
 
@@ -64,14 +64,19 @@ public class TerminalController {
     }
 
 
-//   //List All Unassigned Terminals
+    /**
+     List All Unassigned Terminals
+     */
+
     @GetMapping(value ="/fetch",produces = {"application/json"})
     public ResponseEntity<List<Terminal>> unassignedTerminals() {
         List<Terminal> terminals = terminalService.unassignedTerminals();
         return new ResponseEntity<>(terminals, HttpStatus.OK);
     }
 
-    //List Terminal by Id
+    /**
+     List Terminals by ID
+     */
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
     public ResponseEntity<Terminal> listOne(@PathVariable("id") Long id) {

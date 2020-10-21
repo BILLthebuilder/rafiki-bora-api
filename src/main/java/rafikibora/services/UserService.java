@@ -75,7 +75,7 @@ public class UserService implements UserServiceI {
         return ResponseEntity.ok().body(authResponse);
     }
 
-    //test validity of credentials
+    //test validity of credentialsi
     private void authenticate(String email, String password) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));

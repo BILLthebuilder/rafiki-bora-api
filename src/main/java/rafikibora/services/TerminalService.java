@@ -66,14 +66,17 @@ public class TerminalService implements TerminalInterface {
         terminal.setCreatedOn((LocalDateTime.now()));
         terminal.setUpdatedOn((LocalDateTime.now()));
         terminal.setTid(createTID());
-//        terminal.setMid(user.getUser());
+        terminal.setMid(user.getUser());
 //        terminal.setMid(user.getUser());
 //        terminal.setMid(createMID());
         terminal.setTerminalMaker(user.getUser());
 //        return terminalRepository.save(terminal);
 
 
-        //Catching Entry of Duplicate Values.
+
+        /**
+         Catching Entry of Duplicate Values.
+         */
 
         try {
             terminalRepository.save(terminal);
@@ -117,15 +120,14 @@ public class TerminalService implements TerminalInterface {
      Update Terminal by ID
      */
 
-
     @Transactional
     public void update(Long id, TerminalDto terminalDto) {
         Terminal terminal = terminalRepository.findById(id).get();
         if (terminalDto.getModelType() != null) {
             terminal.setModelType(terminalDto.getModelType());
         }
-        if (terminalDto.getSerialNumber() !=null) {
-            terminal.setSerialNo(terminalDto.getSerialNumber());
+        if (terminalDto.getSerialNo() !=null) {
+            terminal.setSerialNo(terminalDto.getSerialNo());
         }
         terminalRepository.save(terminal);
     }
