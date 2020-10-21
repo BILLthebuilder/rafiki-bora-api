@@ -34,9 +34,6 @@ public class ReceiveMoneyController {
         System.out.println("mid: " + req.getMid());
         System.out.println("receiveMoneyToken: "+req.getReceiveMoneyToken());
         System.out.println("=================================== INCOMING ISO MSG ===================================");
-//        ReceiveMoneyResponseDto resp = new ReceiveMoneyResponseDto();
-//        resp.setTxnAmount("5500");
-//        resp.setMessage("00");
         ReceiveMoneyResponseDto resp = null;
 
         try {
