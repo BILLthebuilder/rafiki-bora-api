@@ -22,9 +22,6 @@ class SendMoneyServiceTest {
 
     @BeforeEach
     void setUp() {
-        // mocks -> fake data
-        // stubs -> fake methods
-        // Java -> both mocks
         MockitoAnnotations.initMocks(this);
     }
 
