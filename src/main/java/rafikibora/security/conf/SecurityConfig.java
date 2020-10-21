@@ -1,12 +1,10 @@
 package rafikibora.security.conf;
 
-//import rafikibora.services.CustomUserDetailsServiceImpl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,8 +13,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -25,7 +21,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import rafikibora.services.CustomUserDetailsService;
-
 import java.util.Arrays;
 
 
@@ -77,7 +72,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and().authorizeRequests()
                 .antMatchers("/api/auth/**",
-                        "/api/transactions/**")
+                        "/api/transactions/send_money",
+                        "/api/transactions/receive_money",
+                        "/api/transactions/deposit",
+                        "/api/transactions/sale")
                 .permitAll()
                 .antMatchers("/profile").hasAuthority("ADMIN")
                 .anyRequest()
@@ -94,7 +92,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-//    that provides a CorsConfiguration instance based on the provided request
+    /**
+     * Provides a CorsConfiguration instance based on the provided request
+     */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

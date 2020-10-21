@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 
 
 @RestController
-@RequestMapping("/api/receive_money")
+@RequestMapping("/api/transactions/receive_money")
 public class ReceiveMoneyController {
 
     @Autowired

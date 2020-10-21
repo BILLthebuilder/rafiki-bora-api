@@ -3,9 +3,7 @@ package rafikibora.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rafikibora.dto.DepositDto;
-import rafikibora.dto.ReceiveMoneyResponseDto;
 import rafikibora.exceptions.AccountTransactionException;
-import rafikibora.exceptions.TransactionDeniedException;
 import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.model.transactions.Transaction;
@@ -102,8 +100,8 @@ public class DepositService {
     /**
      *
      * @param transmissionDateTime
-     * @return Formatted date
-     * @throws Exception
+     * @return formatted date
+     * @throws AccountTransactionException
      */
     private Date formatDateTime(String transmissionDateTime) throws AccountTransactionException {
         String pattern = "yyyy-MM-dd HH:mm:ss";
