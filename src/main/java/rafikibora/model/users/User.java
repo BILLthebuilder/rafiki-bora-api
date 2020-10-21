@@ -60,10 +60,8 @@ public class User implements Serializable {
     @Column(name = "status", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean status;
 
-
     @Column(name = "mid", unique = true, columnDefinition = "VARCHAR(34)")
     private String mid;
-
 
     @Column(name = "business_name", columnDefinition = "VARCHAR(35)")
     private String businessName;
@@ -114,9 +112,10 @@ public class User implements Serializable {
             allowSetters = true)
     private Set<UserRoles> roles = new HashSet<>();
 
+
     @JsonIgnore
     @OneToOne
-    @JoinColumn(name = "account_id", referencedColumnName = "account_id", columnDefinition = "INT(10)")
+    @JoinColumn(name = "account_id", referencedColumnName = "account_id")
     private Account userAccount;
 
     /**
@@ -161,6 +160,3 @@ public class User implements Serializable {
     @Transient
     private String role;
 }
-
-
-

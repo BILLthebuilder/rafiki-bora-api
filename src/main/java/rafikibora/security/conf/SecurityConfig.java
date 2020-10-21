@@ -76,7 +76,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable().exceptionHandling()
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and().authorizeRequests()
-                .antMatchers("/api/auth/**")
+                .antMatchers("/api/auth/**",
+                        "/api/transactions/**")
                 .permitAll()
                 .antMatchers("/profile").hasAuthority("ADMIN")
                 .anyRequest()
