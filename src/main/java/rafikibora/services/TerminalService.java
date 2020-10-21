@@ -66,14 +66,17 @@ public class TerminalService implements TerminalInterface {
         terminal.setCreatedOn((LocalDateTime.now()));
         terminal.setUpdatedOn((LocalDateTime.now()));
         terminal.setTid(createTID());
-//        terminal.setMid(user.getUser());
+        terminal.setMid(user.getUser());
 //        terminal.setMid(user.getUser());
 //        terminal.setMid(createMID());
         terminal.setTerminalMaker(user.getUser());
 //        return terminalRepository.save(terminal);
 
 
-        //Catching Entry of Duplicate Values.
+
+        /**
+         Catching Entry of Duplicate Values.
+         */
 
         try {
             terminalRepository.save(terminal);
