@@ -5,7 +5,7 @@ public class TransactionDeniedException
 {
     public TransactionDeniedException(String message)
     {
-        super("Deposit/Sale Transaction Error: " + message);
+        super("Transaction Error: " + message);
     }
 }
 

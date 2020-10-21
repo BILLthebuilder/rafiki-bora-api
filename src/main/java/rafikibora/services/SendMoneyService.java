@@ -14,9 +14,14 @@ import rafikibora.repository.AccountRepository;
 import rafikibora.repository.TerminalRepository;
 import rafikibora.repository.TransactionRepository;
 import rafikibora.repository.UserRepository;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class includes functionality to send money to someone.
@@ -26,6 +31,10 @@ import java.util.UUID;
 @Service
 @Slf4j
 public class SendMoneyService {
+
+    private final String PROCESSING_CODE = "26000";
+    /** Formats a date with such a format as: 04-09-2019 01:45:48 */
+    private final String DATE_TIME_FORMAT_BIT_7 = "dd-MM-yyyy hh:mm:ss";
 
     @Autowired
     AccountRepository accountRepository;
@@ -46,28 +55,32 @@ public class SendMoneyService {
      * This method is used to perform a send money transaction
      *
      * @param sendMoneyData
+     * @return
      */
     @Transactional
-    public void sendMoney(Transaction sendMoneyData) {
-        // Get required fields fields
+    public boolean sendMoney(Transaction sendMoneyData) {
+        // Get required fields
         String merchantPan = sendMoneyData.getPan(); // 2
         String processingCode = sendMoneyData.getProcessingCode(); // 3
         Double amountToSend = sendMoneyData.getAmountTransaction(); //4
         String emailOfRecipient = sendMoneyData.getRecipientEmail(); // 47
         String currencyCode = sendMoneyData.getCurrencyCode(); // 49
         String dateTime = sendMoneyData.getDateTime(); // 7
-        String TID = sendMoneyData.getTID(); // 41
+        String terminalID = sendMoneyData.getTerminalID(); // 41
 
-        System.out.println("######### pan: " + merchantPan);
-        System.out.println("######### process code: " + processingCode);
-        System.out.println("######### amount: " + amountToSend);
-        System.out.println("######### email: " + emailOfRecipient);
-        System.out.println("######### currency code: " + currencyCode);
-        System.out.println("######### datetime: " + dateTime);
+        // Set a default value for the processing code if none provided
+        processingCode = (processingCode == null ? PROCESSING_CODE: processingCode);
+
+        try {
+            Date date = parseDateTime(dateTime);
+            dateTime = "" + date;
+        } catch (Exception ex) {
+            log.warn("Date could not be parsed: " + ex.getMessage());
+        }
 
         try {
             // Validate TID and MID
-            validateTID(TID);
+            //validateTID(terminalID);
 
             // get merchant's account using pan
             Optional<Account> merchantAccount = accountRepository.findByPan(merchantPan);
@@ -75,33 +88,41 @@ public class SendMoneyService {
             // Add amount to merchant's account
             merchantAccount.get().setBalance(merchantAccount.get().getBalance() + amountToSend);
 
-            // Generate withdrawal token
-            String recipientToken = generateRecipientToken(9); // Generates a unique ID or length 9
+            // Generate withdrawal code
+            String recipientToken = "" + generateRecipientToken();
 
-            // Add token to transaction model
+            // Add withdrawal code to transaction model
             sendMoneyData.setToken(recipientToken);
+
+            // Update Date-Time Field
+            sendMoneyData.setDateTime(dateTime);
+
+            // set Processing code
+            sendMoneyData.setProcessingCode(processingCode);
+
+            // set currency code
+            sendMoneyData.setCurrencyCode(currencyCode);
 
             // store transaction details
             transactionRepository.save(sendMoneyData);
 
             // send token to email of recipient
-
             emailService.sendEmail(emailOfRecipient, recipientToken);
         } catch (Exception ex) {
             log.error("Error sending money: " + ex.getMessage());
             throw new RafikiBoraException("Error sending money: " + ex.getMessage());
         }
 
+        return true;
     }
 
     /**
-     * This method generates a unique token
+     * This method generates a unique 9 digit code
      *
-     * @param tokenLength Specifies the length of the token
-     * @return UUID a unique token value
+     * @return  a unique code made of integer values
      */
-    private String generateRecipientToken(int tokenLength) {
-        return UUID.randomUUID().toString().substring(0, tokenLength);
+    private int generateRecipientToken() {
+        return ThreadLocalRandom.current().nextInt(1, 999999999);
     }
 
     /**
@@ -110,8 +131,8 @@ public class SendMoneyService {
      */
     private void validateTID(String TID) {
         Optional<Terminal> terminal = terminalRepository.findByTid(TID);
-        if (terminal == null) {
-            throw new ResourceNotFoundException("Invalid Terminal Indentification Number");
+        if (!terminal.isPresent()) {
+            throw new ResourceNotFoundException("Invalid Terminal Identification Number");
         }
     }
 
@@ -125,6 +146,35 @@ public class SendMoneyService {
         if (merchant == null) {
             throw new ResourceNotFoundException("Invalid Merchant Identification Number");
         }
+    }
+
+    /**
+     * Formats a string representation of date and time
+     * into a valid format that can be parsed by the DateFormatter object.
+     *
+     * @param dateTimeString a string formatted as 'yymmddhhmmss'
+     * @return a string with the format 'dd-MM-yyyy hh:mm:ss'
+     */
+    private Date parseDateTime(String dateTimeString) throws ParseException {
+        Date date = null;
+        Pattern dayTime = Pattern.compile("(\\d\\d)(\\d\\d)(\\d\\d)(\\d\\d)(\\d\\d)(\\d\\d)");
+        Matcher m = dayTime.matcher(dateTimeString);
+
+        String formattedDateTimeString = null;
+        if (m.find()) {
+            String year =  m.group(1);
+            String month =  m.group(2);
+            String day =  m.group(3);
+            String hr =  m.group(4);
+            String min =  m.group(5);
+            String sec =  m.group(6);
+            formattedDateTimeString = day + "-" + month + "-" + "20" + year + " " + hr + ":" + min + ":" + sec;
+
+            SimpleDateFormat d = new SimpleDateFormat(DATE_TIME_FORMAT_BIT_7);
+            date = d.parse(formattedDateTimeString);
+
+        }
+        return date;
     }
 
 }

@@ -117,7 +117,6 @@ public class TerminalService implements TerminalInterface {
      Update Terminal by ID
      */
 
-
     @Transactional
     public void update(Long id, TerminalDto terminalDto) {
         Terminal terminal = terminalRepository.findById(id).get();

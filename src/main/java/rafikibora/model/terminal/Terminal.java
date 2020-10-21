@@ -88,6 +88,4 @@ public class Terminal implements Serializable {
     @OneToMany(mappedBy="terminal",cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Transaction> transactions = new ArrayList<Transaction>();
-
-
 }
