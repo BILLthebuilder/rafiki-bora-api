@@ -9,13 +9,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
+import rafikibora.model.transactions.Transaction;
 import rafikibora.model.users.Role;
 import rafikibora.model.users.User;
 import rafikibora.model.users.UserRoles;
-import rafikibora.repository.AccountRepository;
-import rafikibora.repository.RoleRepository;
-import rafikibora.repository.TerminalRepository;
-import rafikibora.repository.UserRepository;
+import rafikibora.repository.*;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 
 /**
@@ -32,6 +33,7 @@ public class SeedData
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
     private final TerminalRepository terminalRepository;
+    private final TransactionRepository transactionRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -109,15 +111,29 @@ public class SeedData
         // Merchant
 
         User merchant1 = new User();
-        merchant1.setFirstName("Merchant-First");
-        merchant1.setLastName("Merchant-Last");
+        merchant1.setFirstName("Merchant1-First");
+        merchant1.setLastName("Merchant1-Last");
         merchant1.setEmail("mulongojohnpaul@gmail.com");
         merchant1.setUsername("mulongojohnpaul@gmail.com");
         merchant1.setPhoneNo("928273");
+        merchant1.setMid("123456789");
         merchant1.setPassword(passwordEncoder.encode("merchant"));
         merchant1.setStatus(true);
         merchant1.getRoles().add(new UserRoles(merchant1, merchantRole));
         userRepository.save(merchant1);
+
+        User merchant2 = new User();
+        merchant2.setFirstName("Merchant2-First");
+        merchant2.setLastName("Merchant2-Last");
+        merchant2.setEmail("merchant2@gmail.com");
+        merchant2.setUsername("merchant2@gmail.com");
+        merchant2.setPhoneNo("928273");
+        merchant2.setMid("112233445");
+        merchant2.setPassword(passwordEncoder.encode("merchant"));
+        merchant2.setStatus(true);
+        merchant2.getRoles().add(new UserRoles(merchant1, merchantRole));
+        userRepository.save(merchant2);
+
 
         //#################### ACCOUNTS ########################
         // Merchant accounts
@@ -130,6 +146,7 @@ public class SeedData
         merchantAcc1.setAccountMaker(admin1);
         merchantAcc1.setAccountChecker(admin2);
         merchantAcc1.setPhoneNumber("0722555555");
+        merchantAcc1.setUser(merchant1);
         accountRepository.save(merchantAcc1);
 
         Account merchantAcc2 = new Account();
@@ -138,6 +155,7 @@ public class SeedData
         merchantAcc2.setName("Mitishamba#2");
         merchantAcc2.setStatus(true);
         merchantAcc2.setPan("5196010116943992");
+        merchantAcc2.setUser(merchant2);
         merchantAcc2.setAccountMaker(admin1);
         merchantAcc2.setAccountChecker(admin2);
         merchantAcc2.setPhoneNumber("0722444444");
@@ -152,6 +170,7 @@ public class SeedData
         custAcc1.setPan("123");
         custAcc1.setAccountMaker(admin1);
         custAcc1.setAccountChecker(admin2);
+        custAcc1.setUser(cust1);
         accountRepository.save(custAcc1);
 
         Account custAcc2 = new Account();
@@ -160,13 +179,14 @@ public class SeedData
         custAcc2.setBalance(50000.0);
         custAcc2.setPhoneNumber("0720305056");
         custAcc2.setPan("123");
+        custAcc2.setUser(cust2);
         custAcc2.setAccountMaker(admin1);
         custAcc2.setAccountChecker(admin2);
         accountRepository.save(custAcc2);
 
         // ####################### TERMINALS #######################################
         Terminal terminal1 = new Terminal();
-        terminal1.setTid("123456789");
+        terminal1.setTid("987654321");
         terminal1.setSerialNo("qwerty");
         terminal1.setModelType("Move220");
         terminal1.setStatus(true);
@@ -174,5 +194,16 @@ public class SeedData
         terminal1.setTerminalMaker(admin1);
         terminal1.setTerminalChecker(admin2);
         terminalRepository.save(terminal1);
+
+        // ####################### TRANSACTIONS #######################################
+        Transaction transaction1 = new Transaction();
+        transaction1.setPan("4478150055546780");
+        transaction1.setProcessingCode("260000");
+        transaction1.setAmountTransaction(13000);
+        transaction1.setDateTimeTransmission(new Date());
+        transaction1.setTerminalID("2345678910");
+        transaction1.setCurrencyCode("040");
+        transaction1.setRecipientEmail("mulungojohnpaul@gmail.com");
+        transactionRepository.save(transaction1);
     }
 }
