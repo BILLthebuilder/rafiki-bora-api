@@ -8,11 +8,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import rafikibora.model.account.Account;
+import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.Role;
 import rafikibora.model.users.User;
 import rafikibora.model.users.UserRoles;
 import rafikibora.repository.AccountRepository;
 import rafikibora.repository.RoleRepository;
+import rafikibora.repository.TerminalRepository;
 import rafikibora.repository.UserRepository;
 
 
@@ -26,20 +28,38 @@ public class SeedData
         implements CommandLineRunner
 {
 
-    @Autowired
-    UserRepository userrepos;
-
-    @Autowired
-    AccountRepository accountRepository;
-
-    private RoleRepository roleRepository;
-
+    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
+    private final RoleRepository roleRepository;
+    private final TerminalRepository terminalRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void run(String... args)
-    {
-        // Create users
+    public void run(String... args) {
+        // ################### ROLES ########################
+        // Admin
+        Role adminRole = new Role();
+        adminRole.setRoleName("ADMIN");
+        adminRole = roleRepository.save(adminRole);
+
+        // Merchant
+        Role merchantRole = new Role();
+        merchantRole.setRoleName("MERCHANT");
+        merchantRole = roleRepository.save(merchantRole);
+
+        // Customer
+        Role customerRole = new Role();
+        customerRole.setRoleName("CUSTOMER");
+        customerRole = roleRepository.save(customerRole);
+
+        // Agent
+        Role agentRole = new Role();
+        agentRole.setRoleName("AGENT");
+        agentRole = roleRepository.save(agentRole);
+
+
+        // ####### USERS ###########
+        // Admins
         User admin1 = new User();
         admin1.setFirstName("Jedidah");
         admin1.setLastName("Wangeci");
@@ -48,6 +68,8 @@ public class SeedData
         admin1.setPhoneNo("0720942927");
         admin1.setPassword(passwordEncoder.encode("Ellahruth019"));
         admin1.setStatus(true);
+        admin1.getRoles().add(new UserRoles(admin1, adminRole));
+        userRepository.save(admin1);
 
         User admin2 = new User();
         admin2.setFirstName("Jedidah1");
@@ -57,40 +79,52 @@ public class SeedData
         admin2.setPhoneNo("0720942928");
         admin2.setPassword(passwordEncoder.encode("Ellahruth019"));
         admin2.setStatus(true);
-
-        // Create roles
-        // admin
-        Role adminRole = new Role();
-        adminRole.setRoleName("ADMIN");
-        adminRole = roleRepository.save(adminRole);
-
-        // merchant
-        Role merchantRole = new Role();
-        merchantRole.setRoleName("MERCHANT");
-        merchantRole = roleRepository.save(merchantRole);
-
-        // customer
-        Role customerRole = new Role();
-        customerRole.setRoleName("CUSTOMER");
-        customerRole = roleRepository.save(customerRole);
-
-        // agent
-        Role agentRole = new Role();
-        agentRole.setRoleName("AGENT");
-        agentRole = roleRepository.save(agentRole);
-
-        // Assign roles to create users
-        admin1.getRoles().add(new UserRoles(admin1, adminRole));
-        userrepos.save(admin1);
-
         admin2.getRoles().add(new UserRoles(admin2, adminRole));
-        userrepos.save(admin2);
+        userRepository.save(admin2);
 
-        // Add merchant accounts
+
+        // Customers
+        User cust1 = new User();
+        cust1.setFirstName("Maulid");
+        cust1.setLastName("Bulle");
+        cust1.setEmail("maulid@gmail.com");
+        cust1.setUsername("mauli@gmail.com");
+        cust1.setPhoneNo("555555");
+        cust1.setPassword(passwordEncoder.encode("maulid"));
+        cust1.setStatus(true);
+        cust1.getRoles().add(new UserRoles(cust1, customerRole));
+        userRepository.save(cust1);
+
+        User cust2 = new User();
+        cust2.setFirstName("John");
+        cust2.setLastName("Paul");
+        cust2.setEmail("mulongojohnpaul1@gmail.com");
+        cust2.setUsername("mulongojohnpaul1@gmail.com");
+        cust2.setPhoneNo("999999");
+        cust2.setPassword(passwordEncoder.encode("mulongo"));
+        cust2.setStatus(true);
+        cust2.getRoles().add(new UserRoles(cust2, customerRole));
+        userRepository.save(cust2);
+
+        // Merchant
+
+        User merchant1 = new User();
+        merchant1.setFirstName("Merchant-First");
+        merchant1.setLastName("Merchant-Last");
+        merchant1.setEmail("mulongojohnpaul@gmail.com");
+        merchant1.setUsername("mulongojohnpaul@gmail.com");
+        merchant1.setPhoneNo("928273");
+        merchant1.setPassword(passwordEncoder.encode("merchant"));
+        merchant1.setStatus(true);
+        merchant1.getRoles().add(new UserRoles(merchant1, merchantRole));
+        userRepository.save(merchant1);
+
+        //#################### ACCOUNTS ########################
+        // Merchant accounts
         Account merchantAcc1 = new Account();
         merchantAcc1.setAccountNumber("555555");
         merchantAcc1.setBalance(100000);
-        merchantAcc1.setName("Mitishamba");
+        merchantAcc1.setName("Merchant One Account");
         merchantAcc1.setStatus(true);
         merchantAcc1.setPan("4478150055546780");
         merchantAcc1.setAccountMaker(admin1);
@@ -109,35 +143,36 @@ public class SeedData
         merchantAcc2.setPhoneNumber("0722444444");
         accountRepository.save(merchantAcc2);
 
-        // Create customer
-        User cust1 = new User();
-        cust1.setFirstName("Maulid");
-        cust1.setLastName("Bulle");
-        cust1.setEmail("maulid@gmail.com");
-        cust1.setUsername("mauli@gmail.com");
-        cust1.setPhoneNo("555555");
-        cust1.setPassword(passwordEncoder.encode("maulid"));
-        cust1.setStatus(true);
+        // Customer accounts
+        Account custAcc1 = new Account();
+        custAcc1.setAccountNumber("0714385056");
+        custAcc1.setName("Maulid Bulle");
+        custAcc1.setBalance(50000.0);
+        custAcc1.setPhoneNumber("0714385056");
+        custAcc1.setPan("123");
+        custAcc1.setAccountMaker(admin1);
+        custAcc1.setAccountChecker(admin2);
+        accountRepository.save(custAcc1);
 
-        userrepos.save(cust1);
+        Account custAcc2 = new Account();
+        custAcc2.setAccountNumber("0720305056");
+        custAcc2.setName("John Mulongo");
+        custAcc2.setBalance(50000.0);
+        custAcc2.setPhoneNumber("0720305056");
+        custAcc2.setPan("123");
+        custAcc2.setAccountMaker(admin1);
+        custAcc2.setAccountChecker(admin2);
+        accountRepository.save(custAcc2);
 
-        // Add account info data
-        Account account1 = new Account();
-        account1.setAccountNumber("0714385056");
-        account1.setName("Maulid Bulle");
-        account1.setBalance(50000.0);
-//        account1.setPhoneNumber("0714385056");
-        account1.setPan("123");
-
-        Account account2 = new Account();
-        account2.setAccountNumber("0720305056");
-        account2.setName("John Mulongo");
-        account2.setBalance(50000.0);
-//        account2.setPhoneNumber("0720305056");
-        account2.setPan("123");
-
-        accountRepository.save(account1);
-        accountRepository.save(account2);
+        // ####################### TERMINALS #######################################
+        Terminal terminal1 = new Terminal();
+        terminal1.setTid("123456789");
+        terminal1.setSerialNo("qwerty");
+        terminal1.setModelType("Move220");
+        terminal1.setStatus(true);
+        terminal1.setMid(merchant1);
+        terminal1.setTerminalMaker(admin1);
+        terminal1.setTerminalChecker(admin2);
+        terminalRepository.save(terminal1);
     }
 }
-
