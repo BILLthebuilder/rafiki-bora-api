@@ -24,7 +24,12 @@ public class SendMoneyTransactionController {
 
     @PostMapping
     public ResponseEntity<?> sendMoney(@RequestBody Transaction sendMoneyData) {
-        sendMoneyService.sendMoney(sendMoneyData);
-        return ResponseEntity.status(HttpStatus.OK).body("OK");
+        System.out.println("=============================================> " + sendMoneyData);
+        boolean isOK = sendMoneyService.sendMoney(sendMoneyData);
+        if (isOK) {
+            return ResponseEntity.status(HttpStatus.OK).body("OK");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("DECLINED");
+
     }
 }
