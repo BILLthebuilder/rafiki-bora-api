@@ -103,6 +103,7 @@ public class TerminalController {
     Approve Terminal by ID
      */
 
+
     @PatchMapping(value = "/approve/{id}")
     public ResponseEntity<String> approve(@PathVariable("id") Long id) {
         //System.out.println(terminalDto.getId());
