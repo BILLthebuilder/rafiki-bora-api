@@ -75,7 +75,7 @@ public class UserService implements UserServiceI {
         return ResponseEntity.ok().body(authResponse);
     }
 
-    //test validity of credentialsi
+    //test validity of credentials
     private void authenticate(String email, String password) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
@@ -106,6 +106,25 @@ public class UserService implements UserServiceI {
         User user = new User();
         if (user!=null) {
             userRepository.deleteById((long) id);
+
+            //if user being deleted is merchant also delete their terminals and agents
+//            Set<UserRoles> retrievedRoles = user.getRoles();
+//            for (UserRoles userRole : retrievedRoles) {
+//                if (userRole.getRole().getRoleName().equalsIgnoreCase("MERCHANT")) {
+            if (user.getRole().equalsIgnoreCase("MERCHANT")) {
+                User agent=null;
+                Terminal terminal=null;
+               if (agent.getUserMaker()==user&&terminal.getMid()==user){
+                   agent.setDeleted(true);
+                   agent.setStatus(false);
+
+                   terminal.setDeleted(true);
+                   terminal.setStatus(false);
+
+                   userRepository.deleteById((long) id);
+               }
+
+            }
             // return "account disabled";
             return new ResponseEntity("UserAccount Deleted", HttpStatus.OK);
         } else {

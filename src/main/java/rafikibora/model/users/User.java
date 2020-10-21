@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLUpdate;
 import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.model.transactions.Transaction;
@@ -24,6 +25,7 @@ import java.util.*;
 @Entity
 @JsonIgnoreProperties
 @SQLDelete(sql = "UPDATE users SET is_deleted=true,status=false WHERE userid=?")
+@SQLUpdate(sql="UPDATE users SET mid = null WHERE userid=?")
 @Table(name = "users")
 public class User implements Serializable {
 
