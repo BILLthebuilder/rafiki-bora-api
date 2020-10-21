@@ -37,7 +37,7 @@ public class SaleController {
             status = false;
         }
         if(status){
-            return ResponseEntity.status(HttpStatus.CREATED).body("Sale transaction is valid");
+            return ResponseEntity.status(HttpStatus.CREATED).body("OK");
         }else{
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Sale transaction is invalid");
         }

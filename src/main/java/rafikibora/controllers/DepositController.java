@@ -43,7 +43,7 @@ public class DepositController {
             status = false;
         }
         if(status){
-            return ResponseEntity.status(HttpStatus.CREATED).body("Deposit transaction is valid");
+            return ResponseEntity.status(HttpStatus.CREATED).body("OK");
         }else{
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Deposit transaction is invalid");
         }
