@@ -2,6 +2,7 @@ package rafikibora.model.transactions;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
+//@ApiModel(value = "Transaction", description="Transaction record - holds entire transaction data")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -90,7 +91,7 @@ public class Transaction implements Serializable {
      * Will not be persited
      */
     @Transient
-    private String TID;
+    private String terminalID;
 
     /**
      * A transient field, for mapping to a date-time field as

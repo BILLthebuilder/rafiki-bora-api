@@ -32,5 +32,4 @@ public class Support {
     @Column(name = "reason",nullable = false, columnDefinition = "VARCHAR(50)")
     private String reason;
 
-
 }

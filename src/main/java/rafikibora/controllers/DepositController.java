@@ -11,7 +11,7 @@ import rafikibora.model.transactions.Transaction;
 import rafikibora.services.DepositService;
 
 @RestController
-@RequestMapping("/api/deposit")
+@RequestMapping("/api/transactions/deposit")
 public class DepositController {
     @Autowired
     private DepositService depositService;
@@ -43,7 +43,7 @@ public class DepositController {
             status = false;
         }
         if(status){
-            return ResponseEntity.status(HttpStatus.CREATED).body("Deposit transaction is valid");
+            return ResponseEntity.status(HttpStatus.CREATED).body("OK");
         }else{
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Deposit transaction is invalid");
         }

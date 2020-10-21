@@ -11,17 +11,20 @@ import rafikibora.dto.ReceiveMoneyRequestDto;
 import rafikibora.dto.ReceiveMoneyResponseDto;
 import rafikibora.services.ReceiveMoneyService;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 @RestController
-@RequestMapping("/api/auth/receive_money")
+@RequestMapping("/api/transactions/receive_money")
 public class ReceiveMoneyController {
 
     @Autowired
     private ReceiveMoneyService receiveMoneyService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ReceiveMoneyResponseDto receiveMoneyTransaction(@RequestBody ReceiveMoneyRequestDto req) {
+    public ReceiveMoneyResponseDto receiveMoneyTransaction(@RequestBody ReceiveMoneyRequestDto req, HttpServletRequest request) {
         System.out.println("=================================== INCOMING ISO MSG ===================================");
+        System.out.println("Authorization header: "+request.getHeader("Authorization"));
         System.out.println("processingCode: "+ req.getProcessingCode());
         System.out.println("pan: " + req.getPan());
         System.out.println("txnAmount: " + req.getTxnAmount());

@@ -3,6 +3,7 @@ package rafikibora.model.users;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.*;
 
+@ApiModel(value = "User", description="Accunts record")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -58,10 +60,8 @@ public class User implements Serializable {
     @Column(name = "status", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean status;
 
-
     @Column(name = "mid", unique = true, columnDefinition = "VARCHAR(34)")
     private String mid;
-
 
     @Column(name = "business_name", columnDefinition = "VARCHAR(35)")
     private String businessName;
@@ -112,9 +112,10 @@ public class User implements Serializable {
             allowSetters = true)
     private Set<UserRoles> roles = new HashSet<>();
 
+
     @JsonIgnore
     @OneToOne
-    @JoinColumn(name = "account_id", referencedColumnName = "account_id", columnDefinition = "INT(10)")
+    @JoinColumn(name = "account_id", referencedColumnName = "account_id")
     private Account userAccount;
 
     /**
@@ -159,6 +160,3 @@ public class User implements Serializable {
     @Transient
     private String role;
 }
-
-
-

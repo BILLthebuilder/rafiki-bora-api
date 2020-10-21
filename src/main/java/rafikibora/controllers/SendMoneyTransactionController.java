@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rafikibora.model.transactions.Transaction;
 import rafikibora.services.SendMoneyService;
-import javax.validation.Valid;
 
 /**
  * This controller handles all transactions pertaining to sending money

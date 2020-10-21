@@ -1,6 +1,5 @@
 package rafikibora.handlers;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -20,9 +19,12 @@ import rafikibora.model.ErrorDetail;
 import java.util.Date;
 
 /**
- * This is the driving class when an exception occurs. All exceptions are handled here.
- * This class is shared across all controllers due to the annotation RestControllerAdvice;
- * this class gives advice to all controllers on how to handle exceptions.
+ * This is the driving class when an exception occurs.
+ * All exceptions are handled here.
+ *
+ * This class is shared across all controllers due to the annotation RestControllerAdvice.
+ * It class gives advice to all controllers on how to handle exceptions.
+ *
  * Due to the annotation Order(Ordered.HIGHEST_PRECEDENCE), this class takes precedence
  * over all other controller advisors.
  */
@@ -34,9 +36,6 @@ public class RestExceptionHandler
     @Autowired
     private HelperFunctions helper;
 
-    /**
-     * The constructor for the RestExceptionHandler. Currently we do not do anything special. We just call the parent constructor.
-     */
     public RestExceptionHandler()
     {
         super();
@@ -64,7 +63,7 @@ public class RestExceptionHandler
                 status);
     }
 
-    /** annotation to say the following method is meant to handle any time the ResourceNotFoundException is thrown */
+    /** Handles ResourceNotFoundException */
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException rnfe)
     {
@@ -82,9 +81,9 @@ public class RestExceptionHandler
                 HttpStatus.NOT_FOUND);
     }
 
-    /** annotation to say the following method is meant to handle any time BadRequestExceptionException is thrown */
+    /** Handles bad request exeception */
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<?> handleResourceNotFoundException(BadRequestException rnfe)
+    public ResponseEntity<?> handleBadRequestException(BadRequestException rnfe)
     {
         ErrorDetail errorDetail = new ErrorDetail();
         errorDetail.setTimestamp(new Date());
@@ -100,9 +99,9 @@ public class RestExceptionHandler
                 HttpStatus.BAD_REQUEST);
     }
 
-    /** annotation to say the following method is meant to handle any time InvalidTokenException is thrown */
+    /** Handles Invalid Token exception */
     @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<?> handleResourceNotFoundException(InvalidTokenException rnfe)
+    public ResponseEntity<?> handleInvalidTokenException(InvalidTokenException rnfe)
     {
         ErrorDetail errorDetail = new ErrorDetail();
         errorDetail.setTimestamp(new Date());
@@ -118,9 +117,9 @@ public class RestExceptionHandler
                 HttpStatus.UNAUTHORIZED);
     }
 
-    /** annotation to say the following method is meant to handle any time InvalidTokenException is thrown */
+   /** Handles exception thrown while adding new users */
     @ExceptionHandler(AddNewUserException.class)
-    public ResponseEntity<?> handleResourceNotFoundException(AddNewUserException rnfe)
+    public ResponseEntity<?> handleAddNewUserFoundException(AddNewUserException rnfe)
     {
         ErrorDetail errorDetail = new ErrorDetail();
         errorDetail.setTimestamp(new Date());
@@ -135,10 +134,4 @@ public class RestExceptionHandler
                 null,
                 HttpStatus.BAD_REQUEST);
     }
-
-
-
-
-
-
 }
