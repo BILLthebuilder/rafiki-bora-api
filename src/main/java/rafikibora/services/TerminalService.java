@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import rafikibora.dto.CustomUserDetails;
 import rafikibora.dto.SignupResponse;
 import rafikibora.dto.TerminalDto;
+import rafikibora.exceptions.InvalidCheckerException;
+import rafikibora.exceptions.NotFoundException;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.User;
 import rafikibora.repository.TerminalRepository;
@@ -97,11 +99,16 @@ public class TerminalService implements TerminalInterface {
 
     }
 
-    //List All Unassigned Terminals
+
+    /**
+     List All Unassigned Terminals
+     */
+
     @Transactional
     public List<Terminal> unassignedTerminals() {
       return  terminalRepository.findByMid_MidIsNull();
     }
+
 
 
     /**
@@ -122,7 +129,12 @@ public class TerminalService implements TerminalInterface {
 
     @Transactional
     public void update(Long id, TerminalDto terminalDto) {
-        Terminal terminal = terminalRepository.findById(id).get();
+        Optional<Terminal> tx = terminalRepository.findById(id);
+        if (!tx.isPresent())
+            throw new ResourceNotFoundException("Terminal Does Not Exist");
+
+        Terminal terminal = tx.get();
+//        Terminal terminal = terminalRepository.findById(id).get();
         if (terminalDto.getModelType() != null) {
             terminal.setModelType(terminalDto.getModelType());
         }
@@ -138,25 +150,28 @@ public class TerminalService implements TerminalInterface {
      */
 
     @Transactional
-    public void approve(TerminalDto terminalDto) throws Exception {
+    public void approve(Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-        Long id = Long.parseLong(terminalDto.getId());
-        Terminal terminal = terminalRepository.findById(id).get();
+//        Long id = Long.parseLong(terminalDto.getId());
+        Optional<Terminal> tx = terminalRepository.findById(id);
+        if (!tx.isPresent())
+            throw new ResourceNotFoundException("Terminal Does Not Exist");
+
+        Terminal terminal = tx.get();
         Long checkerId = user.getUser().getUserid();
         Long makerId = terminal.getTerminalMaker().getUserid();
         System.out.println("******************************************");
         System.out.println("Maker id: "+makerId);
         System.out.println("Cehecker id: "+checkerId);
         System.out.println("******************************************");
+
         if (checkerId.equals(makerId))
-            throw new Exception("Creator of resource is not allowed to approve.");
-        else {
-            terminal.setTerminalChecker(user.getUser());
-            terminal.setStatus(true);
-            terminalRepository.save(terminal);
-            // }
-        }
+            throw new InvalidCheckerException("Creator of resource is not allowed to approve.");
+
+        terminal.setTerminalChecker(user.getUser());
+        terminal.setStatus(true);
+        terminalRepository.save(terminal);
     }
 
 
@@ -166,6 +181,11 @@ public class TerminalService implements TerminalInterface {
 
     @Transactional
     public void deleteById(Long id) {
+        Optional<Terminal> tx = terminalRepository.findById(id);
+        if (!tx.isPresent())
+            throw new ResourceNotFoundException("Terminal Does Not Exist");
+
+        Terminal terminal = tx.get();
         try {
             terminalRepository.deleteById(id);
         }catch (EmptyResultDataAccessException e){

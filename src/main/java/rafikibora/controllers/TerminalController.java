@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rafikibora.dto.TerminalDto;
+import rafikibora.exceptions.NotFoundException;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.repository.TerminalRepository;
 import rafikibora.services.TerminalInterface;
@@ -92,7 +93,7 @@ public class TerminalController {
 
     @PatchMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
     public ResponseEntity<String> update(@PathVariable("id") Long id, @RequestBody TerminalDto terminalDto) {
-        System.out.println(id.toString());
+//        System.out.println(id.toString());
         terminalService.update(id, terminalDto);
         return new ResponseEntity<>("Terminal updated successfully", HttpStatus.OK);
     }
@@ -102,18 +103,13 @@ public class TerminalController {
     Approve Terminal by ID
      */
 
-    @PatchMapping(value = "/approve/{id}", consumes = {"application/json"}, produces = {"application/json"})
-    public ResponseEntity<String> approve(@RequestBody TerminalDto terminalDto) {
-        System.out.println(terminalDto.getId());
-        String msg = "";
-        try{
-            terminalService.approve(terminalDto);
-            msg = "Terminal approved successfully";
-        }catch (Exception ex){
-            msg = "Creator of resource is not allowed to approve!!";
-        }finally {
-            return new ResponseEntity<>(msg, HttpStatus.OK);
-        }
+
+    @PatchMapping(value = "/approve/{id}")
+    public ResponseEntity<String> approve(@PathVariable("id") Long id) {
+        //System.out.println(terminalDto.getId());
+        System.out.println("================================ " + id);
+        terminalService.approve(id);
+        return new ResponseEntity<>("Terminal approved successfully", HttpStatus.OK);
     }
 
 

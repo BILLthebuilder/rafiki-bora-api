@@ -37,7 +37,7 @@ class SendMoneyServiceTest {
         data.setAmountTransaction(12000);
         data.setRecipientEmail("mulongojohnpaul@gmail.com");
         data.setCurrencyCode("040");
-        data.setDateTime("201020000000");
+        data.setDateTime("2010200000");
         data.setTerminalID("123456789");
 
         assertEquals(true, sendMoneyService.sendMoney(data));
