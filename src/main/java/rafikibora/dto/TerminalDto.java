@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class TerminalDto {
 
     String modelType;
-    String serialNumber;
+    String serialNo;
     String id;
 //    String DateCreated;
 //    String Deleted;

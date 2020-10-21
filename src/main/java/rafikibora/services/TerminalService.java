@@ -123,8 +123,8 @@ public class TerminalService implements TerminalInterface {
         if (terminalDto.getModelType() != null) {
             terminal.setModelType(terminalDto.getModelType());
         }
-        if (terminalDto.getSerialNumber() !=null) {
-            terminal.setSerialNo(terminalDto.getSerialNumber());
+        if (terminalDto.getSerialNo() !=null) {
+            terminal.setSerialNo(terminalDto.getSerialNo());
         }
         terminalRepository.save(terminal);
     }
