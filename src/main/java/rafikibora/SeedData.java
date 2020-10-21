@@ -227,31 +227,6 @@ public class SeedData
         transaction1.setCurrencyCode("040");
         transaction1.setRecipientEmail("mulungojohnpaul@gmail.com");
         transactionRepository.save(transaction1);
-
-        // ####################### ASSIGN ACCOUNTS TO USERS #######################################
-        this.assignAccountsToUsers();
-
     }
 
-    private void assignAccountsToUsers(){
-        String[] emails = {
-                "betty.kirii@rafiki.com",
-                "bill.brandon@rafiki.com",
-                "anthony.muthuma@rafiki.com",
-                "rufusy.idachi@rafiki.com",
-        };
-        String[] accounts = {
-                "0714385056",
-                "0714385057",
-                "0714385058",
-                "0714385059"
-        };
-
-        for(int i=0; i<4; i++){
-            User user = userRepository.findByEmail(emails[i]);
-            Account account = accountRepository.findByAccountNumber(accounts[i]);
-            user.setUserAccount(account);
-            userRepository.save(user);
-        }
-    }
 }

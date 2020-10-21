@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
@@ -18,7 +16,8 @@ import java.io.Serializable;
 import java.util.*;
 
 @ApiModel(value = "User", description="Accunts record")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -114,9 +113,8 @@ public class User implements Serializable {
 
 
     @JsonIgnore
-    @OneToOne
-    @JoinColumn(name = "account_id", referencedColumnName = "account_id")
-    private Account userAccount;
+    @OneToOne(mappedBy="user")
+    private Account account;
 
     /**
      * Part of the join relationship between user and transactions
