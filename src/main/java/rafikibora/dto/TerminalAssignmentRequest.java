@@ -6,9 +6,9 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class TerminalAssignmentRequest {
-    @NotBlank(message = "user id cannot be empty")
-    private long merchantid;
+    @NotBlank(message = "user email cannot be empty")
+    private String email;
 
-    @NotBlank(message = "terminal id cannot be empty")
-    private long terminalid;
+    @NotBlank(message = "terminal tid cannot be empty")
+    private String tid;
 }
