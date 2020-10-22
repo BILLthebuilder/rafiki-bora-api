@@ -76,8 +76,8 @@ public class SendMoneyService {
         }
 
         try {
-            validateTID(terminalID);
-            validateMID(merchantID);
+            Terminal terminal = validateTID(terminalID);
+            User merchant = validateMID(merchantID);
 
             Optional<Account> merchantAccount = accountRepository.findByPan(merchantPan);
             // Add amount to merchant's account
@@ -87,11 +87,16 @@ public class SendMoneyService {
             sendMoneyData.setDateTime(dateTime);
             sendMoneyData.setProcessingCode(processingCode);
             sendMoneyData.setCurrencyCode(currencyCode);
+            sendMoneyData.setMerchant(merchant);
+            sendMoneyData.setTerminal(terminal);
+
             transactionRepository.save(sendMoneyData);
             emailService.sendEmail(emailOfRecipient, recipientToken);
         } catch (Exception ex) {
             log.error("Error sending money: " + ex.getMessage());
-            throw new RafikiBoraException("Error sending money: " + ex.getMessage());
+            ex.printStackTrace();
+            return false;
+            //throw new RafikiBoraException("Error sending money: " + ex.getMessage());
         }
         return true;
     }
@@ -107,37 +112,39 @@ public class SendMoneyService {
 
     /**
      * Ensures that the Terminal Identification is valid
-     * @param TID Indentication Number
+     *
+     * @param TID Terminal Identification number
+     * @return Terminal model corresponding to given TID
      */
-    private void validateTID(String TID) {
+    private Terminal validateTID(String TID) {
         Optional<Terminal> terminal = terminalRepository.findByTid(TID);
         if (!terminal.isPresent()) {
             throw new ResourceNotFoundException("Invalid Terminal Identification Number");
         }
+        return terminal.get();
     }
 
     /**
-     * Checks that the Merchant Identification number is valid
-     *
+     * hecks that the Merchant Identification number is valid
      * @param MID Merchant Identification Number
+     * @return Merchant model with the given MID
      */
-    private void validateMID(String MID) {
+    private User validateMID(String MID) {
         Optional<User> merchant = userRepository.findByMid(MID);
         if (merchant == null) {
             throw new ResourceNotFoundException("Invalid Merchant Identification Number");
         }
+        return merchant.get();
     }
 
     /**
      * Formats a string representation of date and time
      * into a valid format that can be parsed by the DateFormatter object.
      *
-     * @param dateTimeString a string formatted as 'yymmddhhmmss'
+     * @param dateTimeString a string formatted as 'yymmddhhmm'
      * @return a string with the format 'dd-MM-yyyy hh:mm:ss'
      */
     private Date parseDateTime(String dateTimeString) throws ParseException {
-        Date date = null;
-        String formattedDateTimeString = null;
         String year =  dateTimeString.substring(0, 2);
         String month =  dateTimeString.substring(2, 4);
         String day =  dateTimeString.substring(4, 6);
@@ -145,9 +152,9 @@ public class SendMoneyService {
         String min =  dateTimeString.substring(8, 10);
         String sec =  "00";
 
-        formattedDateTimeString = day + "-" + month + "-" + "20" + year + " " + hr + ":" + min + ":" + sec;
+        String formattedDateTimeString = day + "-" + month + "-" + "20" + year + " " + hr + ":" + min + ":" + sec;
         SimpleDateFormat d = new SimpleDateFormat(DATE_TIME_FORMAT_BIT_7);
-        date = d.parse(formattedDateTimeString);
+        Date date = d.parse(formattedDateTimeString);
 
         return date;
     }

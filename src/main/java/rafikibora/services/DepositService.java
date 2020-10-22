@@ -91,7 +91,7 @@ public class DepositService {
         newTransaction.setTerminal(terminal);
         newTransaction.setRecipientEmail("merchant@email.com");
         newTransaction.setPan(merchantPan);
-        newTransaction.setProcessingCode("21");
+        newTransaction.setProcessingCode(depositDto.getProcessingCode());
         newTransaction.setSourceAccount(sourceAccount);
         newTransaction.setDestinationAccount(destAccount);
         transactionRepository.save(newTransaction);

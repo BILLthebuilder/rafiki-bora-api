@@ -62,7 +62,7 @@ public class SaleService {
                 merchant= optionalMerchant.get();
 
                 // get merchant account
-                destAccount = merchant.getUserAccount();
+                destAccount = merchant.getAccount();
 
                 // get merchant account balance
                 merchantAccBalance = destAccount.getBalance();
@@ -117,7 +117,7 @@ public class SaleService {
             newTransaction.setTerminal(terminal);
             newTransaction.setRecipientEmail("merchant@email.com");
             newTransaction.setPan(customerPan);
-            newTransaction.setProcessingCode("00");
+            newTransaction.setProcessingCode(saleDto.getProcessingCode());
             newTransaction.setSourceAccount(sourceAccount);
             newTransaction.setDestinationAccount(destAccount);
             transactionRepository.save(newTransaction);

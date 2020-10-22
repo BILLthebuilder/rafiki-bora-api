@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rafikibora.dto.*;
+import rafikibora.exceptions.BadRequestException;
 import rafikibora.exceptions.InvalidCheckerException;
 import rafikibora.exceptions.ResourceNotFoundException;
 import rafikibora.model.terminal.Terminal;
@@ -75,7 +76,7 @@ public class UserService implements UserServiceI {
         return ResponseEntity.ok().body(authResponse);
     }
 
-    //test validity of credentialsi
+    //test validity of credentials
     private void authenticate(String email, String password) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
@@ -88,30 +89,28 @@ public class UserService implements UserServiceI {
 
     //find user by Id
     public ResponseEntity<?> getUserById(int id) {
-    Response response;
-    Optional<User> optional = Optional.ofNullable(userRepository.findById(id));
-    User user = null;
-    if (optional.isPresent()){
-        user = optional.get();
-    } else {
-        response = new Response(Response.responseStatus.FAILED," User not found for id :: " + id);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        Response response;
+        Optional<User> optional = Optional.ofNullable(userRepository.findById(id));
+        User user = null;
+        if (optional.isPresent()){
+            user = optional.get();
+        } else {
+            response = new Response(Response.responseStatus.FAILED," User not found for id :: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
-    return ResponseEntity.status(HttpStatus.OK).body(user);
-}
 
     //soft delete user
     @Transactional
     public ResponseEntity<?> deleteUser(int id) {
         User user = new User();
-        if (user!=null) {
+        if (user != null) {
             userRepository.deleteById((long) id);
-            // return "account disabled";
-            return new ResponseEntity("UserAccount Deleted", HttpStatus.OK);
-        } else {
-            throw new ResourceNotFoundException("User with id   " + id + " Not Found");
         }
+        return new ResponseEntity("UserAccount Deleted", HttpStatus.OK);
     }
+
 
     //find user by name
     @Override
@@ -132,7 +131,7 @@ public class UserService implements UserServiceI {
         return users;
     }
 
-   //list user by id
+    //list user by id
     public User getUserById(long id) {
 
         User user = userRepository.findById(id);
@@ -216,22 +215,22 @@ public class UserService implements UserServiceI {
         if (user.getRole().equalsIgnoreCase("AGENT")) {
             role = roleRepository.findByRoleName("AGENT");
         }
-            Set<UserRoles> retrievedRoles = currentUser.getRoles();
+        Set<UserRoles> retrievedRoles = currentUser.getRoles();
 
-            for (UserRoles userRole : retrievedRoles) {
-                if (userRole.getRole().getRoleName().equalsIgnoreCase("MERCHANT")) {
+        for (UserRoles userRole : retrievedRoles) {
+            if (userRole.getRole().getRoleName().equalsIgnoreCase("MERCHANT")) {
 
-                    user.setStatus(true);
-                    user.getRoles().add(new UserRoles(user, role));
-                    user.setUserMaker(currentUser);
-                    user.setUserChecker(null);
-                    user.setPassword(passwordEncoder.encode(user.getPassword()));
-                    userRepository.save(user);
+                user.setStatus(true);
+                user.getRoles().add(new UserRoles(user, role));
+                user.setUserMaker(currentUser);
+                user.setUserChecker(null);
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                userRepository.save(user);
 
-                }
             }
-
         }
+
+    }
 
     //allow uses to update their information
     public User updateUser(User user, int userid) {
@@ -267,16 +266,16 @@ public class UserService implements UserServiceI {
     //assign terminals to Merchants
     public void assignTerminals(TerminalAssignmentRequest terminalAssignmentRequest) {
 
-        long merchantID = terminalAssignmentRequest.getMerchantid();
-        long terminalID = terminalAssignmentRequest.getTerminalid();
+        String merchantEmail = terminalAssignmentRequest.getEmail();
+        String terminalTid = terminalAssignmentRequest.getTid();
 
-
-        User merchant = userRepository.findById(merchantID);
-        Terminal terminal = terminalRepository.findById(terminalID);
+        User merchant = userRepository.findByEmail(merchantEmail);
+        Optional<Terminal> terminal = terminalRepository.findByTid(terminalTid);
 
         try {
-            terminal.setMid(merchant);
-            terminalRepository.save(terminal);
+            Terminal t = terminal.get();
+            t.setMid(merchant);
+            terminalRepository.save(t);
 
         } catch (Exception ex) {
             log.error("Error assigning terminals: " + ex.getMessage());
@@ -288,21 +287,30 @@ public class UserService implements UserServiceI {
     //assign terminals from merchants to agents
     public void assignTerminalsToAgent(TerminalToAgentResponse terminalToAgentResponse) {
         User merchant = getCurrentUser();
-        User agent= null;
-        Terminal terminal;
+        User agent = null;
 
-        long merchantid = terminalToAgentResponse.getMerchantid();
-        long agentid = terminalToAgentResponse.getAgentid();
-        long terminalid = terminalToAgentResponse.getTerminalid();
+        String agentEmail = terminalToAgentResponse.getAgentEmail();
+        String terminalId = terminalToAgentResponse.getTid();
 
-         merchant = userRepository.findById(merchantid);
-         agent=userRepository.findById(agentid);
-         terminal = terminalRepository.findById(terminalid);
+        agent = userRepository.findByEmail(agentEmail);
+        Optional<Terminal> terminal = terminalRepository.findByTid(terminalId);
+        Terminal t = terminal.get();
+        try {
 
-         if(merchant==agent.getUserMaker()&& merchant==terminal.getMid()){
-             agent.getAssignedTerminals().add(terminal);
-             userRepository.save(agent);
-         }
+            // check that both agent and terminal belong to this merchant
+            if (merchant == agent.getUserMaker() && merchant == t.getMid()) {
+                agent.getAssignedTerminals().add(t);
+
+                userRepository.save(agent);
+
+            } else if (merchant!=agent.getUserMaker()||merchant!=t.getMid()){
+                log.info("invalid credentials to perform this actions");
+                throw new BadRequestException("Invalid credentials to perform this actions");
+            }
+        }catch (Exception er){
+            log.error("Error assigning terminals: " + er.getMessage());
+            throw new BadRequestException("Error assigning terminals: " + er.getMessage());
+        }
     }
 
 

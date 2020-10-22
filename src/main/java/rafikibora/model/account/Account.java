@@ -3,9 +3,7 @@ package rafikibora.model.account;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import rafikibora.model.transactions.Transaction;
 import rafikibora.model.users.User;
@@ -17,7 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ApiModel(value = "Account", description="Accunts record")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -78,7 +77,8 @@ public class Account implements Serializable {
     private User accountChecker;
 
     @JsonIgnore
-    @OneToOne(mappedBy="userAccount",cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "status", columnDefinition = "TINYINT(1) DEFAULT 0")
