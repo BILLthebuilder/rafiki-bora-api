@@ -94,6 +94,14 @@ public class Transaction implements Serializable {
     private String terminalID;
 
     /**
+     * A transient field, for mapping to an MID field,
+     * a String, from a transaction request object.
+     * Will not be persited
+     */
+    @Transient
+    private String merchantID;
+
+    /**
      * A transient field, for mapping to a date-time field as
      * a String.
      * This will prevent the String field from being converted into
