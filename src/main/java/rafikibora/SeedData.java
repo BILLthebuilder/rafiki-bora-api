@@ -218,15 +218,98 @@ public class SeedData
         terminalRepository.save(terminal3);
 
         // ####################### TRANSACTIONS #######################################
+        // send money transactions
         Transaction transaction1 = new Transaction();
-        transaction1.setPan("4478150055546780");
-        transaction1.setProcessingCode("260000");
         transaction1.setAmountTransaction(13000);
-        transaction1.setDateTimeTransmission(new Date());
-        transaction1.setTerminalID("2345678910");
         transaction1.setCurrencyCode("040");
+        transaction1.setDateTimeTransmission(new Date());
+        transaction1.setPan("5196010116643992");
+        transaction1.setProcessingCode("260000");
         transaction1.setRecipientEmail("mulungojohnpaul@gmail.com");
+        transaction1.setToken("12345");
+        transaction1.setTerminal(terminal1);
         transactionRepository.save(transaction1);
+
+        Transaction transaction2 = new Transaction();
+        transaction2.setAmountTransaction(1500);
+        transaction2.setCurrencyCode("040");
+        transaction2.setDateTimeTransmission(new Date());
+        transaction2.setPan("5196010116643992");
+        transaction2.setProcessingCode("260000");
+        transaction2.setRecipientEmail("mulungojohnpaul@gmail.com");
+        transaction2.setToken("12346");
+        transaction2.setTerminal(terminal1);
+        transactionRepository.save(transaction2);
+
+        Transaction transaction3 = new Transaction();
+        transaction3.setAmountTransaction(1500);
+        transaction3.setCurrencyCode("040");
+        transaction3.setDateTimeTransmission(new Date());
+        transaction3.setPan("5196010116643992");
+        transaction3.setProcessingCode("260000");
+        transaction3.setRecipientEmail("mulungojohnpaul@gmail.com");
+        transaction3.setToken("12347");
+        transaction3.setTerminal(terminal2);
+        transactionRepository.save(transaction3);
+
+        // receive money
+        Transaction transaction4 = new Transaction();
+        transaction4.setAmountTransaction(1500);
+        transaction4.setCurrencyCode("040");
+        transaction4.setDateTimeTransmission(new Date());
+        transaction4.setPan("4478150181885102");
+        transaction4.setProcessingCode("010000");
+        transaction4.setTerminal(terminal3);
+        transactionRepository.save(transaction4);
+
+        Transaction transaction5 = new Transaction();
+        transaction5.setAmountTransaction(15000);
+        transaction5.setCurrencyCode("040");
+        transaction5.setDateTimeTransmission(new Date());
+        transaction5.setPan("4478150181885102");
+        transaction5.setProcessingCode("010000");
+        transaction5.setTerminal(terminal3);
+        transactionRepository.save(transaction5);
+
+        // sale
+        Transaction transaction6 = new Transaction();
+        transaction6.setAmountTransaction(15000);
+        transaction6.setCurrencyCode("040");
+        transaction6.setDateTimeTransmission(new Date());
+        transaction6.setPan("5196010174673147");
+        transaction6.setProcessingCode("000000");
+        transaction6.setTerminal(terminal1);
+        transactionRepository.save(transaction6);
+
+        Transaction transaction7 = new Transaction();
+        transaction7.setAmountTransaction(15050);
+        transaction7.setCurrencyCode("040");
+        transaction7.setDateTimeTransmission(new Date());
+        transaction7.setPan("5196010174673147");
+        transaction7.setProcessingCode("000000");
+        transaction7.setTerminal(terminal3);
+        transactionRepository.save(transaction7);
+
+        // deposit
+        Transaction transaction8 = new Transaction();
+        transaction8.setAmountTransaction(15050);
+        transaction8.setCurrencyCode("040");
+        transaction8.setDateTimeTransmission(new Date());
+        transaction8.setPan("4478150096571201");
+        transaction8.setProcessingCode("210000");
+        transaction8.setTerminal(terminal2);
+        transactionRepository.save(transaction8);
+
+        Transaction transaction9 = new Transaction();
+        transaction9.setAmountTransaction(15050);
+        transaction9.setCurrencyCode("040");
+        transaction9.setDateTimeTransmission(new Date());
+        transaction9.setPan("4478150096571201");
+        transaction9.setProcessingCode("210000");
+        transaction9.setTerminal(terminal1);
+        transactionRepository.save(transaction9);
+
+
     }
 
 }
