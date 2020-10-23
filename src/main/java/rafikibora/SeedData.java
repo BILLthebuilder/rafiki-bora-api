@@ -147,16 +147,27 @@ public class SeedData
         userRepository.save(merchant2);
 
         // Agents
-        User agent1 = new User();
-        agent1.setFirstName("Agent 1");
-        agent1.setLastName("Mobutu");
-        agent1.setEmail("mobutu@gmail.com");
-        agent1.setUsername("mobutu@mail.com");
-        agent1.setPhoneNo("0110942927");
-        agent1.setPassword(passwordEncoder.encode("mobutu"));
-        agent1.setStatus(true);
-        agent1.getRoles().add(new UserRoles(agent1, agentRole));
-        userRepository.save(agent1);
+        User agent2 = new User();
+        agent2.setFirstName("Agent 1");
+        agent2.setLastName("Mobutu");
+        agent2.setEmail("mobutu@gmail.com");
+        agent2.setUsername("mobutu@mail.com");
+        agent2.setPhoneNo("0110942927");
+        agent2.setPassword(passwordEncoder.encode("mobutu"));
+        agent2.setStatus(true);
+        agent2.getRoles().add(new UserRoles(agent2, agentRole));
+        userRepository.save(agent2);
+
+        User agent3 = new User();
+        agent3.setFirstName("Agent 2");
+        agent3.setLastName("Mobutu-2");
+        agent3.setEmail("mobutu2@gmail.com");
+        agent3.setUsername("mobutu2@mail.com");
+        agent3.setPhoneNo("0220942927");
+        agent3.setPassword(passwordEncoder.encode("mobutu"));
+        agent3.setStatus(true);
+        agent3.getRoles().add(new UserRoles(agent3, agentRole));
+        userRepository.save(agent3);
 
         //#################### ACCOUNTS ########################
         // Merchant accounts
@@ -237,7 +248,7 @@ public class SeedData
         terminal3.setMid(merchant2); // assigned to merchant 2
         terminal3.setTerminalMaker(admin1);
         terminal3.setTerminalChecker(admin2);
-        terminal3.setAgent(agent1);
+        terminal3.setAgent(agent2);
         terminalRepository.save(terminal3);
 
         // ####################### TRANSACTIONS #######################################

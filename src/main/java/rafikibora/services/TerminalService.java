@@ -22,6 +22,7 @@ import rafikibora.exceptions.NotFoundException;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.User;
 import rafikibora.repository.TerminalRepository;
+import rafikibora.repository.UserRepository;
 import rafikibora.security.util.exceptions.ExceptionUtilService;
 
 import javax.transaction.Transactional;
@@ -40,6 +41,10 @@ import java.util.*;
 public class TerminalService implements TerminalInterface {
     @Autowired
     private TerminalRepository terminalRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
     /**
      Generate A Unique TID
      */
@@ -101,7 +106,7 @@ public class TerminalService implements TerminalInterface {
 
 
     /**
-     List All Unassigned Terminals
+     List all terminals not assigned to a merchant
      */
 
     @Transactional
@@ -109,6 +114,14 @@ public class TerminalService implements TerminalInterface {
       return  terminalRepository.findByMid_MidIsNull();
     }
 
+    /**
+     List all terminals for a given merchant not assigned to an agent
+     */
+    @Transactional
+    public List<Terminal> agentUnassignedTerminals(String merchantID) {
+        User merchant = userRepository.findByMid(merchantID).get();
+        return  terminalRepository.findByMidAndAgentIsNull(merchant);
+    }
 
 
     /**

@@ -232,7 +232,7 @@ public class UserService implements UserServiceI {
 
     }
 
-    //allow uses to update their information
+    //allow user to update their information
     public User updateUser(User user, int userid) {
         User existinguser = userRepository.findById(userid);
         if (existinguser == null) {

@@ -57,7 +57,6 @@ public class UserController {
         return new ResponseEntity<>(user,
                 HttpStatus.OK);
     }
-
     @PostMapping("/user/approve/{email}")
     public ResponseEntity<?> approve(@PathVariable("email") String email){
 

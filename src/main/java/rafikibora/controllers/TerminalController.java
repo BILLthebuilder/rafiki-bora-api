@@ -76,6 +76,16 @@ public class TerminalController {
     }
 
     /**
+     List all terminals for a given merchant not assigned to an agent
+     */
+
+    @GetMapping(value ="/merchant/{merchantID}/unassigned",produces = {"application/json"})
+    public ResponseEntity<List<Terminal>> unassignedTerminals(@PathVariable("merchantID") String merchantID) {
+        List<Terminal> terminals = terminalService.agentUnassignedTerminals(merchantID);
+        return new ResponseEntity<>(terminals, HttpStatus.OK);
+    }
+
+    /**
      List Terminals by ID
      */
 
