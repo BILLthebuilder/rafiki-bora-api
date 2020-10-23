@@ -13,6 +13,10 @@ public interface TerminalRepository extends JpaRepository<Terminal, Long>{
 
     List<Terminal> findByMid_MidIsNull();
 
+    // Lists all terminals that:
+    // - Belong to a merchant with merchant ID 'mid'
+    // - Are not assigned to an agent
+    List<Terminal> findByMidAndAgentIsNull(String mid);
 }
 
 

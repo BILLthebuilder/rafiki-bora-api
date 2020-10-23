@@ -109,7 +109,6 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
     @PostMapping(value = "/agenttoterminal")
         public ResponseEntity<?> terminalToAgent(@RequestBody TerminalToAgentResponse terminalToAgentResponse) throws Exception {
         userServiceI.assignTerminalsToAgent(terminalToAgentResponse);

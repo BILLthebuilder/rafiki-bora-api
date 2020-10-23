@@ -298,16 +298,18 @@ public class UserService implements UserServiceI {
         try {
 
             // check that both agent and terminal belong to this merchant
+            // An agent is made by a merchant, so check that the maker of this agent
+            // corresponds to the merchant whose terminal we're assigning.
             if (merchant == agent.getUserMaker() && merchant == t.getMid()) {
+                // Add this terminal to the list of assigned terminals
+                // for this agent
                 agent.getAssignedTerminals().add(t);
-
                 userRepository.save(agent);
-
-            } else if (merchant!=agent.getUserMaker()||merchant!=t.getMid()){
-                log.info("invalid credentials to perform this actions");
+            } else {
+                log.info("Invalid credentials to perform this actions");
                 throw new BadRequestException("Invalid credentials to perform this actions");
             }
-        }catch (Exception er){
+        } catch (Exception er) {
             log.error("Error assigning terminals: " + er.getMessage());
             throw new BadRequestException("Error assigning terminals: " + er.getMessage());
         }
