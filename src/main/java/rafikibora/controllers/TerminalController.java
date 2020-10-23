@@ -1,24 +1,17 @@
 package rafikibora.controllers;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rafikibora.dto.TerminalDto;
-import rafikibora.exceptions.NotFoundException;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.repository.TerminalRepository;
 import rafikibora.services.TerminalInterface;
 import rafikibora.services.TerminalService;
 
-import java.awt.*;
-import java.security.Principal;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController

@@ -131,11 +131,11 @@ public class User implements Serializable {
     private List<Transaction> transactions = new ArrayList<>();
 
 
+
     // This field pertains to an agent: contains all terminals assigned to an agent
     @JsonIgnore
     @OneToMany(mappedBy = "agent", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties(value = "agent",
-            allowSetters = true)
+    @JsonIgnoreProperties(value = "agent", allowSetters = true)
     List<Terminal> assignedTerminals = new ArrayList<Terminal>();
 
     /**

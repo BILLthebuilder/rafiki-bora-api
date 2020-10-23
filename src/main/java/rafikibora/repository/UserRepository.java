@@ -1,10 +1,9 @@
 package rafikibora.repository;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import rafikibora.model.account.Account;
 import rafikibora.model.users.User;
 
 import java.util.List;
@@ -19,11 +18,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
 
-
     Set<User> findByRoles_Role_RoleNameContainingIgnoreCase(String roleName);
 
-    // Set<User> findByUserId(long id);
+    // Lists all terminals that:
+    // - Belong to a merchant with merchant ID 'mid'
+    // - Are not assigned to an agent
+    List<User> findByUserMakerAndAssignedTerminalsIsNull(User merchant);
 
-    @Query("SELECT u FROM User u WHERE UPPER(u.roles) = UPPER(:roles)")
-    public List<User> find(@Param("roles") String roles);
+
 }
