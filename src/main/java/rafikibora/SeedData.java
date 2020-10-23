@@ -61,7 +61,7 @@ public class SeedData
 
 
         // ####### USERS ###########
-        // Admins
+        // ## Admins
         User admin1 = new User();
         admin1.setFirstName("Jedidah");
         admin1.setLastName("Wangeci");
@@ -85,7 +85,7 @@ public class SeedData
         userRepository.save(admin2);
 
 
-        // Customers
+        // ## Customers
         User cust1 = new User();
         cust1.setFirstName("ANTHONY");
         cust1.setLastName("MUTHUMA");
@@ -108,7 +108,7 @@ public class SeedData
         cust2.getRoles().add(new UserRoles(cust2, customerRole));
         userRepository.save(cust2);
 
-        // Merchant
+        // ## Merchants
 
         User merchant1 = new User();
         merchant1.setFirstName("BETTY");
@@ -136,6 +136,17 @@ public class SeedData
         merchant2.getRoles().add(new UserRoles(merchant2, merchantRole));
         userRepository.save(merchant2);
 
+        // Agents
+        User agent1 = new User();
+        agent1.setFirstName("Agent 1");
+        agent1.setLastName("Mobutu");
+        agent1.setEmail("mobutu@gmail.com");
+        agent1.setUsername("mobutu@mail.com");
+        agent1.setPhoneNo("0110942927");
+        agent1.setPassword(passwordEncoder.encode("mobutu"));
+        agent1.setStatus(true);
+        agent1.getRoles().add(new UserRoles(agent1, agentRole));
+        userRepository.save(agent1);
 
         //#################### ACCOUNTS ########################
         // Merchant accounts
@@ -187,12 +198,13 @@ public class SeedData
         accountRepository.save(custAcc2);
 
         // ####################### TERMINALS #######################################
+
         Terminal terminal1 = new Terminal();
         terminal1.setTid("00000001");
         terminal1.setSerialNo("2006173003221017313880837");
         terminal1.setModelType("Move/2500");
         terminal1.setStatus(true);
-        terminal1.setMid(merchant1);
+        terminal1.setMid(merchant1); // assigned to merchant 1
         terminal1.setTerminalMaker(admin1);
         terminal1.setTerminalChecker(admin2);
         terminalRepository.save(terminal1);
@@ -202,7 +214,7 @@ public class SeedData
         terminal2.setSerialNo("2006173003221017313880838");
         terminal2.setModelType("Move/2500");
         terminal2.setStatus(true);
-        terminal2.setMid(merchant1);
+        terminal2.setMid(merchant1); // assigned to merchant 1
         terminal2.setTerminalMaker(admin1);
         terminal2.setTerminalChecker(admin2);
         terminalRepository.save(terminal2);
@@ -212,10 +224,21 @@ public class SeedData
         terminal3.setSerialNo("2006173003221017313880839");
         terminal3.setModelType("Move/2500");
         terminal3.setStatus(true);
-        terminal3.setMid(merchant2);
+        terminal3.setMid(merchant2); // assigned to merchant 2
         terminal3.setTerminalMaker(admin1);
         terminal3.setTerminalChecker(admin2);
         terminalRepository.save(terminal3);
+
+        // Terminals assigned to agent
+        Terminal terminal4 = new Terminal();
+        terminal4.setTid("00000004");
+        terminal4.setSerialNo("2006173003221017313880839");
+        terminal4.setModelType("iWL220");
+        terminal4.setStatus(true);
+        terminal4.setTerminalMaker(admin1);
+        terminal4.setTerminalChecker(admin2);
+        terminal4.setAgent(agent1);
+        terminalRepository.save(terminal4);
 
         // ####################### TRANSACTIONS #######################################
         // send money transactions
