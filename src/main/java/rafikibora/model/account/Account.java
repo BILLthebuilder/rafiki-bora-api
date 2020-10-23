@@ -24,7 +24,7 @@ import java.util.List;
 // Update record instead of deleting it
 @SQLDelete(sql = "UPDATE accounts SET is_deleted=true,status=false WHERE account_id=?")
 // Excludes all deleted records by default
-@Where(clause = "is_deleted <> true")
+//@Where(clause = "is_deleted <> true")
 @Table(name = "accounts")
 public class Account implements Serializable {
     @Id

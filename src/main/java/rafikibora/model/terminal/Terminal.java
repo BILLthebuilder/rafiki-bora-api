@@ -25,7 +25,7 @@ import java.util.List;
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE terminals SET is_deleted=true,status=false WHERE terminal_id=?")
 // Excludes all deleted records by default
-@Where(clause = "is_deleted <> true")
+//@Where(clause = "is_deleted <> true")
 public class Terminal implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

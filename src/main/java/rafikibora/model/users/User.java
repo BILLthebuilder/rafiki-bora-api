@@ -26,7 +26,7 @@ import java.util.*;
 @JsonIgnoreProperties
 @SQLDelete(sql = "UPDATE users SET is_deleted=true,status=false WHERE userid=?")
 // Excludes all deleted records by default
-@Where(clause = "is_deleted <> true")
+//@Where(clause = "is_deleted <> true")
 @Table(name = "users")
 public class User implements Serializable {
 
