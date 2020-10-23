@@ -83,7 +83,7 @@ public class UserController {
     }
 
     //find user by the Id
-    @GetMapping("ser/{id}")
+    @GetMapping("user/{id}")
     public ResponseEntity<User> findUserById(@PathVariable @Param("id") int id) {
         return (ResponseEntity<User>) userService.getUserById(id);
     }
@@ -122,6 +122,12 @@ public class UserController {
     public User findById(@PathVariable("id") long id) {
         return userService.getUserById(id);
     }
+
+
+//    @GetMapping("/unAssignedAgents")
+//    public List<User> unAssignedAgents(){
+//        return userService.unAssignedAgents();
+//    }
 
 
 }

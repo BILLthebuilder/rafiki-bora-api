@@ -131,13 +131,15 @@ public class User implements Serializable {
     private List<Transaction> transactions = new ArrayList<>();
 
 
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "Agents_Terminals",
             joinColumns = {@JoinColumn(name = "userid")},
             inverseJoinColumns = {@JoinColumn(name = "terminal_id")}
     )
+    @JsonIgnoreProperties(value = "terminal",
+            allowSetters = true)
     List<Terminal> assignedTerminals = new ArrayList<Terminal>();
 
 //    @ManyToOne

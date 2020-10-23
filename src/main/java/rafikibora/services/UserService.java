@@ -111,7 +111,6 @@ public class UserService implements UserServiceI {
         return new ResponseEntity("UserAccount Deleted", HttpStatus.OK);
     }
 
-
     //find user by name
     @Override
     public User findByName(String name) {
@@ -312,6 +311,21 @@ public class UserService implements UserServiceI {
             throw new BadRequestException("Error assigning terminals: " + er.getMessage());
         }
     }
+
+    //list all agents belonging to a merchant but not assigned to any terminal
+//    public List<User> unAssignedAgents(){
+//        User merchant = getCurrentUser();
+//        User agent = null;
+//
+//            String merchantEmail =merchant.getEmail();
+//       List<Terminal> terminal = agent.getAssignedTerminals();
+//
+//       if (merchant==agent.getUserMaker()&& terminal==null) {
+//
+//
+//         }
+//     return null;
+//    }
 
 
 }
