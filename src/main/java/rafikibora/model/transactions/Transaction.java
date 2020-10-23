@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.User;
@@ -23,6 +25,9 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @JsonIgnoreProperties
+@SQLDelete(sql = "UPDATE transactions SET is_deleted=true,status=false WHERE transaction_id=?")
+// Excludes all deleted records by default
+//@Where(clause = "is_deleted <> true")
 @Table(name = "transactions")
 public class Transaction implements Serializable {
     @Id
@@ -35,7 +40,7 @@ public class Transaction implements Serializable {
     private String pan;
 
     @Column(name = "processing_code", updatable=false, columnDefinition = "VARCHAR(6)")
-//    @NotNull
+    @NotNull
     private String processingCode;
 
     @Column(name = "amount_transaction", updatable=false, columnDefinition = "DOUBLE(12,2)")
@@ -92,6 +97,14 @@ public class Transaction implements Serializable {
      */
     @Transient
     private String terminalID;
+
+    /**
+     * A transient field, for mapping to an MID field,
+     * a String, from a transaction request object.
+     * Will not be persited
+     */
+    @Transient
+    private String merchantID;
 
     /**
      * A transient field, for mapping to a date-time field as

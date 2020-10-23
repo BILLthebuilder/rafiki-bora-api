@@ -20,5 +20,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Set<User> findByRoles_Role_RoleNameContainingIgnoreCase(String roleName);
 
+    // Lists all terminals that:
+    // - Belong to a merchant with merchant ID 'mid'
+    // - Are not assigned to an agent
+    List<User> findByUserMakerAndAssignedTerminalsIsNull(User merchant);
+
 
 }

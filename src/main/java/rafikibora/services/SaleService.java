@@ -62,7 +62,7 @@ public class SaleService {
                 merchant= optionalMerchant.get();
 
                 // get merchant account
-                destAccount = merchant.getUserAccount();
+                destAccount = merchant.getAccount();
 
                 // get merchant account balance
                 merchantAccBalance = destAccount.getBalance();

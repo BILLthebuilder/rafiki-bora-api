@@ -146,6 +146,28 @@ public class TransactionController {
     }
 
     /**
+     * Get all transactions
+     * @param response
+     * @throws IOException
+     */
+    @GetMapping(value = "all")
+    public void allTransactions(HttpServletResponse response) throws IOException{
+        List<Transaction> transactions = service.getAllTransactions();
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode jsonNodes = mapper.createObjectNode();
+        String data = "";
+
+        if(transactions.isEmpty()){
+            jsonNodes.put("found", false);
+            jsonNodes.put("msg", "No transactions found");
+            data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNodes);
+        } else {
+            data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.buildTransactionListJson(transactions));
+        }
+        response.getWriter().println(data);
+    }
+
+    /**
      * build transactions list json
      * @param transactions
      * @return

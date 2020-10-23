@@ -4,11 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLUpdate;
+import org.hibernate.annotations.Where;
 import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.model.transactions.Transaction;
@@ -19,15 +18,17 @@ import java.io.Serializable;
 import java.util.*;
 
 @ApiModel(value = "User", description="Accunts record")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @JsonIgnoreProperties
 @SQLDelete(sql = "UPDATE users SET is_deleted=true,status=false WHERE userid=?")
+// Excludes all deleted records by default
+//@Where(clause = "is_deleted <> true")
 @Table(name = "users")
 public class User implements Serializable {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -115,9 +116,8 @@ public class User implements Serializable {
 
 
     @JsonIgnore
-    @OneToOne
-    @JoinColumn(name = "account_id", referencedColumnName = "account_id")
-    private Account userAccount;
+    @OneToOne(mappedBy="user")
+    private Account account;
 
     /**
      * Part of the join relationship between user and transactions
@@ -131,20 +131,12 @@ public class User implements Serializable {
     private List<Transaction> transactions = new ArrayList<>();
 
 
-//    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinTable(
-            name = "Agents_Terminals",
-            joinColumns = {@JoinColumn(name = "userid")},
-            inverseJoinColumns = {@JoinColumn(name = "terminal_id")}
-    )
-    @JsonIgnoreProperties(value = "terminal",
-            allowSetters = true)
-    List<Terminal> assignedTerminals = new ArrayList<Terminal>();
 
-//    @ManyToOne
-//    @JoinColumn(name = "roleid", nullable = false)
-//    private Role role;
+    // This field pertains to an agent: contains all terminals assigned to an agent
+    @JsonIgnore
+    @OneToMany(mappedBy = "agent", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = "agent", allowSetters = true)
+    List<Terminal> assignedTerminals = new ArrayList<Terminal>();
 
     /**
      * Setter for user role combinations
@@ -162,4 +154,14 @@ public class User implements Serializable {
      */
     @Transient
     private String role;
+
+    /**
+     * Ensured status and isDeleted values are also updated in the
+     * current session
+     */
+    @PreRemove
+    public void deleteUser () {
+        this.isDeleted = true;
+        this.status = false;
+    }
 }

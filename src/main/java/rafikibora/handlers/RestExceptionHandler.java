@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import rafikibora.exceptions.AddNewUserException;
-import rafikibora.exceptions.BadRequestException;
-import rafikibora.exceptions.InvalidTokenException;
-import rafikibora.exceptions.ResourceNotFoundException;
+import rafikibora.exceptions.*;
 import rafikibora.model.ErrorDetail;
 
 import java.util.Date;
@@ -133,5 +130,23 @@ public class RestExceptionHandler
         return new ResponseEntity<>(errorDetail,
                 null,
                 HttpStatus.BAD_REQUEST);
+    }
+
+    /** Handles Invalid Token exception */
+    @ExceptionHandler(InvalidCheckerException.class)
+    public ResponseEntity<?> handleInvalidTokenException(InvalidCheckerException rnfe)
+    {
+        ErrorDetail errorDetail = new ErrorDetail();
+        errorDetail.setTimestamp(new Date());
+        errorDetail.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorDetail.setTitle("You cannot approve this resource");
+        errorDetail.setDetail(rnfe.getMessage());
+        errorDetail.setDeveloperMessage(rnfe.getClass()
+                .getName());
+        errorDetail.setErrors(helper.getConstraintViolation(rnfe));
+
+        return new ResponseEntity<>(errorDetail,
+                null,
+                HttpStatus.UNAUTHORIZED);
     }
 }

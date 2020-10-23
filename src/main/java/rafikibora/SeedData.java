@@ -1,3 +1,4 @@
+
 //package rafikibora;
 //
 //
@@ -61,7 +62,7 @@
 //
 //
 //        // ####### USERS ###########
-//        // Admins
+//        // ## Admins
 //        User admin1 = new User();
 //        admin1.setFirstName("Jedidah");
 //        admin1.setLastName("Wangeci");
@@ -83,10 +84,19 @@
 //        admin2.setStatus(true);
 //        admin2.getRoles().add(new UserRoles(admin2, adminRole));
 //        userRepository.save(admin2);
-
-
 //
-//        // Customers
+//        User agent1 = new User();
+//        agent1.setFirstName("Lorine");
+//        agent1.setLastName("Achieng");
+//        agent1.setEmail("lorine@rafiki.com");
+//        agent1.setUsername("lorine");
+//        agent1.setPhoneNo("0720942928");
+//        agent1.setPassword(passwordEncoder.encode("12345"));
+//        agent1.setStatus(true);
+//        agent1.getRoles().add(new UserRoles(agent1, agentRole));
+//        userRepository.save(agent1);
+//
+//        // ## Customers
 //        User cust1 = new User();
 //        cust1.setFirstName("ANTHONY");
 //        cust1.setLastName("MUTHUMA");
@@ -109,7 +119,7 @@
 //        cust2.getRoles().add(new UserRoles(cust2, customerRole));
 //        userRepository.save(cust2);
 //
-//        // Merchant
+//        // ## Merchants
 //
 //        User merchant1 = new User();
 //        merchant1.setFirstName("BETTY");
@@ -137,6 +147,17 @@
 //        merchant2.getRoles().add(new UserRoles(merchant2, merchantRole));
 //        userRepository.save(merchant2);
 //
+//        // Agents
+//        User agent2 = new User();
+//        agent1.setFirstName("Agent 1");
+//        agent1.setLastName("Mobutu");
+//        agent1.setEmail("mobutu@gmail.com");
+//        agent1.setUsername("mobutu@mail.com");
+//        agent1.setPhoneNo("0110942927");
+//        agent1.setPassword(passwordEncoder.encode("mobutu"));
+//        agent1.setStatus(true);
+//        agent1.getRoles().add(new UserRoles(agent1, agentRole));
+//        userRepository.save(agent1);
 //
 //        //#################### ACCOUNTS ########################
 //        // Merchant accounts
@@ -188,12 +209,13 @@
 //        accountRepository.save(custAcc2);
 //
 //        // ####################### TERMINALS #######################################
+//
 //        Terminal terminal1 = new Terminal();
 //        terminal1.setTid("00000001");
 //        terminal1.setSerialNo("2006173003221017313880837");
 //        terminal1.setModelType("Move/2500");
 //        terminal1.setStatus(true);
-//        terminal1.setMid(merchant1);
+//        terminal1.setMid(merchant1); // assigned to merchant 1
 //        terminal1.setTerminalMaker(admin1);
 //        terminal1.setTerminalChecker(admin2);
 //        terminalRepository.save(terminal1);
@@ -203,7 +225,7 @@
 //        terminal2.setSerialNo("2006173003221017313880838");
 //        terminal2.setModelType("Move/2500");
 //        terminal2.setStatus(true);
-//        terminal2.setMid(merchant1);
+//        terminal2.setMid(merchant1); // assigned to merchant 1
 //        terminal2.setTerminalMaker(admin1);
 //        terminal2.setTerminalChecker(admin2);
 //        terminalRepository.save(terminal2);
@@ -213,47 +235,107 @@
 //        terminal3.setSerialNo("2006173003221017313880839");
 //        terminal3.setModelType("Move/2500");
 //        terminal3.setStatus(true);
-//        terminal3.setMid(merchant2);
+//        terminal3.setMid(merchant2); // assigned to merchant 2
 //        terminal3.setTerminalMaker(admin1);
 //        terminal3.setTerminalChecker(admin2);
+//        terminal3.setAgent(agent1);
 //        terminalRepository.save(terminal3);
 //
 //        // ####################### TRANSACTIONS #######################################
+//        // send money transactions
 //        Transaction transaction1 = new Transaction();
-//        transaction1.setPan("4478150055546780");
-//        transaction1.setProcessingCode("260000");
 //        transaction1.setAmountTransaction(13000);
-//        transaction1.setDateTimeTransmission(new Date());
-//        transaction1.setTerminalID("2345678910");
 //        transaction1.setCurrencyCode("040");
+//        transaction1.setDateTimeTransmission(new Date());
+//        transaction1.setPan("5196010116643992");
+//        transaction1.setProcessingCode("260000");
 //        transaction1.setRecipientEmail("mulungojohnpaul@gmail.com");
+//        transaction1.setToken("12345");
+//        transaction1.setTerminal(terminal1);
 //        transactionRepository.save(transaction1);
 //
-//        // ####################### ASSIGN ACCOUNTS TO USERS #######################################
-//        this.assignAccountsToUsers();
+//        Transaction transaction2 = new Transaction();
+//        transaction2.setAmountTransaction(1500);
+//        transaction2.setCurrencyCode("040");
+//        transaction2.setDateTimeTransmission(new Date());
+//        transaction2.setPan("5196010116643992");
+//        transaction2.setProcessingCode("260000");
+//        transaction2.setRecipientEmail("mulungojohnpaul@gmail.com");
+//        transaction2.setToken("12346");
+//        transaction2.setTerminal(terminal1);
+//        transactionRepository.save(transaction2);
+//
+//        Transaction transaction3 = new Transaction();
+//        transaction3.setAmountTransaction(1500);
+//        transaction3.setCurrencyCode("040");
+//        transaction3.setDateTimeTransmission(new Date());
+//        transaction3.setPan("5196010116643992");
+//        transaction3.setProcessingCode("260000");
+//        transaction3.setRecipientEmail("mulungojohnpaul@gmail.com");
+//        transaction3.setToken("12347");
+//        transaction3.setTerminal(terminal2);
+//        transactionRepository.save(transaction3);
+//
+//        // receive money
+//        Transaction transaction4 = new Transaction();
+//        transaction4.setAmountTransaction(1500);
+//        transaction4.setCurrencyCode("040");
+//        transaction4.setDateTimeTransmission(new Date());
+//        transaction4.setPan("4478150181885102");
+//        transaction4.setProcessingCode("010000");
+//        transaction4.setTerminal(terminal3);
+//        transactionRepository.save(transaction4);
+//
+//        Transaction transaction5 = new Transaction();
+//        transaction5.setAmountTransaction(15000);
+//        transaction5.setCurrencyCode("040");
+//        transaction5.setDateTimeTransmission(new Date());
+//        transaction5.setPan("4478150181885102");
+//        transaction5.setProcessingCode("010000");
+//        transaction5.setTerminal(terminal3);
+//        transactionRepository.save(transaction5);
+//
+//        // sale
+//        Transaction transaction6 = new Transaction();
+//        transaction6.setAmountTransaction(15000);
+//        transaction6.setCurrencyCode("040");
+//        transaction6.setDateTimeTransmission(new Date());
+//        transaction6.setPan("5196010174673147");
+//        transaction6.setProcessingCode("000000");
+//        transaction6.setTerminal(terminal1);
+//        transactionRepository.save(transaction6);
+//
+//        Transaction transaction7 = new Transaction();
+//        transaction7.setAmountTransaction(15050);
+//        transaction7.setCurrencyCode("040");
+//        transaction7.setDateTimeTransmission(new Date());
+//        transaction7.setPan("5196010174673147");
+//        transaction7.setProcessingCode("000000");
+//        transaction7.setTerminal(terminal3);
+//        transactionRepository.save(transaction7);
+//
+//        // deposit
+//        Transaction transaction8 = new Transaction();
+//        transaction8.setAmountTransaction(15050);
+//        transaction8.setCurrencyCode("040");
+//        transaction8.setDateTimeTransmission(new Date());
+//        transaction8.setPan("4478150096571201");
+//        transaction8.setProcessingCode("210000");
+//        transaction8.setTerminal(terminal2);
+//        transactionRepository.save(transaction8);
+//
+//        Transaction transaction9 = new Transaction();
+//        transaction9.setAmountTransaction(15050);
+//        transaction9.setCurrencyCode("040");
+//        transaction9.setDateTimeTransmission(new Date());
+//        transaction9.setPan("4478150096571201");
+//        transaction9.setProcessingCode("210000");
+//        transaction9.setTerminal(terminal1);
+//        transactionRepository.save(transaction9);
+//
 //
 //    }
-//
-//    private void assignAccountsToUsers(){
-//        String[] emails = {
-//                "betty.kirii@rafiki.com",
-//                "bill.brandon@rafiki.com",
-//                "anthony.muthuma@rafiki.com",
-//                "rufusy.idachi@rafiki.com",
-//        };
-//        String[] accounts = {
-//                "0714385056",
-//                "0714385057",
-//                "0714385058",
-//                "0714385059"
-//        };
-//
-//        for(int i=0; i<4; i++){
-//            User user = userRepository.findByEmail(emails[i]);
-//            Account account = accountRepository.findByAccountNumber(accounts[i]);
-//            user.setUserAccount(account);
-//            userRepository.save(user);
-//        }
 //    }
 //}
-//
+
+
