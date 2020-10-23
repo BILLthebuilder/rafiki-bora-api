@@ -227,18 +227,8 @@ public class SeedData
         terminal3.setMid(merchant2); // assigned to merchant 2
         terminal3.setTerminalMaker(admin1);
         terminal3.setTerminalChecker(admin2);
+        terminal3.setAgent(agent1);
         terminalRepository.save(terminal3);
-
-        // Terminals assigned to agent
-        Terminal terminal4 = new Terminal();
-        terminal4.setTid("00000004");
-        terminal4.setSerialNo("2006173003221017313880839");
-        terminal4.setModelType("iWL220");
-        terminal4.setStatus(true);
-        terminal4.setTerminalMaker(admin1);
-        terminal4.setTerminalChecker(admin2);
-        terminal4.setAgent(agent1);
-        terminalRepository.save(terminal4);
 
         // ####################### TRANSACTIONS #######################################
         // send money transactions
