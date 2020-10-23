@@ -1,11 +1,13 @@
 package rafikibora.model.terminal;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import rafikibora.model.transactions.Transaction;
 import rafikibora.model.users.User;
 
@@ -22,6 +24,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE terminals SET is_deleted=true,status=false WHERE terminal_id=?")
+// Excludes all deleted records by default
+@Where(clause = "is_deleted <> true")
 public class Terminal implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -82,4 +86,10 @@ public class Terminal implements Serializable {
     @OneToMany(mappedBy="terminal",cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Transaction> transactions = new ArrayList<Transaction>();
+
+    @ManyToOne
+    @JoinColumn(name="userid")
+    @JsonIgnoreProperties(value = "assignedTerminals",
+            allowSetters = true)
+    private User agent;
 }

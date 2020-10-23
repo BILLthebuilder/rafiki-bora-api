@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import rafikibora.model.transactions.Transaction;
 import rafikibora.model.users.User;
 
@@ -20,8 +21,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-//set delete account to true (is_deleted) using the account_id
+// Update record instead of deleting it
 @SQLDelete(sql = "UPDATE accounts SET is_deleted=true,status=false WHERE account_id=?")
+// Excludes all deleted records by default
+@Where(clause = "is_deleted <> true")
 @Table(name = "accounts")
 public class Account implements Serializable {
     @Id
@@ -31,9 +34,6 @@ public class Account implements Serializable {
 
     @Column(name = "name",nullable = false, columnDefinition = "VARCHAR(50)")
     private String name;
-
-//    @Column(name = "account_number")
-//    private String accountNumber = UUID.randomUUID().toString().replaceAll("[^0.05]","2");
 
     @Column(name = "account_number", unique = true, nullable = false, columnDefinition = "VARCHAR(10)")
     public String accountNumber;
