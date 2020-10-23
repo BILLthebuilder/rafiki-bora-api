@@ -84,6 +84,16 @@ public class SeedData
         admin2.getRoles().add(new UserRoles(admin2, adminRole));
         userRepository.save(admin2);
 
+        User agent1 = new User();
+        agent1.setFirstName("Lorine");
+        agent1.setLastName("Achieng");
+        agent1.setEmail("lorine@rafiki.com");
+        agent1.setUsername("lorine");
+        agent1.setPhoneNo("0720942928");
+        agent1.setPassword(passwordEncoder.encode("12345"));
+        agent1.setStatus(true);
+        agent1.getRoles().add(new UserRoles(agent1, agentRole));
+        userRepository.save(agent1);
 
         // Customers
         User cust1 = new User();
