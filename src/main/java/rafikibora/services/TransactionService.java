@@ -46,4 +46,9 @@ public class TransactionService {
     public List<Transaction> getTerminalTransactions(String tid){
         return repository.terminalTransactions(tid);
     }
+
+    // All transactions
+    public List<Transaction> getAllTransactions(){
+        return  repository.findAll();
+    }
 }

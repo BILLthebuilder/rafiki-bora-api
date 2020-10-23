@@ -71,11 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable().exceptionHandling()
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and().authorizeRequests()
-                .antMatchers("/api/auth/**",
-                        "/api/transactions/send_money",
-                        "/api/transactions/receive_money",
-                        "/api/transactions/deposit",
-                        "/api/transactions/sale")
+                .antMatchers("/api/auth/**")
                 .permitAll()
                 .antMatchers("/profile").hasAuthority("ADMIN")
                 .anyRequest()

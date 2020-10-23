@@ -15,6 +15,9 @@ public interface TransactionRepository extends JpaRepository<Transaction,Integer
     Optional<Transaction> findById(Integer id);
     Optional<Transaction> findByToken(String fundsToken);
 
+    // All transactions
+    List<Transaction> findAll();
+
     // All transactions on an account
     List<Transaction> findByPan(String pan);
 

@@ -66,10 +66,9 @@ public class SendMoneyService {
 
         // Set a default value for the processing code if none provided
         processingCode = (processingCode == null ? PROCESSING_CODE: processingCode);
-
+        Date date = null;
         try {
-            Date date = parseDateTime(dateTime);
-            dateTime = "" + date;
+            date = parseDateTime(dateTime);
             System.out.println("=============================== " + dateTime);
         } catch (ParseException | IndexOutOfBoundsException ex) {
             log.warn("Date could not be parsed: " + ex.getMessage());
@@ -84,7 +83,7 @@ public class SendMoneyService {
             merchantAccount.get().setBalance(merchantAccount.get().getBalance() + amountToSend);
             String recipientToken = "" + generateRecipientToken();
             sendMoneyData.setToken(recipientToken);
-            sendMoneyData.setDateTime(dateTime);
+            sendMoneyData.setDateTimeTransmission(date);
             sendMoneyData.setProcessingCode(processingCode);
             sendMoneyData.setCurrencyCode(currencyCode);
             sendMoneyData.setMerchant(merchant);
