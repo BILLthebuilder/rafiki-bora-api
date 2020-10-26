@@ -70,7 +70,7 @@ public class TransactionController {
 
     @GetMapping(value = "sum/{type}")
     public Optional<Transaction> sum(@PathVariable String type, HttpServletResponse response) throws IOException{
-        return  repository.sum(this.getTransactionType(type));
+        return repository.sum(this.getTransactionType(type));
     }
 
     /**
