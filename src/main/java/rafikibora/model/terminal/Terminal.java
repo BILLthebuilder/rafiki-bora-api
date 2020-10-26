@@ -92,4 +92,14 @@ public class Terminal implements Serializable {
     @JsonIgnoreProperties(value = "assignedTerminals",
             allowSetters = true)
     private User agent;
+
+    /**
+     * Ensures status and isDeleted values are also updated in the
+     * current session
+     */
+    @PreRemove
+    public void deleteTerminal () {
+        this.isDeleted = true;
+        this.status = false;
+    }
 }

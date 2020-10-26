@@ -49,10 +49,8 @@ public class UserController {
      * @return JSON of the current user. Status of OK
      * @see UserService#findByName(String) UserService.findByName(authenticated user)
      */
-    @GetMapping(value = "/user/profile",
-            produces = {"application/json"})
-    public ResponseEntity<?> getCurrentUserInfo(Authentication authentication)
-     {
+    @GetMapping(value = "/user/profile",produces = {"application/json"})
+    public ResponseEntity<?> getCurrentUserInfo(Authentication authentication) {
         User user = userServiceI.findByName(authentication.getName());
         return new ResponseEntity<>(user,
                 HttpStatus.OK);
@@ -67,9 +65,9 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable @Param("id") int id) {
-        return userService.deleteUser(id);
-
+    public ResponseEntity<?> deleteUser(@PathVariable @Param("id") long id) {
+        userService.deleteUser(id);
+        return new ResponseEntity("UserAccount Deleted", HttpStatus.OK);
     }
 
     @GetMapping("/{roleName}")

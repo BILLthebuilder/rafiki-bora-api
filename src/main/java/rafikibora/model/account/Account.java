@@ -94,4 +94,14 @@ public class Account implements Serializable {
     @OneToMany(mappedBy="destinationAccount",cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Transaction> deposits = new ArrayList<Transaction>();
+
+    /**
+     * Ensures status and isDeleted values are also updated in the
+     * current session
+     */
+    @PreRemove
+    public void deleteAccount () {
+        this.isDeleted = true;
+        this.status = false;
+    }
 }

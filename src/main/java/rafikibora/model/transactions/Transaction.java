@@ -150,4 +150,14 @@ public class Transaction implements Serializable {
         String prettyDateAdded = simpleDateFormat.format(date);
         return  prettyDateAdded;
     }
+
+    /**
+     * Ensures status and isDeleted values are also updated in the
+     * current session
+     */
+//    @PreRemove
+//    public void deleteTransaction () {
+//        this.isDeleted = true;
+//        this.status = false;
+//    }
 }
