@@ -96,7 +96,7 @@ public class UserController {
             jsonNodes.put("found", false);
             data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNodes);
         } else{
-            data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.buildUserListJson(users));
+            data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.buildUserListJson(users).getSystemUsers());
         }
         response.getWriter().println(data);
     }
