@@ -103,12 +103,12 @@ public class UserService implements UserServiceI {
 
     //soft delete user
     @Transactional
-    public ResponseEntity<?> deleteUser(int id) {
-        User user = new User();
-        if (user != null) {
-            userRepository.deleteById((long) id);
+    public void deleteUser(long id) {
+        User user = userRepository.findById(id);
+        if (user == null) {
+            throw new ResourceNotFoundException("User does not exist");
         }
-        return new ResponseEntity("UserAccount Deleted", HttpStatus.OK);
+        userRepository.delete(user);
     }
 
     //find user by name
@@ -159,10 +159,14 @@ public class UserService implements UserServiceI {
         }
         if (user.getRole().equalsIgnoreCase("MERCHANT")) {
             role = roleRepository.findByRoleName("MERCHANT");
+            String mid = UUID.randomUUID().toString().substring(0, 16);
+            user.setMid(mid);
         }
         if (user.getRole().equalsIgnoreCase("CUSTOMER")) {
             role = roleRepository.findByRoleName("CUSTOMER");
         }
+
+
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.getRoles().add(new UserRoles(user, role));
@@ -184,20 +188,6 @@ public class UserService implements UserServiceI {
         if (currentUser == user.getUserMaker()) {
             throw new InvalidCheckerException("You cannot approve this user!");
         }
-        // if user has Merchant role generate MID and assign
-        boolean merchant = false;
-        Set<UserRoles> retrievedRoles = user.getRoles();
-        for (UserRoles userRole : retrievedRoles) {
-            if (userRole.getRole().getRoleName().equalsIgnoreCase("MERCHANT")) {
-                merchant = true;
-                break;
-            }
-        }
-        if (merchant == true) {
-            String mid = UUID.randomUUID().toString().substring(0, 16);
-            user.setMid(mid);
-        }
-
         user.setUserChecker(currentUser);
         user.setStatus(true);
         return userRepository.save(user);

@@ -35,4 +35,13 @@ public class RafikibApplication {
 		registry.addResourceHandler("/webjars/**")
 				.addResourceLocations("classpath:/META-INF/resources/webjars/");
 	}
+	@Bean
+	public Docket productApi() {
+		return new Docket(DocumentationType.SWAGGER_2).select()
+				.paths(PathSelectors.ant("/api/*"))
+				//package based configuration
+				.apis(RequestHandlerSelectors.basePackage("rafikibora"))
+				.build();
+	}
+
 }

@@ -134,7 +134,7 @@ public class User implements Serializable {
 
     // This field pertains to an agent: contains all terminals assigned to an agent
     @JsonIgnore
-    @OneToMany(mappedBy = "agent", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "agent", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties(value = "agent", allowSetters = true)
     List<Terminal> assignedTerminals = new ArrayList<Terminal>();
 
