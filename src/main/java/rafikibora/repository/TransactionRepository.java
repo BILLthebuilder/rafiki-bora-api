@@ -21,6 +21,10 @@ public interface TransactionRepository extends JpaRepository<Transaction,Integer
     // All transactions on an account
     List<Transaction> findByPan(String pan);
 
+//    find transaction  total by type
+     @Query("SELECT SUM(s.amountTransaction)FROM Transaction s WHERE s.processingCode = :processingCode")
+     Optional<Transaction> sum(@Param("processingCode")String processingCode);
+
     // All transactions by type
     List<Transaction> findByProcessingCode(String processingCode);
 

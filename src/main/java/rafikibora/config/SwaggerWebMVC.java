@@ -1,28 +1,28 @@
-package rafikibora.config;
-
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-
-/**
- * This class allows Swagger to generate web pages
- */
-@Configuration
-public class SwaggerWebMVC implements WebMvcConfigurer {
-
-    /**
-     * Adds the swagger web pages to spring
-     *
-     * @param registry holds the web pages for spring
-     */
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry)
-    {
-        registry.addResourceHandler("swagger-ui.html")
-                .addResourceLocations("classpath:/META-INF/resources/");
-
-        registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/");
-    }
-}
+//package rafikibora.config;
+//
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+//import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+//
+//
+///**
+// * This class allows Swagger to generate web pages
+// */
+//@Configuration
+//public class SwaggerWebMVC implements WebMvcConfigurer {
+//
+//    /**
+//     * Adds the swagger web pages to spring
+//     *
+//     * @param registry holds the web pages for spring
+//     */
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry)
+//    {
+//        registry.addResourceHandler("swagger-ui.html")
+//                .addResourceLocations("classpath:/META-INF/resources/");
+//
+//        registry.addResourceHandler("/webjars/**")
+//                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+//    }
+//}

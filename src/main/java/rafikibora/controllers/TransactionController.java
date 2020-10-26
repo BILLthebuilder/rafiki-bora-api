@@ -15,6 +15,7 @@ import rafikibora.services.TransactionService;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -51,9 +52,25 @@ public class TransactionController {
     }
 
 
+    /**
+     * Get sum of amount of transactions by type
+     * @return
+     */
+
     @GetMapping("totals")
     public double totals() {
         return repository.totals();
+    }
+
+    /**
+     * Get sum of amount of transactions by type
+     * @param type
+     * @return
+     */
+
+    @GetMapping(value = "sum/{type}")
+    public Optional<Transaction> sum(@PathVariable String type, HttpServletResponse response) throws IOException{
+        return repository.sum(this.getTransactionType(type));
     }
 
     /**
@@ -61,6 +78,7 @@ public class TransactionController {
      * @param pan
      * @return
      */
+
     @GetMapping(value = "account/{pan}")
     public void accountTransactions(@PathVariable String pan, HttpServletResponse response) throws IOException {
         List<Transaction> transactions = service.getTransactionsByPan(pan);
@@ -86,7 +104,7 @@ public class TransactionController {
     @GetMapping(value = "type/{type}")
     public void transactionsByType(@PathVariable String type, HttpServletResponse response) throws IOException {
 
-        List<Transaction> transactions = service.getTransactionsByProcessingCode(type);
+        List<Transaction> transactions = service.getTransactionsByProcessingCode(this.getTransactionType(type));
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode jsonNodes = mapper.createObjectNode();
         String data = "";
