@@ -24,6 +24,13 @@ public class AccountController {
     @Autowired
     private AccountService service;
 
+
+    /**
+     * add account
+     *
+     * @return
+     */
+
     @PostMapping
     public ResponseEntity<?> addAccount(@Valid @RequestBody Account account) {
 
@@ -48,16 +55,32 @@ public class AccountController {
         return service.getAccounts();
     }
 
+    /**
+     * Get account by id
+     * @param id
+     * @return
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Account> findAccountById(@PathVariable int id) {
         return (ResponseEntity<Account>) service.getAccountById(id);
     }
 
+    /**
+     * Get account by name
+     * @param name
+     * @return
+     */
     @GetMapping("accounts/{name}")
     public ResponseEntity<Account> findAccountByName(@PathVariable @Valid String name) {
         return (ResponseEntity<Account>) service.getAccountByName(name);
     }
 
+
+    /**
+     * update account by id
+     * @param id
+     * @return
+     */
     @PatchMapping(value = "/{id}", consumes = {"application/json"})
     public ResponseEntity<?> updateAccount(@RequestBody Account account, @PathVariable int id) {
         service.updateAccount(account, id);
@@ -65,6 +88,11 @@ public class AccountController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * delete account by id
+     * @param id
+     * @return
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAccount(@PathVariable @Param("id") int id) {
         return service.deleteAccount(id);
