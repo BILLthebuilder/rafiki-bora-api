@@ -209,10 +209,9 @@ public class UserService implements UserServiceI {
         for (UserRoles userRole : retrievedRoles) {
             if (userRole.getRole().getRoleName().equalsIgnoreCase("MERCHANT")) {
 
-                user.setStatus(true);
+                //user.setStatus(true);
                 user.getRoles().add(new UserRoles(user, role));
                 user.setUserMaker(currentUser);
-                user.setUserChecker(null);
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 userRepository.save(user);
 
