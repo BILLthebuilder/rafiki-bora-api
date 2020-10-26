@@ -2,6 +2,8 @@ package rafikibora.dto;
 
 import rafikibora.model.users.User;
 
+import java.util.Date;
+
 public class SystemUser {
         private String firstName;
         private String lastName;
@@ -13,11 +15,13 @@ public class SystemUser {
         private String username;
         private String mid;
         private String businessName;
+        private String dateCreated;
 
         public SystemUser(User user){
                 this.firstName = user.getFirstName();
                 this.lastName = user.getLastName();
                 this.email = user.getEmail();
+                this.dateCreated = String.valueOf(user.getDateCreated());
                 this.phoneNo = user.getPhoneNo();
                 if(user.getUserMaker() != null)
                         this.createdBy = user.getUserMaker().getEmail();
@@ -41,6 +45,10 @@ public class SystemUser {
                 else
                         this.businessName = "NOT A BUSINESS";
 
+        }
+
+        public String getDateCreated() {
+                return dateCreated;
         }
 
         public String getFirstName() {
