@@ -1,12 +1,18 @@
 package rafikibora.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import rafikibora.dto.ListSystemUser;
+import rafikibora.dto.SystemUser;
 import rafikibora.dto.TerminalAssignmentRequest;
 import rafikibora.dto.TerminalToAgentResponse;
 import rafikibora.exceptions.AddNewUserException;
@@ -15,8 +21,12 @@ import rafikibora.model.users.User;
 import rafikibora.services.UserService;
 import rafikibora.services.UserServiceI;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -55,6 +65,7 @@ public class UserController {
         return new ResponseEntity<>(user,
                 HttpStatus.OK);
     }
+
     @PostMapping("/user/approve/{email}")
     public ResponseEntity<?> approve(@PathVariable("email") String email){
 
@@ -74,9 +85,20 @@ public class UserController {
         return userServiceI.getUserByRole(roleName);
     }
 
-    @GetMapping
-    public List<User> findAllUsers() {
-        return userServiceI.viewUsers();
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public void findAllUsers(HttpServletResponse response) throws IOException {
+        List<User> users = userServiceI.viewUsers();
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode jsonNodes = mapper.createObjectNode();
+        String data = "";
+
+        if(userServiceI.viewUsers().isEmpty()){
+            jsonNodes.put("found", false);
+            data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNodes);
+        } else{
+            data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.buildUserListJson(users));
+        }
+        response.getWriter().println(data);
     }
 
     //find user by the Id
@@ -125,6 +147,10 @@ public class UserController {
         return userService.unAssignedAgents();
     }
 
+
+    private ListSystemUser buildUserListJson(List<User> users){
+        return new ListSystemUser(users.stream().map(user -> new SystemUser(user)).collect(Collectors.toList()));
+    }
 
 }
 

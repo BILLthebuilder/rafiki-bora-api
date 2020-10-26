@@ -93,13 +93,13 @@ public class User implements Serializable {
     }
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "created_by", referencedColumnName = "userid")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "created_by", referencedColumnName = "email")
     private User userMaker;
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "approved_by", referencedColumnName = "userid")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "approved_by", referencedColumnName = "email")
     private User userChecker;
 
 
