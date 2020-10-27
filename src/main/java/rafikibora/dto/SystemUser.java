@@ -1,9 +1,10 @@
 package rafikibora.dto;
 
+import lombok.Data;
 import rafikibora.model.users.User;
 
 import java.util.Date;
-
+@Data
 public class SystemUser {
         private String firstName;
         private String lastName;
@@ -11,7 +12,7 @@ public class SystemUser {
         private String phoneNo;
         private String createdBy;
         private String approvedBy;
-        private String userId;
+        private String userid;
         private String username;
         private String mid;
         private String businessName;
@@ -32,7 +33,7 @@ public class SystemUser {
                 else
                         this.approvedBy = "UNAPPROVED";
 
-                this.userId = String.valueOf(user.getUserid());
+                this.userid = String.valueOf(user.getUserid());
                 this.username = user.getUsername();
 
                 if(user.getMid() != null)
@@ -47,47 +48,4 @@ public class SystemUser {
 
         }
 
-        public String getDateCreated() {
-                return dateCreated;
-        }
-
-        public String getFirstName() {
-                return firstName;
-        }
-
-        public String getLastName() {
-                return lastName;
-        }
-
-        public String getEmail() {
-                return email;
-        }
-
-        public String getPhoneNo() {
-                return phoneNo;
-        }
-
-        public String getCreatedBy() {
-                return createdBy;
-        }
-
-        public String getApprovedBy() {
-                return approvedBy;
-        }
-
-        public String getUserId() {
-                return userId;
-        }
-
-        public String getUsername() {
-                return username;
-        }
-
-        public String getMid() {
-                return mid;
-        }
-
-        public String getBusinessName() {
-                return businessName;
-        }
 }

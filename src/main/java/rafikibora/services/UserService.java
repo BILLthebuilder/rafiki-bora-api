@@ -222,7 +222,7 @@ public class UserService implements UserServiceI {
 
     //allow user to update their information
     public User updateUser(User user, int userid) {
-        User existinguser = userRepository.findById(userid);
+        User existinguser = getCurrentUser();
         if (existinguser == null) {
             UserService.log.error("User " + userid + " Not Found");
         }
@@ -244,7 +244,7 @@ public class UserService implements UserServiceI {
         }
 
         if (user.getPassword() != null) {
-            existinguser.setPassword(user.getPassword());
+            existinguser.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
 
