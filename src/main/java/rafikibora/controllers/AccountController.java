@@ -31,23 +31,23 @@ public class AccountController {
      * @return
      */
 
-    @PostMapping
-    public ResponseEntity<?> addAccount(@Valid @RequestBody Account account) {
-
-        Account newAccount = service.saveAccount(account);
-
-        // set the location header for the newly created resource
-        HttpHeaders responseHeaders = new HttpHeaders();
-        URI newEmployeeURI = ServletUriComponentsBuilder.fromCurrentRequest() // get the URI for this request
-                .path("/{id}") // add to it a path variable
-                .buildAndExpand(newAccount.getId()) // populate that path variable with the newly created restaurant id
-                .toUri(); // convert that work into a human readable URI
-        responseHeaders.setLocation(newEmployeeURI); // in the header, set the location location to that URI
-
-        return new ResponseEntity<>(null,
-                responseHeaders,
-                HttpStatus.CREATED);
-    }
+//    @PostMapping
+//    public ResponseEntity<?> addAccount(@Valid @RequestBody Account account) {
+//
+//        Account newAccount = service.saveAccount(account);
+//
+//        // set the location header for the newly created resource
+//        HttpHeaders responseHeaders = new HttpHeaders();
+//        URI newEmployeeURI = ServletUriComponentsBuilder.fromCurrentRequest() // get the URI for this request
+//                .path("/{id}") // add to it a path variable
+//                .buildAndExpand(newAccount.getId()) // populate that path variable with the newly created restaurant id
+//                .toUri(); // convert that work into a human readable URI
+//        responseHeaders.setLocation(newEmployeeURI); // in the header, set the location location to that URI
+//
+//        return new ResponseEntity<>(null,
+//                responseHeaders,
+//                HttpStatus.CREATED);
+//    }
 
 
     @GetMapping
