@@ -16,13 +16,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rafikibora.dto.*;
+import rafikibora.exceptions.AddNewUserException;
 import rafikibora.exceptions.BadRequestException;
 import rafikibora.exceptions.InvalidCheckerException;
 import rafikibora.exceptions.ResourceNotFoundException;
+import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.Role;
 import rafikibora.model.users.User;
 import rafikibora.model.users.UserRoles;
+import rafikibora.repository.AccountRepository;
 import rafikibora.repository.RoleRepository;
 import rafikibora.repository.TerminalRepository;
 import rafikibora.repository.UserRepository;
@@ -37,6 +40,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class UserService implements UserServiceI {
 
+    private final AccountRepository accountRepository;
     private final UserRepository userRepository;
     private final TerminalRepository terminalRepository;
     private final RoleRepository roleRepository;
@@ -126,9 +130,9 @@ public class UserService implements UserServiceI {
 
     //list users of specific roles
     @Override
-    public Set<User> getUserByRole(String roleName) {
+    public List<User> getUserByRole(String roleName) {
 
-        Set<User> users = userRepository.findByRoles_Role_RoleNameContainingIgnoreCase(roleName);
+        List<User> users = userRepository.findByRoles_Role_RoleNameContainingIgnoreCase(roleName);
 
         return users;
     }
@@ -150,6 +154,7 @@ public class UserService implements UserServiceI {
     //Setting user Maker
     @Transactional
     public void addUser(User user) {
+       Account account = new Account();
         if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new EntityExistsException("Email already exists");
         }
@@ -169,11 +174,24 @@ public class UserService implements UserServiceI {
             role = roleRepository.findByRoleName("CUSTOMER");
         }
 
+        try {
+            if(!user.getRole().equalsIgnoreCase("ADMIN")&&!user.getRole().equalsIgnoreCase("AGENT")) {
+                account.setAccountMaker(user.getUserMaker());
+                account.setAccountNumber(user.getPhoneNo());
+                account.setName(user.getFirstName() + "  " + user.getLastName());
+                account.setUser(user);
+                account.setPhoneNumber(user.getPhoneNo());
+                accountRepository.save(account);
+            }
 
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
+    user.getRoles().add(new UserRoles(user, role));
+    userRepository.save(user);
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.getRoles().add(new UserRoles(user, role));
-        userRepository.save(user);
+}catch (Exception ex){
+            throw new AddNewUserException(ex.getMessage());
+}
+
 
 
     }
