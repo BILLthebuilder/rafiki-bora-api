@@ -46,7 +46,7 @@ public class TransactionController {
             data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNodes);
         }
         else{
-            data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.buildTransactionJson(transaction));
+            data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.buildTransactionJson(transaction).getTransaction());
         }
         response.getWriter().println(data);
     }
@@ -91,7 +91,7 @@ public class TransactionController {
             jsonNodes.put("msg", "No transactions found for account: "+pan);
             data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNodes);
         } else{
-            data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.buildTransactionListJson(transactions));
+            data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.buildTransactionListJson(transactions).getTransactions());
         }
         response.getWriter().println(data);
     }
@@ -114,7 +114,7 @@ public class TransactionController {
             jsonNodes.put("msg", "No transactions found for type: "+type);
             data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNodes);
         } else{
-            data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.buildTransactionListJson(transactions));
+            data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.buildTransactionListJson(transactions).getTransactions());
         }
         response.getWriter().println(data);
     }
@@ -136,7 +136,7 @@ public class TransactionController {
             jsonNodes.put("msg", "No transactions found for merchant: "+mid);
             data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNodes);
         } else{
-            data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.buildTransactionListJson(transactions));
+            data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.buildTransactionListJson(transactions).getTransactions());
         }
         response.getWriter().println(data);
     }
@@ -158,7 +158,7 @@ public class TransactionController {
             jsonNodes.put("msg", "No transactions found for terminal: "+tid);
             data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNodes);
         } else {
-            data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.buildTransactionListJson(transactions));
+            data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.buildTransactionListJson(transactions).getTransactions());
         }
         response.getWriter().println(data);
     }
@@ -180,7 +180,7 @@ public class TransactionController {
             jsonNodes.put("msg", "No transactions found");
             data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNodes);
         } else {
-            data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.buildTransactionListJson(transactions));
+            data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.buildTransactionListJson(transactions).getTransactions());
         }
         response.getWriter().println(data);
     }

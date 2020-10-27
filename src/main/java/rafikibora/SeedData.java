@@ -261,6 +261,7 @@ public class SeedData
         transaction1.setRecipientEmail("mulungojohnpaul@gmail.com");
         transaction1.setToken("12345");
         transaction1.setTerminal(terminal1);
+        transaction1.setReferenceNo(terminal1.getTid()+System.currentTimeMillis());
         transactionRepository.save(transaction1);
 
         Transaction transaction2 = new Transaction();
@@ -272,6 +273,7 @@ public class SeedData
         transaction2.setRecipientEmail("mulungojohnpaul@gmail.com");
         transaction2.setToken("12346");
         transaction2.setTerminal(terminal1);
+        transaction2.setReferenceNo(terminal1.getTid()+System.currentTimeMillis());
         transactionRepository.save(transaction2);
 
         Transaction transaction3 = new Transaction();
@@ -283,6 +285,7 @@ public class SeedData
         transaction3.setRecipientEmail("mulungojohnpaul@gmail.com");
         transaction3.setToken("12347");
         transaction3.setTerminal(terminal2);
+        transaction3.setReferenceNo(terminal2.getTid()+System.currentTimeMillis());
         transactionRepository.save(transaction3);
 
         // receive money
@@ -293,6 +296,7 @@ public class SeedData
         transaction4.setPan("4478150181885102");
         transaction4.setProcessingCode("010000");
         transaction4.setTerminal(terminal3);
+        transaction4.setReferenceNo(terminal3.getTid()+System.currentTimeMillis());
         transactionRepository.save(transaction4);
 
         Transaction transaction5 = new Transaction();
@@ -301,6 +305,7 @@ public class SeedData
         transaction5.setDateTimeTransmission(new Date());
         transaction5.setPan("4478150181885102");
         transaction5.setProcessingCode("010000");
+        transaction5.setReferenceNo(terminal3.getTid()+System.currentTimeMillis());
         transaction5.setTerminal(terminal3);
         transactionRepository.save(transaction5);
 
@@ -312,6 +317,7 @@ public class SeedData
         transaction6.setPan("5196010174673147");
         transaction6.setProcessingCode("000000");
         transaction6.setTerminal(terminal1);
+        transaction6.setReferenceNo(terminal1.getTid()+System.currentTimeMillis());
         transactionRepository.save(transaction6);
 
         Transaction transaction7 = new Transaction();
@@ -321,6 +327,7 @@ public class SeedData
         transaction7.setPan("5196010174673147");
         transaction7.setProcessingCode("000000");
         transaction7.setTerminal(terminal3);
+        transaction7.setReferenceNo(terminal3.getTid()+System.currentTimeMillis());
         transactionRepository.save(transaction7);
 
         // deposit
@@ -331,6 +338,7 @@ public class SeedData
         transaction8.setPan("4478150096571201");
         transaction8.setProcessingCode("210000");
         transaction8.setTerminal(terminal2);
+        transaction8.setReferenceNo(terminal2.getTid()+System.currentTimeMillis());
         transactionRepository.save(transaction8);
 
         Transaction transaction9 = new Transaction();
@@ -340,6 +348,7 @@ public class SeedData
         transaction9.setPan("4478150096571201");
         transaction9.setProcessingCode("210000");
         transaction9.setTerminal(terminal1);
+        transaction9.setReferenceNo(terminal1.getTid()+System.currentTimeMillis());
         transactionRepository.save(transaction9);
 
 

@@ -88,6 +88,7 @@ public class SendMoneyService {
             sendMoneyData.setCurrencyCode(currencyCode);
             sendMoneyData.setMerchant(merchant);
             sendMoneyData.setTerminal(terminal);
+            sendMoneyData.setReferenceNo(terminalID+System.currentTimeMillis());
 
             transactionRepository.save(sendMoneyData);
             emailService.sendEmail(emailOfRecipient, recipientToken);
