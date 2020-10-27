@@ -18,10 +18,7 @@ public class AccountService {
     @Autowired
     private AccountRepository repository;
 
-    @Transactional
-    public Account saveAccount(Account accounts) {
-        return repository.save(accounts);
-    }
+
 
     public List<Account> getAccounts() {
         return repository.findAll();

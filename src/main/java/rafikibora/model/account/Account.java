@@ -38,7 +38,7 @@ public class Account implements Serializable {
     @Column(name = "account_number", unique = true, nullable = false, columnDefinition = "VARCHAR(10)")
     public String accountNumber;
 
-    @Column(name = "pan",nullable = false, columnDefinition = "VARCHAR(16)")
+    @Column(name = "pan", columnDefinition = "VARCHAR(16)")
     private String pan;
 
     @Column(name = "phone_number", columnDefinition = "VARCHAR(10)")
@@ -64,12 +64,12 @@ public class Account implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumn(name="created_by", referencedColumnName = "userid", insertable = false, updatable = false)
+    @JoinColumn(name="created_by", referencedColumnName = "userid")
     @JsonIgnore
     private User accountMaker;
 
-    @Column(name = "created_by")
-    private Integer accountMakers;
+//    @Column(name = "created_by")
+//    private Integer accountMakers;
 
     @JsonIgnore
     @ManyToOne

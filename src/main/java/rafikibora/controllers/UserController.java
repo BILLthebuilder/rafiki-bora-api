@@ -43,11 +43,7 @@ public class UserController {
     public ResponseEntity<?> addUser(@RequestBody User user){
         if(user.getRole() == null)
             throw new BadRequestException("User has to have an assigned role");
-        try {
-            userServiceI.addUser(user);
-        } catch (Exception ex) {
-            throw new AddNewUserException(ex.getMessage());
-        }
+        userServiceI.addUser(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -80,8 +76,19 @@ public class UserController {
     }
 
     @GetMapping("/{roleName}")
-    public Set<User> findUserByRoles(@PathVariable("roleName") String roleName) {
-        return userServiceI.getUserByRole(roleName);
+    public void findUserByRoles(@PathVariable("roleName") String roleName, HttpServletResponse response) throws IOException {
+        List<User> users = userServiceI.getUserByRole(roleName);
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode jsonNodes = mapper.createObjectNode();
+        String data = "";
+
+        if(users.isEmpty()){
+            jsonNodes.put("found", false);
+            data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNodes);
+        } else{
+            data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.buildUserListJson(users).getSystemUsers());
+        }
+        response.getWriter().println(data);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -91,7 +98,7 @@ public class UserController {
         ObjectNode jsonNodes = mapper.createObjectNode();
         String data = "";
 
-        if(userServiceI.viewUsers().isEmpty()){
+        if(users.isEmpty()){
             jsonNodes.put("found", false);
             data = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNodes);
         } else{

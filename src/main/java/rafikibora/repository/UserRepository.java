@@ -1,8 +1,6 @@
 package rafikibora.repository;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import rafikibora.model.users.User;
 
@@ -18,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
 
-    Set<User> findByRoles_Role_RoleNameContainingIgnoreCase(String roleName);
+    List<User> findByRoles_Role_RoleNameContainingIgnoreCase(String roleName);
 
     // Lists all terminals that:
     // - Belong to a merchant with merchant ID 'mid'
