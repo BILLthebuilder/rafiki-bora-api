@@ -201,6 +201,7 @@ public class UserService implements UserServiceI {
     public User approveUser(String email) {
         User currentUser = getCurrentUser();
         User user = userRepository.findByEmail(email);
+        Account account=accountRepository.findByAccountNumber(user.getPhoneNo());
 
         if (user == null) {
             throw new ResourceNotFoundException("This user does not exist");
@@ -209,6 +210,13 @@ public class UserService implements UserServiceI {
         if (currentUser == user.getUserMaker()) {
             throw new InvalidCheckerException("You cannot approve this user!");
         }
+        if(account.getUser()==user&& account.getAccountMaker()!=currentUser){
+            account.setAccountChecker(currentUser);
+            account.setStatus(true);
+            accountRepository.save(account);
+        }
+
+
         user.setUserChecker(currentUser);
         user.setStatus(true);
         return userRepository.save(user);
