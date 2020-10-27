@@ -32,8 +32,4 @@ public interface UserServiceI {
 
    void assignTerminalsToAgent (TerminalToAgentResponse terminalToAgentResponse);
 
-
-
-
-
 }
