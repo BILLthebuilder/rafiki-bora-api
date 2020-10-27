@@ -52,11 +52,6 @@ public class TerminalService implements TerminalInterface {
     public String createTID(){
         return UUID.randomUUID().toString().substring(0,16);
     }
-//
-//    //Generate a unique MID
-//    public String createMID(){
-//        return UUID.randomUUID().toString().substring(0,16);
-//    }
 
     /**
      Create Terminal
@@ -174,10 +169,10 @@ public class TerminalService implements TerminalInterface {
         Terminal terminal = tx.get();
         Long checkerId = user.getUser().getUserid();
         Long makerId = terminal.getTerminalMaker().getUserid();
-        System.out.println("******************************************");
-        System.out.println("Maker id: "+makerId);
-        System.out.println("Cehecker id: "+checkerId);
-        System.out.println("******************************************");
+//        System.out.println("******************************************");
+//        System.out.println("Maker id: "+makerId);
+//        System.out.println("Cehecker id: "+checkerId);
+//        System.out.println("******************************************");
 
         if (checkerId.equals(makerId))
             throw new InvalidCheckerException("Creator of resource is not allowed to approve.");

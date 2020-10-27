@@ -40,9 +40,6 @@ public class TerminalController {
         }finally {
             return new ResponseEntity<>(msg, HttpStatus.CREATED);
         }
-//        System.out.println(terminal.toString());
-//        Terminal t = terminalService.save(terminal);
-//        return new ResponseEntity<Terminal>(t, HttpStatus.CREATED);
     }
 
 
@@ -110,7 +107,7 @@ public class TerminalController {
     @PatchMapping(value = "/approve/{id}")
     public ResponseEntity<String> approve(@PathVariable("id") Long id) {
         //System.out.println(terminalDto.getId());
-        System.out.println("================================ " + id);
+//        System.out.println("================================ " + id);
         terminalService.approve(id);
         return new ResponseEntity<>("Terminal approved successfully", HttpStatus.OK);
     }
