@@ -16,7 +16,7 @@ public interface UserServiceI {
 
     User findByName(String name);
 
-//    User deleteUser(String email);
+    ResponseEntity<?> deleteUser(long id);
 
     List<User> viewUsers();
 

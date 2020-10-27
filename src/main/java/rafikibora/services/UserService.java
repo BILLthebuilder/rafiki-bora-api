@@ -58,7 +58,7 @@ public class UserService implements UserServiceI {
         try {
             authenticate(loginRequest.getEmail(), loginRequest.getPassword());
         } catch (Exception ex) {
-            authResponse = new AuthenticationResponse(AuthenticationResponse.responseStatus.FAILED, ex.getMessage(), null, null);
+            authResponse = new AuthenticationResponse(AuthenticationResponse.responseStatus.FAILED, ex.getMessage(), null, null, null);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(authResponse);
         }
 
@@ -103,12 +103,15 @@ public class UserService implements UserServiceI {
 
     //soft delete user
     @Transactional
-    public void deleteUser(long id) {
+    public ResponseEntity<?> deleteUser(long id) {
+        Response response;
         User user = userRepository.findById(id);
         if (user == null) {
             throw new ResourceNotFoundException("User does not exist");
         }
         userRepository.delete(user);
+        response = new Response(Response.responseStatus.SUCCESS, "User Deleted Successfully");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     //find user by name
