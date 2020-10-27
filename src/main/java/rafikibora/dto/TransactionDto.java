@@ -44,4 +44,8 @@ public class TransactionDto {
     public String getDate() {
         return date;
     }
+
+    public String getReferenceNo(){
+        return referenceNo;
+    }
 }
