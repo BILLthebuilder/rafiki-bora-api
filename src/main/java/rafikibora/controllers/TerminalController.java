@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rafikibora.dto.Response;
 import rafikibora.dto.TerminalDto;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.repository.TerminalRepository;
@@ -30,19 +31,16 @@ public class TerminalController {
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Terminal terminal) {
-        System.out.println(terminal.getId());
-        String msg = "";
+        Response response;
         try{
             terminalService.save(terminal);
-            msg = "Terminal created successfully";
+            response = new Response(Response.responseStatus.SUCCESS,"Terminal created successfully");
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
         }catch (Exception ex){
-            msg = "Duplicate Entry is not Allowed!!";
-        }finally {
-            return new ResponseEntity<>(msg, HttpStatus.CREATED);
+            response = new Response(Response.responseStatus.SUCCESS,"Duplicate Entry is not Allowed!!");
+            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
         }
-//        System.out.println(terminal.toString());
-//        Terminal t = terminalService.save(terminal);
-//        return new ResponseEntity<Terminal>(t, HttpStatus.CREATED);
+
     }
 
 

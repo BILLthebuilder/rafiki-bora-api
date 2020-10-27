@@ -18,6 +18,7 @@ public class SystemUser {
         private String businessName;
         private String dateCreated;
         private String status;
+        private String deleted;
 
         public SystemUser(User user){
                 this.firstName = user.getFirstName();
@@ -26,6 +27,7 @@ public class SystemUser {
                 this.dateCreated = String.valueOf(user.getDateCreated());
                 this.phoneNo = user.getPhoneNo();
                 this.status= String.valueOf(user.isStatus());
+                this.deleted = String.valueOf(user.isDeleted());
 
                 if(user.getUserMaker() != null)
                         this.createdBy = user.getUserMaker().getEmail();

@@ -13,9 +13,4 @@ public class TerminalDto {
     String modelType;
     String serialNo;
     String id;
-//    String DateCreated;
-//    String Deleted;
-//    String Status;
-//    String DateUpdated;
-
 }
