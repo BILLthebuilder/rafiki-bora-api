@@ -17,6 +17,7 @@ public class SystemUser {
         private String mid;
         private String businessName;
         private String dateCreated;
+        private String status;
 
         public SystemUser(User user){
                 this.firstName = user.getFirstName();
@@ -24,6 +25,8 @@ public class SystemUser {
                 this.email = user.getEmail();
                 this.dateCreated = String.valueOf(user.getDateCreated());
                 this.phoneNo = user.getPhoneNo();
+                this.status= String.valueOf(user.isStatus());
+
                 if(user.getUserMaker() != null)
                         this.createdBy = user.getUserMaker().getEmail();
                 else this.createdBy = "SYSTEM ADMIN";
