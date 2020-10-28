@@ -1,4 +1,4 @@
-package rafikibora.config;
-
-public class resourceConfig {
-}
+//package rafikibora.config;
+//
+//public class resourceConfig {
+//}
