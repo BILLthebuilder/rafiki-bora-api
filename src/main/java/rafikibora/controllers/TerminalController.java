@@ -106,11 +106,15 @@ public class TerminalController {
 
 
     @PatchMapping(value = "/approve/{id}")
-    public ResponseEntity<String> approve(@PathVariable("id") Long id) {
-        //System.out.println(terminalDto.getId());
-        System.out.println("================================ " + id);
+    public ResponseEntity<?> approve(@PathVariable("id") Long id) {
+        Response response;
         terminalService.approve(id);
-        return new ResponseEntity<>("Terminal approved successfully", HttpStatus.OK);
+        response = new Response(Response.responseStatus.SUCCESS,"Terminal approved successfully");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+        //System.out.println(terminalDto.getId());
+//        System.out.println("================================ " + id);
+//        terminalService.approve(id);
+//        return new ResponseEntity<>("Terminal approved successfully", HttpStatus.OK);
     }
 
 
@@ -119,9 +123,11 @@ public class TerminalController {
      */
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+        Response response;
         terminalService.deleteById(id);
-        return new ResponseEntity<>("Terminal deletion successful", HttpStatus.OK);
+        response = new Response(Response.responseStatus.SUCCESS, "Terminal Deleted Successfully");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
