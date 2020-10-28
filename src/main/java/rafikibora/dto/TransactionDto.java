@@ -9,14 +9,16 @@ public class TransactionDto {
     private final String amount;
     private final String type;
     private final String date;
+    private final String referenceNo;
 
     public TransactionDto(Transaction transaction){
         this.id = String.valueOf(transaction.getId());
         this.pan = transaction.getPan();
         this.currencyCode = transaction.getCurrencyCode();
         this.amount = String.valueOf(transaction.getAmountTransaction());
-        this.type = transaction.getTransactionType();
+        this.type = transaction.getTransactionType(transaction.getProcessingCode());
         this.date = transaction.getTransactionDate(transaction.getDateTimeTransmission());
+        this.referenceNo = transaction.getReferenceNo();
     }
 
     public String getId() {
@@ -41,5 +43,9 @@ public class TransactionDto {
 
     public String getDate() {
         return date;
+    }
+
+    public String getReferenceNo(){
+        return referenceNo;
     }
 }

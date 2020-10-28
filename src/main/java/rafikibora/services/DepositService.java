@@ -94,6 +94,7 @@ public class DepositService {
         newTransaction.setProcessingCode(depositDto.getProcessingCode());
         newTransaction.setSourceAccount(sourceAccount);
         newTransaction.setDestinationAccount(destAccount);
+        newTransaction.setReferenceNo(depositDto.getTerminal()+System.currentTimeMillis());
         transactionRepository.save(newTransaction);
     }
 

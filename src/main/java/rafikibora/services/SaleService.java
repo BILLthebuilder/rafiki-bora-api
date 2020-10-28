@@ -120,6 +120,7 @@ public class SaleService {
             newTransaction.setProcessingCode(saleDto.getProcessingCode());
             newTransaction.setSourceAccount(sourceAccount);
             newTransaction.setDestinationAccount(destAccount);
+            newTransaction.setReferenceNo(saleDto.getTerminal()+System.currentTimeMillis());
             transactionRepository.save(newTransaction);
 
         } catch (Exception e) {

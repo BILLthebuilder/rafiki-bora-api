@@ -67,19 +67,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http.cors().and().csrf().disable().exceptionHandling()
+//                .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+//                .and().authorizeRequests()
+//                .antMatchers("/api/auth/**")
+//                .permitAll()
+//                .antMatchers("/api/transactions/sale", "/api/transactions/deposit", "/api/transactions/receive_money", "/api/transactions/send_money")
+//                .permitAll()
+//                .antMatchers("/profile").hasAuthority("ADMIN")
+//                .anyRequest()
+//                .authenticated().and()
+//                .formLogin().disable()
+//                .httpBasic().disable()
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+////                .maximumSessions(1)
+////                .maxSessionsPreventsLogin(true)
+////                .sessionRegistry(sessionRegistry()).and()
+////                .sessionFixation().migrateSession();
+//        http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+//    }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().exceptionHandling()
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and().authorizeRequests()
                 .antMatchers("/api/auth/**")
-                .permitAll()
-                .antMatchers( "/swagger-resources/**",
-                        "/swagger-resource/**",
-                        "/swagger-ui.html",
-                        "/swagger-ui/",
-                        "/v2/api-docs",
-                        "/webjars/**")
                 .permitAll()
                 .antMatchers("/profile").hasAuthority("ADMIN")
                 .anyRequest()
@@ -104,7 +119,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/swagger-ui",
                 "/webjars/**");
     }
-
 
     /**
      * Provides a CorsConfiguration instance based on the provided request

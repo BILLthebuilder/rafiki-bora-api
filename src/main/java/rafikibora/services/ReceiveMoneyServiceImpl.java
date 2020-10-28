@@ -111,6 +111,7 @@ public class ReceiveMoneyServiceImpl implements ReceiveMoneyService {
         newTransaction.setPan(req.getPan());
         newTransaction.setProcessingCode(req.getProcessingCode());
         newTransaction.setSourceAccount(merchantAccount);
+        newTransaction.setReferenceNo(req.getTid()+System.currentTimeMillis());
         transactionRepository.save(newTransaction);
 
         ReceiveMoneyResponseDto resp = new ReceiveMoneyResponseDto();

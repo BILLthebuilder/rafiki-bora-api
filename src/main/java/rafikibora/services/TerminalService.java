@@ -1,24 +1,18 @@
 package rafikibora.services;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+//import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 import rafikibora.dto.CustomUserDetails;
-import rafikibora.dto.SignupResponse;
 import rafikibora.dto.TerminalDto;
 import rafikibora.exceptions.InvalidCheckerException;
-import rafikibora.exceptions.NotFoundException;
+import rafikibora.exceptions.ResourceNotFoundException;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.User;
 import rafikibora.repository.TerminalRepository;
@@ -26,13 +20,10 @@ import rafikibora.repository.UserRepository;
 import rafikibora.security.util.exceptions.ExceptionUtilService;
 
 import javax.transaction.Transactional;
-import java.security.Principal;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.SQLOutput;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 
 @Service

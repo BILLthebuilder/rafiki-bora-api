@@ -68,6 +68,9 @@ public class Transaction implements Serializable {
     @Column(name = "token", columnDefinition = "VARCHAR(9)")
     private String token;
 
+    @Column(name = "reference_no", columnDefinition = "VARCHAR(24)")
+    private String referenceNo;
+
     @Column(name = "currency_code", columnDefinition = "VARCHAR(3)")
     @NotNull
     private String currencyCode;
@@ -123,19 +126,19 @@ public class Transaction implements Serializable {
     private String customerPan;
 
     @Transient
-    public String getTransactionType(){
+    public String getTransactionType(String processingCode){
         String type = "";
-        switch (this.processingCode){
-            case "00":
+        switch (processingCode){
+            case "000000":
                 type = "SALE";
                 break;
-            case "01":
+            case "010000":
                 type = "RECEIVE MONEY";
                 break;
-            case "26":
+            case "260000":
                 type = "SEND MONEY";
                 break;
-            case "21":
+            case "210000":
                 type = "DEPOSIT";
                 break;
             default:break;
