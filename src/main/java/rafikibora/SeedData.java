@@ -62,34 +62,34 @@ public class SeedData
         // ####### USERS ###########
         // ## Admins
         User admin1 = new User();
-        admin1.setFirstName("Jedidah");
-        admin1.setLastName("Wangeci");
-        admin1.setEmail("wangeci@mail.com");
-        admin1.setUsername("wangeci@mail.com");
-        admin1.setPhoneNo("0720942927");
-        admin1.setPassword(passwordEncoder.encode("Ellahruth019"));
+        admin1.setFirstName("Admin0");
+        admin1.setLastName("Admin0");
+        admin1.setEmail("admin0@mail.com");
+        admin1.setUsername("admin0@mail.com");
+        admin1.setPhoneNo("0720000000");
+        admin1.setPassword(passwordEncoder.encode("123456"));
         admin1.setStatus(true);
         admin1.getRoles().add(new UserRoles(admin1, adminRole));
         userRepository.save(admin1);
 
         User admin2 = new User();
-        admin2.setFirstName("Jedidah1");
-        admin2.setLastName("Wangeci1");
-        admin2.setEmail("wangeci1@mail.com");
-        admin2.setUsername("wangeci1@mail.com");
-        admin2.setPhoneNo("0720942928");
-        admin2.setPassword(passwordEncoder.encode("Ellahruth019"));
+        admin2.setFirstName("Admin1");
+        admin2.setLastName("Admin1");
+        admin2.setEmail("admin1@mail.com");
+        admin2.setUsername("admin1@mail.com");
+        admin2.setPhoneNo("0720000001");
+        admin2.setPassword(passwordEncoder.encode("123456"));
         admin2.setStatus(true);
         admin2.getRoles().add(new UserRoles(admin2, adminRole));
         userRepository.save(admin2);
 
         User agent1 = new User();
-        agent1.setFirstName("Lorine");
-        agent1.setLastName("Achieng");
-        agent1.setEmail("lorine@rafiki.com");
-        agent1.setUsername("lorine");
+        agent1.setFirstName("Agent0");
+        agent1.setLastName("Agent0");
+        agent1.setEmail("agent@rafiki.com");
+        agent1.setUsername("agent@rafiki.com");
         agent1.setPhoneNo("0720942928");
-        agent1.setPassword(passwordEncoder.encode("12345"));
+        agent1.setPassword(passwordEncoder.encode("123456"));
         agent1.setStatus(true);
         agent1.getRoles().add(new UserRoles(agent1, agentRole));
         userRepository.save(agent1);
@@ -127,7 +127,7 @@ public class SeedData
         merchant1.setBusinessName("BETTY'S SHOP");
         merchant1.setPhoneNo("0714385056");
         merchant1.setMid("123456789123456");
-        merchant1.setPassword(passwordEncoder.encode("password"));
+        merchant1.setPassword(passwordEncoder.encode("123456"));
         merchant1.setStatus(true);
         merchant1.getRoles().add(new UserRoles(merchant1, merchantRole));
         userRepository.save(merchant1);
@@ -140,7 +140,7 @@ public class SeedData
         merchant2.setBusinessName("BILL'S SHOP");
         merchant2.setPhoneNo("0714385057");
         merchant2.setMid("123456789123457");
-        merchant2.setPassword(passwordEncoder.encode("password"));
+        merchant2.setPassword(passwordEncoder.encode("123456"));
         merchant2.setStatus(true);
         merchant2.getRoles().add(new UserRoles(merchant2, merchantRole));
         userRepository.save(merchant2);
@@ -149,10 +149,10 @@ public class SeedData
         User agent2 = new User();
         agent2.setFirstName("Agent 1");
         agent2.setLastName("Mobutu");
-        agent2.setEmail("mobutu@gmail.com");
-        agent2.setUsername("mobutu@mail.com");
+        agent2.setEmail("agent1@rafiki.com");
+        agent2.setUsername("agent1@rafiki.com");
         agent2.setPhoneNo("0110942927");
-        agent2.setPassword(passwordEncoder.encode("mobutu"));
+        agent2.setPassword(passwordEncoder.encode("123456"));
         agent2.setStatus(true);
         agent2.getRoles().add(new UserRoles(agent2, agentRole));
         userRepository.save(agent2);
@@ -160,10 +160,10 @@ public class SeedData
         User agent3 = new User();
         agent3.setFirstName("Agent 2");
         agent3.setLastName("Mobutu-2");
-        agent3.setEmail("mobutu2@gmail.com");
-        agent3.setUsername("mobutu2@mail.com");
+        agent3.setEmail("agent2@rafiki.com");
+        agent3.setUsername("agent2@rafiki.com");
         agent3.setPhoneNo("0220942927");
-        agent3.setPassword(passwordEncoder.encode("mobutu"));
+        agent3.setPassword(passwordEncoder.encode("123456"));
         agent3.setStatus(true);
         agent3.getRoles().add(new UserRoles(agent3, agentRole));
         userRepository.save(agent3);
